@@ -1,0 +1,33 @@
+@import './../base/variables';
+
+
+table {
+	thead {
+		th {
+			text-transform: uppercase;
+		}
+	}
+	tbody {
+		tr {
+			@include transition(all, .2s, ease-out);
+
+			.deleted-record {
+				opacity: .7;
+				text-decoration:line-through;
+			}
+
+			td {
+				vertical-align: middle;
+			}
+
+			&:hover {
+				background-color: get-color(secondary, normal);
+			}
+		}
+	}
+	tfoot {
+		td {
+			background-color: #FFFFFF;
+		}
+	}
+}

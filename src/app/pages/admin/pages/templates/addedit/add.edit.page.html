@@ -1,0 +1,129 @@
+
+<mat-toolbar class="bapp-admin-toolbar">
+	<span class="toolbar-title">
+		<span *ngIf="isAddMode">Create Template</span>
+		<span *ngIf="!isAddMode">Edit Template</span>
+	</span>
+	<span class="example-spacer"></span>
+
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark">Back</button>
+	</div>
+
+	<button mat-icon-button (click)="help()" class="Help" aria-label="Help">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<form class="form-model-edit" [formGroup]="FormGroupTemplateDetails" (ngSubmit)="onSubmit()">
+
+
+	<div class="form-row row">
+
+		<div class="form-group col-12 col-md-4">
+			<mat-form-field appearance="fill" id="client-drp">
+				<mat-label>Select Client</mat-label>
+				<mat-select formControlName="clientId" [ngClass]="{ 'is-invalid': ftemplatedetails['clientId'].errors }" required >
+					<mat-option></mat-option>
+					<span *ngFor="let client of formDataClients">
+						<mat-option [value]="client.id" *ngIf="client.status === true">
+							{{client.name}}
+						</mat-option>
+					</span>
+				</mat-select>
+				<mat-error *ngIf="ftemplatedetails['clientId'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['clientId'].errors['required']">Client is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+
+		<div class="form-group col-12 col-md-4">
+			<mat-form-field appearance="fill" id="creative-drp">
+				<mat-label>Creative Type</mat-label>
+				<mat-select formControlName="bannertypeId" [ngClass]="{ 'is-invalid': ftemplatedetails['bannertypeId'].errors }" required >
+					<mat-option></mat-option>
+					<span *ngFor="let bannerType of formDataBannerTypes">
+						<mat-option *ngIf="bannerType.status === true" [value]="bannerType.id" >
+							{{bannerType.name}}
+						</mat-option>
+					</span>
+				</mat-select>
+				<mat-error *ngIf="ftemplatedetails['bannertypeId'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['bannertypeId'].errors['required']">Creative Type is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+
+	</div>
+
+	<div class="form-row row">
+
+		<div class="form-group col-12 col-md-4">
+
+			<mat-form-field class="" appearance="fill" id="inpt-tempName">
+				<mat-label>Template Name</mat-label>
+				<input matInput placeholder="" formControlName="name" [ngClass]="{ 'is-invalid': submitted && ftemplatedetails['name'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatedetails['name'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['name'].errors['required']">Name is required</div>
+				</mat-error>
+			</mat-form-field>
+
+		</div>
+		<div class="form-group col-12 col-md-8">
+
+			<mat-form-field class="" appearance="fill" id="input-tempDesc">
+				<mat-label>Template Description</mat-label>
+				<input matInput placeholder="" formControlName="description" [ngClass]="{ 'is-invalid': submitted && ftemplatedetails['description'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatedetails['description'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['description'].errors['required']">Description is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+
+	<div class="form-row row">
+		<div class="form-group col-12 col-md-4">
+			<mat-form-field appearance="fill" id="size-drp">
+				<mat-label>Creative Size(s)</mat-label>
+				<mat-select multiple formControlName="bannerSizeId" [ngClass]="{ 'is-invalid': ftemplatedetails['bannerSizeId'].errors }" required>
+					<span *ngIf="!isAddMode">
+						<mat-option [value]="bannerSize.id" *ngFor="let bannerSize of formDataBannerSizes">
+							{{bannerSize.name}}
+						</mat-option>
+					</span>
+					<span *ngFor="let bannerSize of formDataBannerSizes">
+						<mat-option [value]="bannerSize.id" *ngIf="bannerSize.status === true">
+							{{bannerSize.name}}
+						</mat-option>
+					</span>
+				</mat-select>
+				<mat-error *ngIf="ftemplatedetails['bannerSizeId'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['bannerSizeId'].errors['required']">At least one Creative Size is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-4">
+			<mat-form-field appearance="fill" id="inputContNo">
+				<mat-label>No. of Containers</mat-label>
+				<input matInput type="number" min="1" max="1" placeholder="" formControlName="containerNumber" [ngClass]="{ 'is-invalid': submitted && ftemplatedetails['containerNumber'].errors }" required />
+				<mat-error *ngIf="ftemplatedetails['containerNumber'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatedetails['containerNumber'].errors['required']">No. of Containers is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="btn-group">
+			<button [disabled]="loading" class="btn btn-success" id="btn-save">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+				Save
+			</button>
+			<a [ngClass]="{ 'disabled': loading }" class="btn btn-secondary" id="btn-cancel" (click)="back()">
+				Cancel
+			</a>
+		</div>
+	</div>
+
+</form>

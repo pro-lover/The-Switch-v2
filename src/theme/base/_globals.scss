@@ -1,0 +1,74 @@
+//
+// Define global styles for the application,
+// usually html and body content.
+//
+
+@import 'variables';
+
+html {
+	height: 100%;
+	scroll-behavior: smooth;
+
+	&.cdk-global-scrollblock {
+		overflow-y: hidden;
+		top: 0 !important;
+		left: 0 !important;
+	}
+}
+
+html,
+body {
+	$font-size: 16px;
+	color: get-color(basic, darkest);
+	font-family: $font_family;
+	font-size: $font-size * .65;
+	width: 100%;
+	overflow-x: hidden;
+
+	@media screen and (min-width: get-media(s)) {
+		font-size: $font-size * .8;
+	}
+
+	@media screen and (min-width: get-media(m)) {
+		font-size: $font-size;
+	}
+}
+
+body {
+	margin: 0;
+	font-family: $font_family !important ;
+	height: auto;
+    overflow: hidden;
+}
+
+/**/
+::-webkit-scrollbar {
+	width: 15px;
+	transition: all .5s ease-out;
+}
+
+::-webkit-scrollbar:hover {
+	width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #ffc107;
+	border-radius: 10px;
+	border: 1px solid #ddaa13;
+	//transition: all .5s ease-out;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #fff;
+	background-color: rgba(255, 255, 255, 1);
+	background-repeat: repeat;
+	background-position: center center;
+	background-image: url('/assets/images/fabric.png');
+	border-left: 1px solid #666;
+	border-left: 1px solid #ccc;
+	box-shadow: inset 1px -1px 3px rgba(0,0,0,0.1);
+}
+/**/
+
+// global styles
+a { cursor: pointer; }

@@ -1,0 +1,229 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">Total Templates: <span *ngIf="!primaryData" class="mr-1 spinner-border spinner-border-sm"></span><span *ngIf="primaryData">{{primaryData.length}}</span></span>
+	<span class="example-spacer"></span>
+	<div class="btn-group" *ngIf="primaryData">
+		<a routerLink="create" class="btn btn-success" id="hint-action-btn-create">
+			Create Template
+		</a>
+		<!--
+		<button (click)="export()" class="btn btn-secondary" id="hint-action-btn-export">
+			Export
+		</button>
+		-->
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+	<button [disabled]="!primaryData" mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+<mat-accordion class="accordion-headers-align graph-panel" >
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				FILTERS
+			</mat-panel-title>
+			<mat-panel-description>
+				Filter Table by Client, Creative Type, Creatives
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<ng-template matExpansionPanelContent>
+			<div class="filters-container">
+				<div class="row">
+					<div class="col-12 col-md-3">
+						<mat-form-field class="name-filter-chip-list"  appearance="fill" *ngIf="masterReference_names">
+							<mat-chip-list #chipList aria-label="All Templates Names">
+								<mat-chip *ngFor="let activeNameFilter of activeNameFilters" [selectable]="selectable"
+									[removable]="removable" (removed)="removeSelectedFiltered('name')">
+										{{activeNameFilter.name}}
+									<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+								</mat-chip>
+								<input matInput placeholder="Search by Template name..."
+									#chipInput
+									[formControl]="chipCtrl"
+									[matAutocomplete]="auto"
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur"
+								>
+							</mat-chip-list>
+							<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTextFilter($event, 'name')">
+								<mat-option *ngFor="let so of filteredNames | async" [value]="so.id">
+									{{ so.name }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+					<div class="col-12 col-md-3">
+						<mat-form-field  appearance="fill">
+							<mat-label>Select a client</mat-label>
+							<mat-select [formControl]="clientFilterValue" (selectionChange)="onFilterChange('client')">
+								<mat-option [value]="">All</mat-option>
+								<mat-option [value]="client.id" *ngFor="let client of filterDataClients">
+									{{client.name}}
+								</mat-option>
+							</mat-select>
+							<mat-hint align="end">Filter by Client</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="col-12 col-md-3">
+						<mat-form-field  appearance="fill">
+							<mat-label>Select Creative Type</mat-label>
+							<mat-select [formControl]="bannertypeFilterValue" (selectionChange)="onFilterChange('bannertype')">
+								<mat-option [value]="">All</mat-option>
+								<mat-option [value]="bannertype.id" *ngFor="let bannertype of filterDataBannerTypes">
+									{{bannertype.name}}
+								</mat-option>
+							</mat-select>
+							<mat-hint align="end">Filter by Creative Type</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="col-12 col-md-3 offset-md-12 filter-status-toggle">
+						Show only active Templates?
+						<br/>
+						<mat-slide-toggle
+							color="primary"
+							(change)="onFilterChange('status')"
+							[formControl]="statusFilterValue">
+						</mat-slide-toggle>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</mat-expansion-panel>
+</mat-accordion>
+<br /><br />
+
+<table class="table table-striped" matSort (matSortChange)="sortData($event)">
+	<thead>
+		<tr>
+			<th mat-sort-header="id" >ID</th>
+			<th mat-sort-header="name" >Name</th>
+			<th mat-sort-header="client" >Client</th>
+			<th mat-sort-header="bannertype" >Creative Type</th>
+			<th mat-sort-header="banners" >Creatives</th>
+			<th mat-sort-header="status" id="toggle-status">Status</th>
+			<!--
+			<th mat-sort-header="created" >Created</th>
+			<th mat-sort-header="updated" >Updated</th>
+			-->
+			<th ></th>
+		</tr>
+	</thead>
+	<tbody>
+        <tr *ngFor="let model of sortedData;let indexOfelement = index;">
+
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.id}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.name}}
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.description}}
+			</td>
+			-->
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.client.name}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.bannertype.name}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.banners.length}}
+			</td>
+			<td >
+				<mat-slide-toggle
+					color="primary"
+					[disabled]="model.deletedAt !== null"
+					(change)="toggleStatus($event, model.id)"
+					[checked]="model.status">
+				</mat-slide-toggle>
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.created | date:'MMM d, y'}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.updated | date:'short'}}
+			</td>
+			-->
+			<td style="white-space: nowrap;text-align: center;">
+				<button
+					mat-icon-button
+					[disabled]="model.isDeleting || model.isVC"
+					[matMenuTriggerFor]="menu" aria-label="">
+						<span *ngIf="model.isDeleting || model.isVC" class="spinner-border spinner-border-sm"></span>
+						<mat-icon>more_vert</mat-icon>
+				</button>
+				<mat-menu #menu="matMenu">
+					<button
+						routerLink="edit/{{model.id}}/banners"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item>
+							<!--
+							<mat-icon>library_books</mat-icon>
+							-->
+							<mat-icon>view_carousel</mat-icon>
+							<span>Manage Creatives</span>
+					</button>
+					<button
+						[disabled]="model.deletedAt !== null"
+						routerLink="edit/{{model.id}}"
+						mat-menu-item>
+							<mat-icon>edit</mat-icon>
+							<span>Edit</span>
+					</button>
+
+					<button
+						(click)="audit(model.id)"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item disabled>
+							<!--<mat-icon>history</mat-icon>-->
+							<mat-icon>track_changes</mat-icon>
+							<span>Audit</span>
+					</button>
+					<button
+						(click)="deleteModel(model.id)"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item>
+							<mat-icon>delete</mat-icon>
+							<span>Delete</span>
+					</button>
+					<button
+						(click)="restoreModel(model.id)"
+						[disabled]="model.deletedAt === null"
+						mat-menu-item>
+							<mat-icon>restore_from_trash</mat-icon>
+							<span>Restore</span>
+					</button>
+				</mat-menu>
+
+			</td>
+		</tr>
+		<tr *ngIf="!sortedData">
+			<td colspan="7" class="text-center">
+				<span class="spinner-border spinner-border-lg align-center"></span>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="7">
+				<mat-paginator [length]="length"
+					[showFirstLastButtons]=true
+					[pageSize]="pageSize"
+					[pageSizeOptions]="pageSizeOptions"
+					[pageIndex]="currentPage"
+					(page)="handlePage($event)"
+					aria-label="Select page">
+				</mat-paginator>
+			</td>
+		</tr>
+	</tfoot>
+</table>

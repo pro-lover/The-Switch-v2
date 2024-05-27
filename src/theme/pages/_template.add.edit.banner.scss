@@ -1,0 +1,12 @@
+
+@import './../base/variables';
+
+.control-nav-components-menu.mat-menu-panel {
+	width: 200px;
+
+	.layer-component-menu {
+		.component-title {
+			text-align: left;
+		}
+	}
+}

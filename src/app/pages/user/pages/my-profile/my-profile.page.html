@@ -1,0 +1,49 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">
+		<span *ngIf="account">Profile Page</span>
+		<span *ngIf="!account" class="spinner-border spinner-border-sm mr-1"></span>
+	</span>
+	<span class="example-spacer"></span>
+	<div class="btn-group" *ngIf="account">
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+	<button [disabled]="!account" mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+<br /><br />
+
+<div class="container d-flex justify-content-center">
+    <div class="card p-3 py-4">
+        <div class="text-center" *ngIf="account">
+			<img src="../assets/images/android-icon-192x192.png" class="rounded-circle profile-picture" />
+            <h3 class="mt-2">{{account.title}} {{account.firstName}} {{account.lastName}}</h3>
+			<span class="mt-1 clearfix">{{account.role}}</span>
+			<!--
+            <div class="row mt-3 mb-3">
+                <div class="col-md-4">
+                    <h5>Projects</h5> <span class="num">10</span>
+                </div>
+                <div class="col-md-4">
+                    <h5>Projects</h5> <span class="num">10</span>
+                </div>
+                <div class="col-md-4">
+                    <h5>Projects</h5> <span class="num">10</span>
+                </div>
+            </div>
+			-->
+            <hr class="line">
+			<small class="mt-4">
+				<strong>Created</strong> {{account.created | date: 'dd/MM/yyyy'}}
+			</small>
+            <div class="profile mt-5">
+				<button class="profile_button px-5" routerLink="../../admin/accounts/edit/{{account.id}}">Edit profile</button>
+			</div>
+        </div>
+    </div>
+</div>

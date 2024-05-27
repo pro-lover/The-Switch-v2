@@ -1,0 +1,49 @@
+@import  '../../../../../../../../theme/app.global.scss';
+
+form {
+
+	label {
+		margin: 1em auto;
+	}
+
+	input {
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+
+	.form-group {
+		margin-bottom: 0;
+		display: flex;
+		justify-content: flex-start;
+
+		h5 {
+			font-weight:bold;
+			font-size:12px;
+			font-family: $font_family;
+		}
+	}
+
+	h3 {
+		text-transform: uppercase;
+	}
+
+	.mat-form-field {
+		width: 100%;
+		//max-width: 200px;
+		margin-left: 0;
+	}
+
+	@media screen and (max-width: get-media(s)) {
+		.btn {
+			font-size: 1em;
+			padding: 1em 2em;
+		}
+	}
+
+	.mat-flat-button,
+	.mat-stroked-button {
+		border-radius: 0;
+	}
+}

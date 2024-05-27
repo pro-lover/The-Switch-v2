@@ -1,0 +1,30 @@
+
+@import './../base/variables';
+
+.page-dashboard {
+
+	.pagination-holder {
+		margin: 0;
+		position: relative;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		display: block;
+		z-index: 9999;
+		//border-top: 1px solid #dbdbdb;
+		border-bottom: 1px solid #dbdbdb;
+
+		> div {
+			padding: 0;
+		}
+
+		.generations-preview {
+			width: 70%;
+			margin-left: 0;
+			.mat-paginator-container {
+				justify-content: flex-start;
+				min-height: 0;
+			}
+		}
+	}
+}

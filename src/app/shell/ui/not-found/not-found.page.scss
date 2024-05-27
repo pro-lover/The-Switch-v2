@@ -1,0 +1,59 @@
+@import '../../../../theme/app.global.scss';
+
+.page_404{
+	padding:40px 0; background:#fff;
+}
+
+.page_404  img{
+	width:100%;
+	max-width: 100%;
+	display: block;
+}
+
+.four_zero_four_bg{
+ 	background-image: url(../../../../assets/images/404.gif);
+    height: 400px;
+    background-position: center;
+	background-repeat: no-repeat;
+}
+
+.four_zero_four_bg h1{
+	font-size:80px;
+	font-family: 'Arvo', serif
+}
+
+.four_zero_four_bg h3{
+	font-size:80px;
+	font-family: 'Arvo', serif
+}
+
+.link_404 {
+	background-color: #730000;
+    color: #000;
+    display: inline-block;
+    padding: 1em 2.5em;
+    text-decoration: none;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transform: skew(20deg);
+    margin: 2em auto 2em 2em;
+    min-width: 180px;
+	transition: all .5s ease-out;
+
+	span {
+		display: inline-block;
+    	transform: skew(-20deg);
+	}
+
+	&:hover {
+		background-color: #000;
+		color: #730000;
+	}
+}
+
+.contant_box_404{
+	margin-top:-50px;
+}

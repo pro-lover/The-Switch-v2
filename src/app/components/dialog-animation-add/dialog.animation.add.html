@@ -1,0 +1,29 @@
+﻿<h1 mat-dialog-title>
+	{{data.title}}
+</h1>
+
+<div mat-dialog-content class="mat-typography">
+	<div class="row">
+		<div class="col-12 col-md-12">
+
+
+			<app-animation-add
+				[dataTemplate]="data.template"
+				[dataBanner]="data.activeBannerSize"
+				[formComponent]="data.component"
+				[dataContainer]="data.container"
+				(AddAnimationEvent)="passAnimationFromDialog($event)">
+			</app-animation-add>
+
+
+		</div>
+	</div>
+</div>
+
+<hr />
+
+<div mat-dialog-actions align="end" style="margin:1em auto;margin-bottom: 0;" [mat-dialog-close]="passAnimation">
+	<button mat-button mat-stroked-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>
+		Cancel
+	</button>
+</div>

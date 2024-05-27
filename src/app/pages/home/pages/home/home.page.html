@@ -1,0 +1,55 @@
+<div class="p-4"></div>
+
+<section class="container">
+	<main class="row">
+		<div class="col-12">
+
+			<div class="hero-copy"  *ngIf="isLoggedIn$ | async; else notAuthorized">
+				<!--
+				<button mat-flat-button [routerLink]="['/', path.dashboard.root]" >
+					<h1>ST<span>⌘</span>RT</h1>
+				</button>
+				<br />
+				-->
+				<a [routerLink]="['/', path.dashboard.root]">
+					<span>START</span>
+				</a>
+				<a [routerLink]="['/', path.base.howItWorks]">
+					<span>HOW IT WORKS</span>
+				</a>
+			</div>
+
+			<ng-template #notAuthorized>
+				<header id="header">
+					<div class="container">
+						<div class="row">
+							<div class="col-6 col-md-2 ">
+								<a [routerLink]="['/', path.dashboard.root]" class="logo">
+									<img src="assets/images/switch_logo_white.png" alt="SWITCH Logo /">
+								</a>
+
+							</div>
+							<div class="col-6 col-md-2 offset-md-8 ">
+								<a [routerLink]="['/auth', path.auth.signIn]" class="login">
+									<span>LOGIN</span>
+								</a>
+							</div>
+
+						</div>
+
+					</div>
+				</header>
+				<div class="hero-copy">
+					<button mat-flat-button [routerLink]="['/', path.dashboard.root]" >
+						<h1>B<span>⌘</span>NNER</h1>
+					</button>
+				</div>
+				<footer class="c-footer">
+					&copy; SWITCH ® company &ndash; <a href="https://www.switch.co.za/policies/privacy-policy.html" target="_blank" class="u-text-white">Privacy Policy</a>.
+				</footer>
+			</ng-template>
+
+		</div>
+
+	</main>
+</section>

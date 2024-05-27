@@ -1,0 +1,80 @@
+
+<mat-toolbar class="bapp-admin-toolbar">
+	<span class="toolbar-title">
+		<span *ngIf="isAddMode">Create Project</span>
+		<span *ngIf="!isAddMode">Edit Project</span>
+	</span>
+	<span class="example-spacer"></span>
+
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark" data-intro="Click here to go back to previous page.">Back</button>
+	</div>
+
+	<button mat-icon-button (click)="help()" class="Help" aria-label="Help">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<form class="form-model-edit" [formGroup]="form" (ngSubmit)="onSubmit()">
+	<div class="form-row row">
+
+		<div class="form-group col-12 col-md-4">
+			<mat-form-field appearance="fill" data-intro="Click here to select a client.">
+				<mat-label>Select Client</mat-label>
+				<mat-select formControlName="clientId" [ngClass]="{ 'is-invalid': f['clientId'].errors }" required>
+					<mat-option></mat-option>
+					<span *ngIf="!isAddMode">
+						<mat-option [value]="client.id" *ngFor="let client of formDataClients">
+							{{client.name}}
+						</mat-option>
+					</span>
+					<span *ngFor="let client of formDataClients">
+						<mat-option [value]="client.id" *ngIf="client.status === true">
+							{{client.name}}
+						</mat-option>
+					</span>
+				</mat-select>
+				<mat-error *ngIf="f['clientId'].errors" class="invalid-feedback" >
+					<div *ngIf="f['clientId'].errors['required']" >Client is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+	<div class="form-row row">
+
+		<div class="form-group col-12 col-md-4">
+
+			<mat-form-field class="" appearance="fill" data-intro="Add project name.">
+				<mat-label>Name</mat-label>
+				<input matInput placeholder="" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" required />
+				<mat-error *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+					<div *ngIf="f['name'].errors['required']">Name is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-8">
+
+			<mat-form-field class="" appearance="fill" data-intro="Add project's description.">
+				<mat-label>Description</mat-label>
+				<input matInput placeholder="" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f['description'].errors }" required />
+				<mat-error *ngIf="submitted && f['description'].errors" class="invalid-feedback">
+					<div *ngIf="f['description'].errors['required']">Description is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+	<hr />
+	<br />
+    <div class="form-group">
+		<div class="btn-group">
+			<button [disabled]="loading" class="btn btn-success" data-intro="Save new project.">
+				<span *ngIf="loading" class="mr-1 spinner-border spinner-border-sm"></span>
+				Save
+			</button>
+			<a [ngClass]="{ 'disabled': loading }" class="btn btn-secondary" (click)="back()" data-intro="Cancel creating a new project.">
+				Cancel
+			</a>
+		</div>
+	</div>
+</form>

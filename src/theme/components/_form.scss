@@ -1,0 +1,77 @@
+@import './../base/variables';
+
+.form-model-edit {
+	label {
+		margin: 1em auto;
+	}
+
+	input {
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+
+	.form-group {
+		margin-bottom: 1em;
+	}
+
+	h3 {
+		text-transform: uppercase;
+	}
+
+	.mat-form-field {
+		width: 100%;
+	}
+
+	@media screen and (max-width: get-media(s)) {
+		.btn {
+			font-size: 1em;
+			padding: 1em 2em;
+		}
+	}
+
+	.mat-flat-button,
+	.mat-stroked-button {
+		border-radius: 0;
+	}
+
+	//
+
+
+}
+
+// TEMPLATE BANNER EDIT FORM
+body[class*='page-admin-templates-edit-'] {
+
+	//background-color: yellow;
+
+	.form-model-edit {
+
+		// coordinates for canvas
+		.coordinates-box {
+
+			.mat-form-field {
+
+				.mat-form-field-wrapper {
+					padding-bottom: 0;
+
+					.mat-form-field-underline {
+						bottom: 0;
+					}
+				}
+
+				&.mat-focused {
+					.mat-form-field-wrapper {
+						.mat-form-field-underline {
+							.mat-form-field-ripple {
+								//background-color: $colour_yellow;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

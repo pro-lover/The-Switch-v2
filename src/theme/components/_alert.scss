@@ -1,0 +1,68 @@
+@import './../base/variables';
+
+.mat-snack-bar-container {
+	@include transition(all, .2s, ease-out);
+
+	&.alert-success {
+		color: #0f5132;
+		background-color: #d1e7dd;
+		border-color: #badbcc;
+
+		.mat-simple-snackbar-action button {
+			color: yellow;
+			background-color: #376f55;
+
+			@include transition(all, .2s, ease-out);
+
+			&:hover {
+				background-color: #064428;
+			}
+		}
+	}
+
+	&.alert-info {
+		color: #055160;
+		background-color: #cff4fc;
+		border-color: #b6effb;
+
+		.mat-simple-snackbar-action button {
+			color: #055160;
+			background-color: #44b6f9;
+
+			@include transition(all, .2s, ease-out);
+
+			&:hover {
+				background-color: #007dc7;
+			}
+		}
+	}
+
+	&.alert-warn {
+
+		.mat-simple-snackbar-action button {
+
+			@include transition(all, .2s, ease-out);
+
+			&:hover {
+
+			}
+		}
+	}
+
+	&.alert-danger {
+		color: #842029;
+		background-color: #f8d7da;
+		border-color: #f5c2c7;
+
+		.mat-simple-snackbar-action button {
+			color: #f5c2c7;
+			background-color: #842029;
+
+			@include transition(all, .2s, ease-out);
+
+			&:hover {
+				background-color: #e55461;
+			}
+		}
+	}
+}

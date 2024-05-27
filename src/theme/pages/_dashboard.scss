@@ -1,0 +1,47 @@
+@import './../base/variables';
+
+
+.page-dashboard {
+
+	.bapp-dialog-stepper {
+		.mat-step-header {
+			padding-left: 0;
+		}
+
+		.mat-vertical-content-container,
+		.mat-horizontal-content-container {
+			overflow: visible;
+			margin-left: 12px;
+
+			.mat-vertical-content {
+				padding-bottom: 0;
+			}
+		}
+	}
+
+	.mat-bapp-content {
+		width: 100%;
+		padding: 0 2em;
+		margin-bottom: 0;
+	}
+
+	//.mat-bapp-content {
+		.drag-drop-component-edit-box {
+			//width: 100%;
+			//max-width: 30vw;
+			//justify-content: flex-start;
+
+			.drag-and-drop-container {
+				padding: 0;
+
+				h3 {
+					padding: 1em;
+					font-size: 1em;
+					font-weight: bold;
+					font-family: $font_family;
+					//font-size: calc(1.3rem + 0.6vw);
+				}
+			}
+		}
+	//}
+}

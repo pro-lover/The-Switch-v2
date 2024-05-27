@@ -1,0 +1,58 @@
+
+<form class="form-model-edit" [formGroup]="FormGroupContainerData" >
+	<!-- ADDING CONTAINER -->
+	<div class="form-row row new-container">
+
+		<div class="form-group col-12 col-md-6" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Container Name</mat-label>
+				<input matInput type="text" placeholder="{{dataBanner.name}} Frame Number" formControlName="name" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['name'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatecontainer['name'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['name'].errors['required']">Container Name is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-6" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Container Description</mat-label>
+				<input matInput type="text" placeholder="" formControlName="description" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['description'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatecontainer['description'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['description'].errors['required']">Container Description is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+
+		<div class="form-group col-12 col-md-12" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Select which components to copy?</mat-label>
+					<mat-select multiple formControlName="components" [ngClass]="{ 'is-invalid': ftemplatecontainer['components'].errors }">
+						<mat-option value="none" *ngIf="formContainer.components.length <= 0">
+							None available
+						</mat-option>
+						<ng-container *ngIf="formContainer.components.length > 0">
+							<mat-option value="{{component.id}}" *ngFor="let component of formContainer.components">
+								{{component.name}} ({{component.componenttype.name}})
+							</mat-option>
+						</ng-container>
+					</mat-select>
+
+				</mat-form-field>
+		</div>
+
+		<div class="form-row row">
+
+			<div class="col-12 col-md-12" class="form-group col-12 col-md-12">
+				<button
+					[disabled]="loading"
+					type="button" mat-flat-button color="primary"
+					(click)="addContainer()">
+						<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+						Add Container
+				</button>
+
+			</div>
+		</div>
+
+	</div>
+
+</form>

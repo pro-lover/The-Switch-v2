@@ -1,0 +1,384 @@
+<mat-card class="drag-drop-component-edit-box" cdkDragBoundary=".example-sidenav-content" cdkDrag >
+	<mat-card-title class="card-title">
+		<h4 class="title">{{EditActiveComponent.name}} details</h4>
+	</mat-card-title>
+
+	<mat-card-content>
+		<form class="form-component-edit" [formGroup]="FormGroupEditComponentMeta"  >
+
+			<mat-stepper class="big-stepper-edit" orientation="horizontal" [linear]="false" labelPosition="bottom" [disableRipple]="true" #stepper>
+
+				<mat-step class="big-stepper-step" label="Position" state="alignment" [editable]="true" >
+					<!--<ng-template matStepLabel>Position</ng-template>-->
+
+					<div class="form-row row">
+						<div class="form-group col-12 offset-md-0 col-md-4" style="text-align: left;">
+							<label class="form-check-label" for="component-smart">
+								<strong class="title">
+									SMART?
+									<!--
+									<abbr title="Smart Components are available to be updated when generating variations.">Smart Component?</abbr>
+									-->
+								</strong>
+							</label>
+						</div>
+						<div class="form-group col-12 offset-md-0 col-md-8" style="text-align: left;display: flex;">
+							<mat-slide-toggle
+								color="primary"
+								name="component-smart"
+								[disabled]="EditActiveComponent.deletedAt !== null"
+								(change)="toggleSmartComponent($event, EditActiveComponent.id)"
+								[checked]="EditActiveComponent.smart">
+							</mat-slide-toggle>
+						</div>
+					</div>
+
+					<div class="form-row row">
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Y-Position</mat-label>
+								<input matInput type="number" placeholder="" formControlName="positionY" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['positionY'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['positionY'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['positionY'].errors['required']">Y-Position is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>X-Position</mat-label>
+								<input matInput type="number" placeholder="" formControlName="positionX" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['positionX'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['positionX'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['positionX'].errors['required']">X-Position is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Width</mat-label>
+								<input matInput type="number" placeholder="" formControlName="width" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['width'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['width'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['width'].errors['required']">Width is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Height</mat-label>
+								<input matInput type="number" placeholder="" formControlName="height" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['height'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['height'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['height'].errors['required']">Height is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Z-Index</mat-label>
+								<input matInput type="number" placeholder="" formControlName="zIndex" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['zIndex'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['zIndex'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['zIndex'].errors['required']">Z-Index is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-step>
+				<mat-step class="big-stepper-step" label="Text" state="text" *ngIf="EditActiveComponent.componenttype.name === 'Text' || EditActiveComponent.componenttype.name === 'Button'" [editable]="true" >
+					<!--<ng-template matStepLabel>Text</ng-template>-->
+					<br />
+					<div class="form-row row" >
+
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Font Family</mat-label>
+								<mat-select formControlName="fontFamilyId" [ngClass]="{ 'is-invalid': ftemplateeditcomponent['fontFamily'].errors }" required>
+
+									<mat-option value="{{fontFamily.id}}" *ngFor="let fontFamily of fontFamilies" style="font-family: {{fontFamily.fontFamily}}; font-weight: {{fontFamily.fontWeight}}; font-style: {{fontFamily.fontStyle}};">
+										{{fontFamily.name}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['fontFamily'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['fontFamily'].errors['required']">{{EditActiveComponent.name}} Font Family is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<input type="hidden" placeholder="" formControlName="fontWeight" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontWeight'].errors }" required />
+						<input type="hidden" placeholder="" formControlName="fontStyle" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontStyle'].errors }" required />
+
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Font Colour</mat-label>
+								<input matInput type="color" placeholder="" formControlName="fontColour" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontColour'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['fontColour'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['fontColour'].errors['required']">{{EditActiveComponent.name}} Font Colour is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Font Size</mat-label>
+								<input matInput type="number" placeholder="" formControlName="fontSize" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontSize'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['fontSize'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['fontSize'].errors['required']">{{EditActiveComponent.name}} Font Size is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Font Line Height</mat-label>
+								<input matInput type="number" placeholder="" formControlName="fontLineHeight" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontLineHeight'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['fontLineHeight'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['fontLineHeight'].errors['required']">{{EditActiveComponent.name}} Font Line Height is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Text Alignment</mat-label>
+
+								<mat-select formControlName="textAlign" [ngClass]="{ 'is-invalid': ftemplateeditcomponent['textAlign'].errors }" required>
+
+									<mat-option value="left">
+										Left
+									</mat-option>
+									<mat-option value="center">
+										Center
+									</mat-option>
+									<mat-option value="right">
+										Right
+									</mat-option>
+
+								</mat-select>
+
+								<!--
+								<mat-button-toggle-group formControlName="textAlign"  [formControl]="FormGroupEditComponentMeta.controls['textAlign']">
+									<mat-button-toggle value="left" aria-label="Text align left">
+										<mat-icon>format_align_left</mat-icon>
+									</mat-button-toggle>
+									<mat-button-toggle value="center" aria-label="Text align center">
+										<mat-icon>format_align_center</mat-icon>
+									</mat-button-toggle>
+									<mat-button-toggle value="right" aria-label="Text align right">
+										<mat-icon>format_align_right</mat-icon>
+									</mat-button-toggle>
+								</mat-button-toggle-group>
+								-->
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['textAlign'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['textAlign'].errors['required']">{{EditActiveComponent.name}} Text Alignment is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Text Value</mat-label>
+								<input matInput placeholder="" formControlName="fontValue" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['fontValue'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['fontValue'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['fontValue'].errors['required']">{{EditActiveComponent.name}} Text Value is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-step>
+				<mat-step class="big-stepper-step" label="Colour" state="colour" *ngIf="EditActiveComponent.componenttype.name === 'Shape' || EditActiveComponent.componenttype.name === 'Button'" [editable]="true" >
+					<!--<ng-template matStepLabel>Colour</ng-template>-->
+					<br />
+					<div class="form-row row" >
+						<div class="form-group col-12 col-md-12">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Shape Colour</mat-label>
+								<input matInput type="color" placeholder="" formControlName="shapeColour" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapeColour'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapeColour'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapeColour'].errors['required']">{{EditActiveComponent.name}} Shape Colour is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="form-row row" *ngIf="EditActiveComponent.componenttype.name === 'Button'">
+						<div class="form-group col-12 col-md-12">
+							<h5>PADDING</h5>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Top</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingTop" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapePaddingTop'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapePaddingTop'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapePaddingTop'].errors['required']"> Top Padding is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Right</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingRight" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapePaddingRight'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapePaddingRight'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapePaddingRight'].errors['required']"> Right Padding is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Bottom</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingBottom" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapePaddingBottom'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapePaddingBottom'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapePaddingBottom'].errors['required']"> Bottom Padding is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Left</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingLeft" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapePaddingLeft'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapePaddingLeft'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapePaddingLeft'].errors['required']"> Left Padding is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-12">
+							<h5>BORDER RADIUS</h5>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Top Left</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusTL" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapeRadiusTL'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapeRadiusTL'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapeRadiusTL'].errors['required']"> Top Left Radius is required</div>
+								</mat-error>
+								<!--<mat-hint>Border Radius Top Left</mat-hint>-->
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Top Right</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusTR" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapeRadiusTR'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapeRadiusTR'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapeRadiusTR'].errors['required']"> Top Right Radius is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Bottom Right</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusBR" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapeRadiusBR'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapeRadiusBR'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapeRadiusBR'].errors['required']"> Bottom Right Radius is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Bottom Left</mat-label>
+								<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusBL" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['shapeRadiusBL'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['shapeRadiusBL'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['shapeRadiusBL'].errors['required']"> Bottom Right Radius is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-step>
+				<mat-step class="big-stepper-step" label="Image" state="image" *ngIf="EditActiveComponent.componenttype.name === 'Image'" [editable]="true" >
+					<!--<ng-template matStepLabel>Image</ng-template>-->
+					<br />
+					<div class="form-row row" >
+						<app-draganddrop
+							(DDEvent)="DragAndDropEventItem($event)"
+							(removeUpload)="removeAsset($event)"
+							[resetUploads]="resetVariationsObs"
+							[dataType]="EditActiveComponent.componenttype.name"
+							[dataContainerId]="''"
+							[componentName]="EditActiveComponent.name"
+							[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+								<h3>
+									Drag and Drop<br />{{EditActiveComponent.name}}(s) Here
+								</h3>
+						</app-draganddrop>
+					</div>
+				</mat-step>
+
+				<!--
+				<mat-step label="Label" state="label" [editable]="true" >
+					<br />
+					<div class="form-row row">
+						<div class="form-group col-12 col-md-12" >
+							<mat-form-field class="" appearance="fill">
+								<mat-label>Name</mat-label>
+								<input matInput readonly type="text" placeholder="" formControlName="componentName" [ngClass]="{ 'is-invalid': submitted && ftemplateeditcomponent['componentName'].errors }" required />
+								<mat-error *ngIf="submitted && ftemplateeditcomponent['componentName'].errors" class="invalid-feedback">
+									<div *ngIf="ftemplateeditcomponent['componentName'].errors['required']">Name is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-step>
+				-->
+
+				<!-- Icon overrides. -->
+				<ng-template matStepperIcon="alignment">
+					<mat-icon>tune</mat-icon>
+				</ng-template>
+				<ng-template matStepperIcon="text">
+					<mat-icon>text_fields</mat-icon>
+				</ng-template>
+				<ng-template matStepperIcon="colour">
+					<mat-icon>palette</mat-icon>
+				</ng-template>
+				<ng-template matStepperIcon="image">
+					<mat-icon>add_photo_alternate</mat-icon>
+				</ng-template>
+				<ng-template matStepperIcon="label">
+					<mat-icon>label_important</mat-icon>
+				</ng-template>
+
+			</mat-stepper>
+
+		</form>
+
+	</mat-card-content>
+
+	<mat-card-actions class="component-edit-dialog-actions">
+		<div class="example-handle" cdkDragHandle>
+			<!--
+			<svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+				<path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+				<path d="M0 0h24v24H0z" fill="none"></path>
+			</svg>
+			-->
+			<mat-icon>
+				drag_indicator
+			</mat-icon>
+		</div>
+		<button mat-button mat-flat-button (click)="closeActiveComponentsEdit()">
+			<mat-icon>
+				close
+			</mat-icon>
+		</button>
+		<button
+			mat-button mat-flat-button
+			[disabled]="EditActiveComponent.isSaving"
+			(click)="saveActiveComponentsEdit(EditActiveComponent.id)"
+			color="primary">
+				<span *ngIf="EditActiveComponent.isSaving" class="spinner-border spinner-border-sm"></span>
+
+				<mat-icon *ngIf="!EditActiveComponent.isSaving">
+					save
+				</mat-icon>
+
+		</button>
+		<button
+			mat-button mat-flat-button (click)="deleteActiveComponentsEdit(EditActiveComponent.id)"
+			color="warn"
+			[disabled]="EditActiveComponent.isDeleting">
+				<span *ngIf="EditActiveComponent.isDeleting" class="spinner-border spinner-border-sm"></span>
+				<mat-icon *ngIf="!EditActiveComponent.isDeleting">
+					delete
+				</mat-icon>
+
+		</button>
+
+	</mat-card-actions>
+
+</mat-card>
+
+

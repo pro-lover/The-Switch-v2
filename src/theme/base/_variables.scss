@@ -1,0 +1,46 @@
+//
+// Wrappers for project variables, to create a new variable
+// please use `variables-definitions.scss` file.
+//
+// If you want to use a variable, import `variables.scss` file,
+// and add the corresponding map-get wrapper here.
+//
+
+/* stylelint-disable */
+@import './variables-definitions';
+@import './mixins/generic-get';
+
+// Special map for colors
+@function get-color($namespace, $variance: normal) {
+	$color-map: get($color, $namespace);
+
+	@return get($color-map, $variance);
+}
+
+// Generic maps
+@function get-time($key: normal) { @return get($time, $key); }
+@function get-font-weight($key: m) { @return get($font-weight, $key); }
+@function get-font-size($key: m) { @return get($font-size, $key); }
+@function get-media($key: m) { @return get($media, $key); }
+@function get-z($key: m) { @return get($z, $key); }
+
+$easeInOutQuart: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+
+$text--primary: #FFFFFF;
+$font_family: Rubik, "Helvetica Neue", sans-serif;
+//$font-family: 'Exo 2',Helvetica,Arial,Lucida,sans-serif;
+
+$colour_black: #000000;
+$colour_white: #FFFFFF;
+
+$colour_red: #C3012F;
+$colour_cyan: #03A9F4;
+$colour_green: #4CAF50;
+$colour_yellow: #fdcc09;
+$colour_orange: #F3BB35;
+
+$colour_twitter_blue: #1da1f2;
+$colour_facebook_blue: #1877f2;
+$colour_instagram_red: #e4405f;
+
+

@@ -1,0 +1,37 @@
+<div mat-dialog-content style="width: 500px;" class="mat-typography ">
+	<div class="row">
+		<div class="col-12 col-md-12">
+			<h1>
+				Rename : {{data.model.name}}
+			</h1>
+			<form class="form-model-edit" [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="form-row row">
+
+					<div class="form-group col-12 col-md-4" style="width: 100%;">
+
+						<mat-form-field class="" appearance="fill" id="inputname">
+							<mat-label>Name</mat-label>
+							<input matInput placeholder="" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" required />
+							<mat-error *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+								<div *ngIf="f['name'].errors['required']">Name is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+				<hr />
+				<br />
+				<div class="form-group">
+					<div class="btn-group">
+						<button [disabled]="loading" class="btn btn-success" id="btn-save">
+							<span *ngIf="loading" class="mr-1 spinner-border spinner-border-sm"></span>
+							Save
+						</button>
+						<button mat-button mat-stroked-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>
+							Close
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

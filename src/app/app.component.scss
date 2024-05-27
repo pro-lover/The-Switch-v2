@@ -1,0 +1,21 @@
+
+@import '../theme/app.global.scss';
+
+#app-layout {
+	display: block;
+	position: relative;
+	min-height: 80vh;
+    display: flex;
+    align-items: flex-start;
+	padding-top: 10vh;
+}
+
+#app-layout-logged-out {
+	display: block;
+	position: relative;
+	min-height: 100vh;
+    display: flex;
+    align-items: center;
+	background: linear-gradient(45deg, rgba(45,45,45,1) 9%,rgba(0,0,0,1) 100%);
+}
+

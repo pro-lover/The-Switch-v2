@@ -1,0 +1,48 @@
+@import './../base/variables';
+
+
+.accordion-headers-align.mat-accordion .mat-expansion-panel {
+	margin-bottom: 1em;
+}
+
+.accordion-headers-align .mat-expansion-panel-header-title,
+.accordion-headers-align .mat-expansion-panel-header-description {
+	//flex-basis: 0;
+	flex-grow: 1;
+	align-items: center;
+}
+
+.accordion-headers-align .mat-expansion-panel-header-title {
+	@media screen and (max-width: get-media(xs)) {
+		flex-basis: auto;
+
+	}
+}
+
+.accordion-headers-align .mat-expansion-panel-header-description {
+	justify-content: end;
+	p {
+		margin-bottom: 0;
+	}
+
+	@media screen and (max-width: get-media(xs)) {
+		justify-content: end;
+
+		p {
+			display: none;
+		}
+	}
+}
+
+.page-dashboard {
+
+	.accordion-headers-align.mat-accordion .mat-expansion-panel {
+		overflow: visible;
+
+		.mat-expansion-panel-content .mat-expansion-panel-body {
+			padding-bottom: 0;
+			padding-right: 0;
+			padding-left: 0;
+		}
+	}
+}

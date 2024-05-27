@@ -1,0 +1,25 @@
+@import './../base/variables';
+
+
+.page-auth-login,
+.page-auth-register,
+.page-auth-forgot-password,
+.page-auth-password-reset {
+	background-color: #222;
+
+	.card-body {
+
+		.mat-card-title {
+			color: #999;
+			text-transform: uppercase;
+			font-weight: bold;
+			font-family: $font_family;
+
+
+			a {
+				color: #730000;
+			}
+		}
+
+	}
+}

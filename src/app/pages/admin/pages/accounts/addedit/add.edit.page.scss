@@ -1,0 +1,34 @@
+@import  '../../../../../../theme/app.global.scss';
+
+
+.form-accounts-edit {
+	label {
+		margin: 1em auto;
+	}
+
+	input {
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+
+	.form-group {
+		margin-bottom: 1em;
+	}
+
+	h3 {
+		text-transform: uppercase;
+	}
+
+	.mat-form-field {
+		width: 100%;
+	}
+
+	@media screen and (max-width: get-media(s)) {
+		.btn {
+			font-size: 1em;
+			padding: 1em 2em;
+		}
+	}
+}

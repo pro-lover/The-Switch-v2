@@ -1,0 +1,111 @@
+﻿
+<h1 mat-dialog-title>
+	{{data.title}}
+</h1>
+
+<div mat-dialog-content class="mat-typography">
+	<div class="row">
+		<div class="col-12 col-md-12">
+
+			<form class="form-model-edit" [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="form-row row">
+
+					<div class="form-group col-12 col-md-4">
+
+						<mat-form-field class="" appearance="fill" id="inputName">
+							<mat-label>Name</mat-label>
+							<input matInput placeholder="" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" required />
+							<mat-error *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+								<div *ngIf="f['name'].errors['required']">Name is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-8">
+
+						<mat-form-field class="" appearance="fill" id="inputDesc">
+							<mat-label>Description</mat-label>
+							<input matInput placeholder="" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f['description'].errors }" required />
+							<mat-error *ngIf="submitted && f['description'].errors" class="invalid-feedback">
+								<div *ngIf="f['description'].errors['required']">Description is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4">
+						<mat-form-field appearance="fill" id="creative-drp">
+							<mat-label>Template (Only templates within the same Client are available)</mat-label>
+							<mat-select formControlName="templateId" [ngClass]="{ 'is-invalid': f['templateId'].errors }" required >
+								<mat-option></mat-option>
+								<span *ngFor="let template of formDataTemplates">
+									<mat-option *ngIf="template.status === true && template.clientId === this.data.data.template.clientId" [value]="template.id" >
+										{{template.name}}
+									</mat-option>
+								</span>
+							</mat-select>
+							<mat-error *ngIf="f['templateId'].errors" class="invalid-feedback">
+								<div *ngIf="f['templateId'].errors['required']">Template is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4">
+						<mat-form-field appearance="fill" id="creative-drp">
+							<mat-label>Creative Type</mat-label>
+							<mat-select formControlName="bannertypeId" [ngClass]="{ 'is-invalid': f['bannertypeId'].errors }" required >
+								<mat-option></mat-option>
+								<span *ngFor="let bannerType of formDataBannerTypes">
+									<mat-option *ngIf="bannerType.status === true" [value]="bannerType.id" >
+										{{bannerType.name}}
+									</mat-option>
+								</span>
+							</mat-select>
+							<mat-error *ngIf="f['bannertypeId'].errors" class="invalid-feedback">
+								<div *ngIf="f['bannertypeId'].errors['required']">Creative Type is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4">
+						<mat-form-field appearance="fill" id="creative-drp">
+							<mat-label>Creative Size</mat-label>
+							<mat-select formControlName="bannersizeId" [ngClass]="{ 'is-invalid': f['bannersizeId'].errors }" required >
+								<mat-option></mat-option>
+								<span *ngFor="let bannerSize of formDataBannerSizes">
+									<mat-option *ngIf="bannerSize.status === true" [value]="bannerSize.id" >
+										{{bannerSize.name}}
+									</mat-option>
+								</span>
+							</mat-select>
+							<mat-error *ngIf="f['bannersizeId'].errors" class="invalid-feedback">
+								<div *ngIf="f['bannersizeId'].errors['required']">Creative Size is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<div class="btn-group">
+						<button [disabled]="loading" class="btn btn-success" id="btn-save">
+							<span *ngIf="loading" class="mr-1 spinner-border spinner-border-sm"></span>
+							Save
+						</button>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+	</div>
+</div>
+
+<br />
+<hr />
+
+<div mat-dialog-actions align="end" style="margin:1em auto;margin-bottom: 0;">
+	<!--
+	<button mat-button mat-stroked-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>
+		Save
+	</button>
+	-->
+	<button mat-button mat-stroked-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>
+		Close
+	</button>
+</div>

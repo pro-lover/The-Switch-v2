@@ -1,0 +1,108 @@
+
+@import '../../../../theme/app.global.scss';
+
+header {
+	border-bottom: 1px solid #730000;
+	box-shadow: 0 3px 11px 0 #e8eafc, 0 3px 3px -2px #b2b2b21a, -1px -14px 7px 20px #9a9a9a;
+
+	&.sticky {
+		top:0;
+		left:0;
+		position: fixed;
+		display: block;
+		width: 100%;
+		z-index: 9;
+	}
+}
+
+.navbar {
+
+	background-color: rgb(30 26 26 / 98%);
+
+	.navbar-brand {
+
+		img {
+			width: 100%;
+			height: auto;
+			max-width: 60px;
+			display: block;
+			position: relative;
+			//border: 1px solid #FFFFFF;
+			//border-radius: 50%;
+
+			@include transition(all, .2s, ease-out);
+
+			@media screen and (max-width: get-media(s)) {
+				max-width: 60px;
+				height: auto;
+			}
+		}
+	}
+
+	.navbar-toggler {
+		border: none;
+
+		&:focus,
+		&:active {
+			box-shadow: none;
+		}
+	}
+
+	.nav-link {
+		padding-top: 1em;
+		padding-bottom: 1em;
+
+		@include transition(all, .2s, ease-out);
+
+		&.active {
+			color: #730000;
+		}
+	}
+
+	.dropdown-menu {
+		background: rgba(30, 26, 26, 0.98);
+		.dropdown-item {
+			color: #FFFFFF;
+
+			&.active,
+			&:active {
+				color: #000000;
+			}
+
+			&:hover {
+				color: #000000;
+				background-color: #fdcc09;
+			}
+		}
+	}
+
+	.dropdown-item.active,
+	.dropdown-item:active {
+		color: #000000;
+		background-color: #fdcc09;
+	}
+
+	.account-name {
+		color: #730000;
+	}
+
+
+	@media screen and (max-width: get-media(s)) {
+		.dropdown-menu {
+			background: transparent;
+			border: none;
+
+			.dropdown-item {
+				color: #FFFFFF;
+				padding-top: 0.5em;
+				padding-bottom: 0.5em;
+			}
+
+			.dropdown-item.active,
+			.dropdown-item:active {
+				color: #000000;
+				background-color: #fdcc09;
+			}
+		}
+	}
+}

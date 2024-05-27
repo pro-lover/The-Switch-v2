@@ -1,0 +1,565 @@
+
+<mat-toolbar class="bapp-admin-toolbar">
+	<span class="toolbar-title">
+		<span *ngIf="isAddMode">Add Creative to Template</span>
+		<span *ngIf="!isAddMode && template">Edit Creative</span>
+	</span>
+	<span class="example-spacer"></span>
+
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark">Back</button>
+	</div>
+
+	<button mat-icon-button (click)="help()" class="Help" aria-label="Help">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<div class="row" *ngIf="activeBannerSizes">
+	<div class="col-12">
+
+		<form class="form-model-edit">
+
+			<div class="row">
+
+				<div class="col-12" *ngFor="let activeBannerSize of activeBannerSizes">
+
+					<mat-accordion class="accordion-headers-align">
+						<mat-expansion-panel [expanded]="!previewActive" [disabled]="previewActive" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+							<mat-expansion-panel-header>
+								<mat-panel-title >
+									<strong>{{template.name}}</strong>&nbsp;for {{template.client.name}}
+								</mat-panel-title>
+								<mat-panel-description >
+									<mat-icon *ngIf="['HTML5'].includes(template.bannertype.name)">html</mat-icon>
+									<mat-icon *ngIf="['GIFs'].includes(template.bannertype.name)">gif</mat-icon>
+									<!--<strong>Creative Type:</strong> {{template.bannertype.name}}-->
+								</mat-panel-description>
+							</mat-expansion-panel-header>
+							<div class="row">
+								<div class="col-12 col-md-12 offset-md-0 d-flex" style="padding-right: 0;justify-content: space-between;">
+									<ng-container *ngIf="['GIFs', 'HTML5'].includes(template.bannertype.name)">
+										<mat-form-field class="" appearance="fill" style="width: 100px;">
+											<mat-label>Order <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+											<input id="Frame Order" [readonly]="true" matInput type="number" min="1" max="{{activeBannerSize.containers.length}}" [formControl]="formControlActiveContainerOrder" placeholder="0" />
+
+										</mat-form-field>
+										<mat-form-field class="" appearance="fill" style="width: 100px;">
+											<mat-label>Duration <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+											<input id="Frame Duration" [readonly]="true" matInput type="number" min="1" max="15" [formControl]="formControlActiveContainerDuration" placeholder="0" />
+											<mat-hint>seconds(s)</mat-hint>
+										</mat-form-field>
+									</ng-container>
+									<mat-form-field class="" appearance="fill" style="width: 50%;max-width: 200px;">
+										<mat-label>Click Through Name <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<input id="Click Through Name" [readonly]="true" matInput type="text" [formControl]="formControlActiveContainerClickThroughName" placeholder="EXIT Tracking Name" />
+									</mat-form-field>
+									<mat-form-field class="" appearance="fill" style="width: 50%;max-width: 200px;">
+										<mat-label>Click Through URL <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<input id="Click Through Link" [readonly]="true" matInput type="text" [formControl]="formControlActiveContainerClickThroughURL" placeholder="https://cmdbanner.io" />
+									</mat-form-field>
+									<mat-form-field class="select-active-container" appearance="fill" style="width: 50%;max-width: 250px;">
+										<mat-label>Choose a Frame <small>(Total: {{activeBannerSize.containers.length}})</small> <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<mat-select [formControl]="formControlActiveContainer">
+											<mat-option [value]="currentContainer.id" *ngFor="let currentContainer of activeBannerSize.containers">
+												{{currentContainer.name}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+
+								</div>
+							</div>
+
+						</mat-expansion-panel>
+					</mat-accordion>
+
+					<!-- PRIMARY TOOLBAR -->
+					<br />
+					<div class="row" >
+						<div class="col-12 col-md-4">
+
+							<mat-button-toggle-group class="coordinates-box" name="containerActions" aria-label="">
+
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>X-Pos.</mat-label>
+									<input id="coordinate-x" class="coordinates-box-input" matInput type="number" readonly placeholder="0.00" />
+								</mat-form-field>
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>Y-Pos.</mat-label>
+									<input id="coordinate-y" class="coordinates-box-input" matInput type="number" readonly placeholder="0.00" />
+								</mat-form-field>
+
+							</mat-button-toggle-group>
+
+						</div>
+						<div class="col-12 col-md-4 offset-md-4 actions-canvas-animation-control" *ngIf="['HTML5'].includes(template.bannertype.name)">
+
+							<mat-button-toggle-group class="coordinates-box" name="containerActions" aria-label="">
+
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>Duration</mat-label>
+									<input id="frame-animation-duration" class="coordinates-box-input" matInput type="number" [value]="0" readonly placeholder="0.00" />
+								</mat-form-field>
+								<!--
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>Progress</mat-label>
+									<input id="frame-animation-progress" class="coordinates-box-input" matInput type="number" [value]="0" readonly placeholder="0.00" />
+								</mat-form-field>
+								-->
+
+							</mat-button-toggle-group>
+
+							<mat-divider [vertical]="true" style="height:50%;"></mat-divider>
+
+							<button
+								mat-icon-button
+								aria-label="Play Animation"
+								[disabled]="previewActive"
+								[color]="animation_isPlaying ? 'primary' : ''"
+								(click)="playAnimation()">
+									<!--<mat-icon>play_circle</mat-icon>-->
+									<mat-icon *ngIf="animation_isPlaying === false">
+										play_arrow
+									</mat-icon>
+									<mat-icon *ngIf="animation_isPlaying === true">
+										pause_circle_filled
+									</mat-icon>
+
+							</button>
+
+							<!--
+							<button
+								[disabled]="previewActive"
+								mat-icon-button
+								[color]="animation_isLooping ? 'primary' : ''"
+								aria-label="Loop Animation"
+								(click)="loopAnimation()">
+									<mat-icon>all_inclusive</mat-icon>
+							</button>
+							-->
+
+							<mat-divider [vertical]="true" style="height:50%;"></mat-divider>
+
+							<button
+								mat-icon-button
+								aria-label="Play All Animation"
+								[disabled]="!previewActive || animation_isPlaying === true"
+								[color]="animation_isPlaying ? 'primary' : ''"
+								(click)="playGlobalAnimation()">
+									<mat-icon>
+										subscriptions
+									</mat-icon>
+							</button>
+
+						</div>
+					</div>
+
+					<!-- MAIN ARTOBOARD SECTION -->
+
+					<div class="row section-artboard" [ngClass]="{ 'creative-loaded': creativeReadyObs | async }">
+						<div class="col-11 control-artboard">
+							<mat-drawer-container class="creative-canvas-container" autosize [hasBackdrop]="false">
+
+								<div
+									class="creative-canvas-sidenav-content">
+										<div class="row">
+
+											<div class="col-12" style="padding:0;">
+												<app-banner-creator
+													(CreativeReadyEvent)="creativeReady($event)"
+													(componentPositionUpdateEvent)="acceptComponentPositionUpdates($event)"
+													(componentEditComponentActionsMenuEvent)="activeComponentsActionMenu($event)"
+
+													[dataBanner]="activeBannerSize"
+													[dataContainer]="activeContainer"
+
+													[newComponentReceived]="newComponentObs"
+													[updateComponentReceived]="updateComponentObs"
+													[unlockComponentReceived]="unlockComponentObs"
+													[deleteComponentReceived]="deleteComponentObs"
+													[editableComponentsReceived]="editableComponentsObs"
+
+													[componentMenuStateReceived]="editableComponentActionMenuObs"
+
+													[playAnimationStageReceived]="playStageAnimationObs"
+													(FrameAnimationPlayEventEnd)="frameAnimationEnd($event)"
+													[playAnimationGlobalStageReceived]="playGlobalAnimationObs"
+													(GlobalAnimationPlayEventEnd)="GlobalAnimationEnd($event)"
+													[loopAnimationStageReceived]="loopStageAnimationObs"
+
+													[refreshStageReceived]="refreshStageObs"
+													[previewCreativeReceived]="previewStageObs"
+													[generateExportReceived]="generateObs">
+												</app-banner-creator>
+												<!-- TODO
+													(componentEditDialogEvent)="activeComponentsEdit($event)"
+
+													[newAnimationReceived]="newAnimationObs"
+													[updateAnimationReceived]="updateAnimationObs"
+													[deleteAnimationReceived]="deleteAnimationObs"
+												-->
+												<!-- Editing COMPONENT -->
+
+												<!--
+													[componentMenuStateReceived]="ComponentMenuActionscloseEvent($event)"
+												<ng-container *ngIf="editingComponent">
+													<app-component-edit
+														[dataTemplate]="template"
+														[dataBanner]="activeBannerSize"
+														[dataContainerId]="activeContainer.id"
+														(EditComponentEvent)="editComponent($event)"
+														(DeleteComponentEvent)="deleteComponent($event)"
+														(EditComponentcloseEvent)="closeActiveComponentsEdit()"
+														[EditActiveComponentReceived]="editableComponentsObsForDialog">
+													</app-component-edit>
+													(ComponentMenuActionscloseEvent)="editableComponentActionMenuObs"
+												</ng-container>
+
+												-->
+
+												<ng-container>
+													<app-component-menu-actions
+
+														[dataTemplate]="template"
+														[dataBanner]="activeBannerSize"
+														[dataContainerId]="activeContainer.id"
+														[EditActiveComponentReceived]="editableComponentActionMenuObs"
+
+														(DeleteComponentEvent)="deleteComponent($event)"
+														(EditComponentEvent)="editComponent($event)"
+														[componentPositionUpdatesReceived]="componentPositionUpdateEventfromPage"
+
+														(ComponentUnlockEvent)="unlockComponent($event)"
+														(ComponentMenuActionscloseEvent)="closeActiveComponentActionsMenu()">
+
+													</app-component-menu-actions>
+												</ng-container>
+											</div>
+										</div>
+								</div>
+
+								<!-- ANIMATION TIMELINE   -->
+								<mat-drawer #drawer (openedChange)="onOpenedChange($event)" class="creative-canvas-sidenav" mode="push" [position]="'end'" >
+
+									<div class="animation-toolbar">
+										<!--
+										<button mat-icon-button [disabled]="true" class="button mat-icon material-icons mat-icon-no-color" (click)="animationSelectMode()">
+											tab_unselected
+										</button>
+										<button mat-icon-button class="button mat-icon material-icons mat-icon-no-color" (click)="animationPanMode()">
+											pan_tool
+										</button>
+										<button mat-icon-button [disabled]="true" class="button mat-icon material-icons mat-icon-no-color" (click)="animationZoomMode()">
+											search
+										</button>
+										-->
+									</div>
+									<div class="animation-timeline">
+										<div class="timeline-outline">
+											<div class="outline-header" id="outline-header" style="min-height: 45px; max-height: 45px;">
+												COMPONENTS <button
+																mat-icon-button
+																[matMenuTriggerFor]="menuLayers"
+																aria-label="Add Animation">
+																	<mat-icon>add_circle</mat-icon>
+															</button>
+															<mat-menu #menuLayers="matMenu" xPosition="after">
+																<div
+																	class="layer-component-menu"
+																	(click)="addAnimationDialog(ExistingComponentType)"
+																	mat-menu-item *ngFor="let ExistingComponentType of componentMetaFiles"
+																	>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Shape'">rectangle</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Text'">text_fields</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Image'">image</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Button'">smart_button</mat-icon>
+																			{{ExistingComponentType.name}}
+																</div>
+
+															</mat-menu>
+											</div>
+											<!-- onwheel="outlineMouseWheel(arguments[0])" -->
+											<div class="outline-scroll-container" id="outline-scroll-container" >
+												<div class="outline-items" id="outline-container">
+
+													<div
+														class="outline-node"
+
+														*ngFor="let anim8row of componentAnimationsOutline">
+															<div title="{{anim8row.componentName}}">
+																{{anim8row.componentName}}
+															</div>
+															<div>
+																<button
+																	mat-icon-button
+																	aria-label=""
+																	(click)="editAnimationDialog(anim8row.group)">
+																		<mat-icon>edit</mat-icon>
+																</button>
+																<button
+																	mat-icon-button
+																	aria-label=""
+																	(click)="addAnimationDialogByKeyframe(anim8row.group)">
+																		<mat-icon>add</mat-icon>
+																</button>
+															</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div id="timeline" #timelineCanvas></div>
+									</div>
+
+									<div *ngIf="editingAnimation">
+										<app-component-animation-edit
+											[dataContainer]="activeContainer"
+											[EditActiveAnimation]="editingAnimation"
+											(EditAnimationEvent)="editAnimation($event)"
+											(DeleteAnimationEvent)="deleteAnimation($event)"
+											(EditAnimationcloseEvent)="closeActiveAnimationEdit()"
+
+											[componentAnimationPositionUpdateReceived]="componentAnimationPositionUpdateEventfromPage">
+										</app-component-animation-edit>
+
+									</div>
+
+								</mat-drawer>
+
+							</mat-drawer-container>
+						</div>
+						<div class="col-1 control-panel">
+
+							<mat-button-toggle-group class="component-actions" name="addComponents" aria-label="Add Component">
+								<!--
+								<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+									<mat-icon>more_vert</mat-icon>
+								</button>
+								<button mat-icon-button aria-label="Creative Details">
+									<mat-icon>info_outline</mat-icon>
+								</button>
+								-->
+								<!--
+								<div
+									class="edit-control"
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Toggle Edit Mode">
+										<mat-slide-toggle
+											color="primary"
+											[disabled]="TimelineOpen === true || previewActive === true"
+											(change)="toggleComponentsEdit($event)"
+											[checked]="componentEditUI">
+										</mat-slide-toggle>
+								</div>
+								-->
+
+								<button mat-icon-button
+									color="accent"
+									(click)="refreshBanner()"
+									aria-label="Refresh Banner"
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Refresh the Creative Canvas">
+										<mat-icon>autorenew</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Add a New Component"
+									mat-icon-button color="accent"
+									[disabled]="TimelineOpen === true || previewActive === true"
+									[matMenuTriggerFor]="menuAddComponents"
+									aria-label="Add New Component">
+										<mat-icon>add_circle</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[disabled]="containerUpdate === true || TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Edit Frame/Container"
+									mat-icon-button
+									color="accent"
+									aria-label="Manage Frame"
+									[matMenuTriggerFor]="frameActions">
+										<mat-icon>web_stories</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[disabled]="containerUpdate === true || componentEditUI === true || TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="List Components"
+									mat-icon-button
+									color="accent"
+									aria-label="List Components"
+									[matMenuTriggerFor]="menuComponents">
+										<mat-icon>layers</mat-icon>
+								</button>
+
+								<!--
+								<button
+									[disabled]="['Static JPG', 'GIFs'].includes(activeBannerSize.bannertype.name) || TimelineOpen === true"
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Animate existing Components"
+									mat-icon-button
+									color="accent"
+									[matMenuTriggerFor]="menuLayers"
+									aria-label="Add Animation">
+										<mat-icon>animation</mat-icon>
+								</button>
+								-->
+								<button
+									[ngClass]="{ 'active': TimelineOpen === true }"
+									[disabled]="['Static JPG', 'GIFs'].includes(activeBannerSize.bannertype.name) || previewActive === true"
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="View the Animation Timeline"
+									mat-icon-button
+									color="accent"
+									aria-label="Timeline"
+									(click)="drawer.toggle()">
+										<mat-icon>blur_linear</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[ngClass]="{ 'active': previewActive === true }"
+									[disabled]="['STATIC JPG', 'GIFs'].includes(activeBannerSize.bannertype.name) || TimelineOpen === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Preview the Creative"
+									mat-icon-button
+									color="accent"
+									aria-label="Preview"
+									(click)="previewCreative()">
+										<mat-icon>visibility</mat-icon>
+								</button>
+								<button
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true|| previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Download the Creative"
+									mat-icon-button
+									color="accent"
+									aria-label="Download"
+									(click)="exportCreative()">
+										<mat-icon>download</mat-icon>
+								</button>
+								<button
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true|| previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="View the Creative Rules"
+									mat-icon-button
+									color="accent"
+									aria-label="Rules"
+									(click)="creativeRules()">
+										<mat-icon>gavel</mat-icon>
+								</button>
+							</mat-button-toggle-group>
+
+							<mat-menu #frameActions="matMenu" xPosition="before">
+								<div
+									class="layer-component-menu"
+									mat-menu-item
+									*ngIf="['GIFs', 'HTML5'].includes(activeBannerSize.bannertype.name)"
+									(click)="addContainerDialog(activeContainer)">
+										<mat-icon>note_add</mat-icon> Add Container/Frame?
+								</div>
+
+								<div
+									class="layer-component-menu"
+									mat-menu-item
+									(click)="editContainerDialog(activeContainer)">
+										<mat-icon>filter_{{activeContainer.displayorder}}</mat-icon> Edit Active Container
+								</div>
+
+							</mat-menu>
+
+
+							<mat-menu #menuComponents="matMenu" class="control-nav-components-menu" xPosition="before" >
+
+								<div
+									cdkDropList [cdkDropListData]="componentMetaFiles" (cdkDropListDropped)="dropComponentOrder($event)">
+
+									<div
+										class="layer-component-menu"
+										cdkDrag [cdkDragData]="ExistingComponentType"
+										(click)="selectComponentFromControlMenu(ExistingComponentType)"
+										mat-menu-item *ngFor="let ExistingComponentType of componentMetaFiles"
+										>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Shape'">rectangle</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Text'">text_fields</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Image'">image</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Button'">smart_button</mat-icon>
+											<span class="component-title">{{ExistingComponentType.name}}</span>
+											<span class="badge-index">{{ExistingComponentType.componentmeta.zIndex}}</span>
+									</div>
+
+								</div>
+
+							</mat-menu>
+
+							<!--
+							<mat-menu #menuLayers="matMenu" xPosition="before">
+								<div
+									class="layer-component-menu"
+									(click)="addAnimationDialog(ExistingComponentType)"
+									mat-menu-item *ngFor="let ExistingComponentType of componentMetaFiles"
+									>
+										<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Shape'">rectangle</mat-icon>
+										<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Text'">text_fields</mat-icon>
+										<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Image'">image</mat-icon>
+											{{ExistingComponentType.name}}
+								</div>
+
+							</mat-menu>
+							-->
+
+							<mat-menu #menuAddComponents="matMenu" xPosition="before">
+								<div
+									class="layer-component-menu"
+									mat-menu-item *ngFor="let componentType of formDataComponentType"
+									(click)="addComponentDialog(componentType)">
+										<mat-icon *ngIf="componentType.name ==='Shape'">rectangle</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Text'">text_fields</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Image'">image</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Button'">smart_button</mat-icon>
+										New {{componentType.name}}
+								</div>
+							</mat-menu>
+						</div>
+
+						<div class="col-12 loading-creative">
+							<mat-spinner></mat-spinner>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+			<br />
+			<br />
+		</form>
+
+	</div>
+</div>
+
+

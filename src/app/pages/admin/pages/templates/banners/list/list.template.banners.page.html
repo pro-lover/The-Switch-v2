@@ -1,0 +1,269 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">
+		<span *ngIf="primaryData">
+			Client: <span style="font-weight: normal;font-size:0.7em;">{{clientName}}</span>
+			<br />
+			Total Creatives: <span *ngIf="!primaryData" class="spinner-border spinner-border-sm mr-1"></span>
+			<span style="font-weight: normal;font-size:0.7em;" *ngIf="primaryData">
+				{{primaryData.length}}
+			</span>
+			<br />
+			Template: <span style="font-weight: normal;font-size:0.7em;">{{templateName}}</span>
+		</span>
+
+	</span>
+	<span class="example-spacer"></span>
+	<div class="btn-group">
+		<!--
+		<a routerLink="create" class="btn btn-success" id="hint-action-btn-create">
+			Create Template Banner
+		</a>
+		<button [disabled]="!primaryData" (click)="export()" class="btn btn-secondary" id="hint-action-btn-export">
+			Export
+		</button>
+		-->
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+	<button [disabled]="!primaryData" mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<mat-accordion class="accordion-headers-align graph-panel" >
+
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				FILTERS
+			</mat-panel-title>
+			<mat-panel-description>Filter Table by Banner, creative type, Creative Size</mat-panel-description>
+		</mat-expansion-panel-header>
+		<ng-template matExpansionPanelContent>
+			<div class="filters-container">
+				<div class="row">
+
+					<div class="col-12 col-md-3 offset-md-9 filter-status-toggle">
+						Show only active components?
+						<br />
+						<mat-slide-toggle
+							color="primary"
+							(change)="onFilterChange('status')"
+							[formControl]="statusFilterValue">
+						</mat-slide-toggle>
+						<br />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<mat-form-field appearance="fill" class="name-filter-chip-list" *ngIf="masterReference_names">
+							<mat-chip-list  #chipList aria-label="All creative Names">
+
+								<mat-chip *ngFor="let activeNameFilter of activeNameFilters" [selectable]="selectable"
+									[removable]="removable" (removed)="removeSelectedFiltered('name')">
+											{{activeNameFilter.name}}
+									<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+
+								</mat-chip>
+
+								<input matInput placeholder="Search by creative name..."
+									#chipInput
+									[formControl]="chipCtrl"
+									[matAutocomplete]="auto"
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur"
+									>
+									<!-- (matChipInputTokenEnd)="add($event)" | async-->
+							</mat-chip-list>
+							<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTextFilter($event, 'name')">
+								<mat-option *ngFor="let so of filteredNames | async" [value]="so.id">
+									{{ so.name }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+					<div class="col-12 col-md-3">
+						<mat-form-field hintLabel="" appearance="fill">
+							<mat-label>Select a Creative Type </mat-label>
+							<mat-select [formControl]="bannertypeFilterValue" (selectionChange)="onFilterChange('Description')">
+								<mat-option [value]="">All</mat-option>
+								<mat-option [value]="bannertype.id" *ngFor="let bannertype of filterDataBannerTypes">
+									{{bannertype.name}}
+								</mat-option>
+							</mat-select>
+							<mat-hint align="end">Filter by Creative Type</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="col-12 col-md-3">
+						<mat-form-field hintLabel="" appearance="fill">
+							<mat-label>Select a Dimension</mat-label>
+							<mat-select [formControl]="bannersizeFilterValue" (selectionChange)="onFilterChange('Dimension')">
+								<mat-option [value]="">All</mat-option>
+								<mat-option [value]="bannersize.id" *ngFor="let bannersize of filterDataBannerSizes">
+									{{bannersize.name}}
+								</mat-option>
+							</mat-select>
+							<mat-hint align="end">Filter by Creative Size</mat-hint>
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</mat-expansion-panel>
+</mat-accordion>
+<br /><br />
+<table class="table table-striped" matSort (matSortChange)="sortData($event)">
+	<thead>
+		<tr>
+			<th mat-sort-header="id" >ID</th>
+			<!--<th mat-sort-header="client" >Client</th>-->
+			<th mat-sort-header="name" >Name</th>
+			<th mat-sort-header="description" >Description</th>
+			<th mat-sort-header="bannersize" >Dimensions</th>
+			<th mat-sort-header="bannertype" >Type</th>
+			<th mat-sort-header="containers" >Containers</th>
+			<th mat-sort-header="status" >Status</th>
+			<!--
+			<th mat-sort-header="components" >Components</th>
+			<th mat-sort-header="created" >Created</th>
+			<th mat-sort-header="updated" >Updated</th>
+			-->
+			<th ></th>
+		</tr>
+	</thead>
+	<tbody>
+        <tr *ngFor="let model of sortedData;let indexOfelement = index;">
+
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.id}}
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.template.client.name}}
+			</td>
+			-->
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.name}}
+			</td>
+
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.description}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.bannersize.name}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.bannertype.name}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.containers.length}}
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+
+			</td>
+			-->
+			<td >
+				<mat-slide-toggle
+					color="primary"
+					[disabled]="model.deletedAt !== null"
+					(change)="toggleStatus($event, model.id)"
+					[checked]="model.status">
+				</mat-slide-toggle>
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.created | date:'MMM d, y'}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.updated | date:'short'}}
+			</td>
+			-->
+			<td style="white-space: nowrap;text-align: center;">
+				<button
+					mat-icon-button
+					[disabled]="model.isDeleting || model.isVC"
+					[matMenuTriggerFor]="menu" aria-label="">
+						<span *ngIf="model.isDeleting || model.isVC" class="spinner-border spinner-border-sm"></span>
+						<mat-icon>more_vert</mat-icon>
+				</button>
+				<mat-menu #menu="matMenu">
+					<button
+						routerLink="edit/{{model.id}}"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item>
+							<mat-icon>design_services</mat-icon>
+							<span>Design</span>
+					</button>
+					<button
+						[disabled]="model.deletedAt !== null"
+						(click)="edit(model.id)"
+						mat-menu-item>
+							<mat-icon>edit</mat-icon>
+							<span>Edit</span>
+					</button>
+					<button
+						[disabled]="model.deletedAt !== null"
+						(click)="duplicate(model.id)"
+						mat-menu-item>
+							<mat-icon>file_copy</mat-icon>
+							<span>Duplicate</span>
+					</button>
+					<button
+						[disabled]="model.deletedAt !== null"
+						(click)="viewRules(model.id)"
+						mat-menu-item>
+							<mat-icon>gavel</mat-icon>
+							<span>Rules</span>
+					</button>
+					<button
+						(click)="audit(model.id)"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item disabled>
+							<mat-icon>history</mat-icon>
+							<span>Audit</span>
+					</button>
+					<button
+						(click)="deleteModel(model.id)"
+						[disabled]="model.deletedAt !== null"
+						mat-menu-item>
+							<mat-icon>delete</mat-icon>
+							<span>Delete</span>
+					</button>
+					<button
+						(click)="restoreModel(model.id)"
+						[disabled]="model.deletedAt === null"
+						mat-menu-item>
+							<mat-icon>restore_from_trash</mat-icon>
+							<span>Restore</span>
+					</button>
+				</mat-menu>
+
+			</td>
+		</tr>
+		<tr *ngIf="!sortedData">
+			<td colspan="8" class="text-center">
+				<span class="spinner-border spinner-border-lg align-center"></span>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="8">
+				<mat-paginator [length]="length"
+					[showFirstLastButtons]=true
+					[pageSize]="pageSize"
+					[pageSizeOptions]="pageSizeOptions"
+					[pageIndex]="currentPage"
+					(page)="handlePage($event)"
+					aria-label="Select page">
+				</mat-paginator>
+			</td>
+		</tr>
+	</tfoot>
+</table>

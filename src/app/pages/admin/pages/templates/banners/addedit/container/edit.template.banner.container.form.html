@@ -1,0 +1,86 @@
+
+<form class="form-model-edit" [formGroup]="FormGroupContainerData" >
+	<!-- EDITING CONTAINER -->
+	<div class="form-row row new-container">
+
+		<div class="form-group col-12 col-md-4" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Container Name</mat-label>
+				<input matInput type="text" placeholder="{{dataBanner.name}} Frame Number" formControlName="name" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['name'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatecontainer['name'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['name'].errors['required']">Container Name is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-8" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Container Description</mat-label>
+				<input matInput type="text" placeholder="" formControlName="description" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['description'].errors }" required />
+				<mat-error *ngIf="submitted && ftemplatecontainer['description'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['description'].errors['required']">Container Description is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+
+		<div class="form-group col-12 col-md-2" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Order</mat-label>
+				<input id="Frame Order" matInput type="number" min="1" max="{{dataBanner.containers.length}}" formControlName="displayorder" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['displayorder'].errors }" required />
+				<mat-hint>Frame order</mat-hint>
+				<mat-error *ngIf="submitted && ftemplatecontainer['displayorder'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['displayorder'].errors['required']">Frame order is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-2" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Duration</mat-label>
+				<input id="Frame Duration" matInput type="number" min="1" max="15" formControlName="duration" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['duration'].errors }" required />
+				<mat-hint>seconds(s)</mat-hint>
+				<mat-error *ngIf="submitted && ftemplatecontainer['duration'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['duration'].errors['required']">Frame duration is required</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+	<div class="form-row row">
+		<div class="form-group col-12 col-md-6" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Click Through Name</mat-label>
+				<input id="Click Through Name" matInput type="url" formControlName="clickThroughName" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['clickThroughName'].errors }" />
+
+				<mat-error *ngIf="submitted && ftemplatecontainer['clickThroughName'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['clickThroughName'].errors['required']">Please provide a Title for the Exit</div>
+					<div *ngIf="ftemplatecontainer['clickThroughName'].errors['pattern']">Please provide a Title for the Exit</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="form-group col-12 col-md-6" >
+			<mat-form-field class="" appearance="fill">
+				<mat-label>Click Through URL</mat-label>
+				<input id="Click Through Link" matInput type="url" formControlName="clickThroughURL" [ngClass]="{ 'is-invalid': submitted && ftemplatecontainer['clickThroughURL'].errors }" />
+				<mat-hint>http(s)://domain.com</mat-hint>
+				<mat-error *ngIf="submitted && ftemplatecontainer['clickThroughURL'].errors" class="invalid-feedback">
+					<div *ngIf="ftemplatecontainer['clickThroughURL'].errors['required']">Please provide a URL</div>
+					<div *ngIf="ftemplatecontainer['clickThroughURL'].errors['pattern']">Please provide a valid URL</div>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</div>
+
+	<div class="form-row row">
+
+		<div class="col-12 col-md-12" class="form-group col-12 col-md-12">
+			<br /><br />
+			<button
+				[disabled]="loading"
+				type="button" mat-flat-button color="primary"
+				(click)="updateContainer()">
+					<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+					Update Container
+			</button>
+
+		</div>
+	</div>
+
+</form>

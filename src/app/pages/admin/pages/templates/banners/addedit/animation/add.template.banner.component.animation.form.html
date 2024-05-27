@@ -1,0 +1,285 @@
+
+
+	<!-- ADDING ANIMATION -->
+
+	<mat-stepper orientation="horizontal" [linear]="true" #stepper>
+		<mat-step label="Selection" [stepControl]="FormGroupAnimationData" state="Selection" [editable]="true" errorMessage="Please complete all required fields." >
+			<form class="form-model-edit" [formGroup]="FormGroupAnimationData" >
+				<br />
+				<div class="form-row row new-animation">
+
+					<div class="form-group col-12 col-md-6">
+						<mat-form-field class="bapp-form-field-class" appearance="fill">
+							<mat-label>Loop</mat-label>
+							<mat-select class="bapp-form-mat-select" formControlName="animationloop" [ngClass]="{ 'is-invalid': fcomponentanimation['animationloop'].errors }">
+
+								<!--
+								<mat-option [value]="true">
+									Yes
+								</mat-option>
+								-->
+								<mat-option [value]="false">
+									No
+								</mat-option>
+
+							</mat-select>
+							<mat-error *ngIf="submitted && fcomponentanimation['animationloop'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimation['animationloop'].errors['required']">Please specify if the animation should loop or not.</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+
+					<div class="form-group col-12 col-md-6">
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Order</mat-label>
+
+							<input matInput type="number" min="1" step="1" placeholder="0.00" formControlName="timelineorder" [ngClass]="{ 'is-invalid': submitted && fcomponentanimation['timelineorder'].errors }" required />
+
+							<mat-error *ngIf="submitted && fcomponentanimation['timelineorder'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimation['timelineorder'].errors['required']">Please specify the order of the keyframe position.</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+
+					<div class="form-group col-12 col-md-6">
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Animation Type</mat-label>
+							<mat-select formControlName="animationtypeId" [ngClass]="{ 'is-invalid': fcomponentanimation['animationtypeId'].errors }">
+
+								<ng-container *ngFor="let animationType of formDataAnimationTypes;trackBy: ListtrackByFn">
+									<mat-option [value]="animationType.id" [disabled]="animationType.id === 3 && fcomponentanimation['timelineorder'].value > 1">
+										{{animationType.name}}
+									</mat-option>
+								</ng-container>
+
+							</mat-select>
+							<mat-error *ngIf="submitted && fcomponentanimation['animationtypeId'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimation['animationtypeId'].errors['required']">Please choose an Animation Type.</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+
+					<div class="form-group col-12 col-md-6">
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Animation Easing</mat-label>
+							<mat-select formControlName="easingtypeId" [ngClass]="{ 'is-invalid': fcomponentanimation['easingtypeId'].errors }">
+
+								<mat-option [value]="easingType.id" *ngFor="let easingType of formDataEasingTypes;trackBy: ListtrackByFn">
+									{{easingType.name}}
+								</mat-option>
+
+							</mat-select>
+							<mat-error *ngIf="submitted && fcomponentanimation['easingtypeId'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimation['easingtypeId'].errors['required']">Please choose an Easing Type.</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+
+
+				</div>
+				<br />
+				<br />
+				<div style="display:flex;justify-content: flex-start;">
+					<!--
+					<button mat-button mat-flat-button color="accent" (click)="stepper.reset()">Reset</button>
+					-->
+					<button mat-button mat-flat-button color="primary" matStepperNext >Next</button>
+				</div>
+			</form>
+		</mat-step>
+
+		<mat-step label="Keyframe" [stepControl]="FormGroupAnimationMetaData" state="Start" [editable]="true" errorMessage="Please complete all required fields." >
+			<br />
+			<form class="form-model-edit" [formGroup]="FormGroupAnimationMetaData" >
+				<div class="form-row row new-animation">
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Component width</mat-label>
+							<input matInput type="number" placeholder="" readonly [disabled]="true" [value]="formComponent.componentmeta.width"  />
+
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Component height</mat-label>
+							<input matInput type="number" placeholder="" readonly [disabled]="true" [value]="formComponent.componentmeta.height"  />
+
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="form-row row new-animation">
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Start Time (seconds)</mat-label>
+							<input matInput type="number" min="0" step="0.25" placeholder="0.00" formControlName="startTime" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta['startTime'].errors }" required />
+							<mat-hint>Position in Timeline</mat-hint>
+							<mat-error *ngIf="submitted && fcomponentanimationmeta['startTime'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta['startTime'].errors['required']">Animation Start Time is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Animation Duration (seconds)</mat-label>
+							<input matInput type="number" min="0" max="{{dataContainer.duration}}" step="0.25" placeholder="0.5" formControlName="duration" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta['duration'].errors }" required />
+							<mat-hint>Max. length: {{dataContainer.duration}} seconds</mat-hint>
+							<mat-error *ngIf="submitted && fcomponentanimationmeta['duration'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta['duration'].errors['required']">Animation Duration is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Position-X</mat-label>
+							<input matInput type="number" placeholder="" formControlName="positionX" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta['positionX'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta['positionX'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta['positionX'].errors['required']">Position-X required</div>
+							</mat-error>
+							<mat-hint>Start Position of animation</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Position-Y</mat-label>
+							<input matInput type="number" placeholder="" formControlName="positionY" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta['positionY'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta['positionY'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta['positionY'].errors['positionY']">Position-Y required</div>
+							</mat-error>
+							<mat-hint>Start Position of animation</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Opacity</mat-label>
+							<input matInput type="number" min="0" max="1" step="0.1" placeholder="" formControlName="opacity" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta['opacity'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta['opacity'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta['opacity'].errors['required']">Opacity required</div>
+							</mat-error>
+							<mat-hint>Start Opacity of animation</mat-hint>
+						</mat-form-field>
+					</div>
+
+				</div>
+				<br /><br />
+				<div style="display:flex;justify-content: space-between;">
+					<div>
+						<!--<button mat-button mat-flat-button color="primary" matStepperNext >Next</button>-->
+						<div>
+							<button
+								[disabled]="loading"
+								type="button" mat-button mat-flat-button color="primary"
+								(click)="addAnimation()">
+									<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+									Add Animation
+							</button>
+						</div>
+					</div>
+					<div>
+						<button mat-button mat-flat-button color="warn" (click)="stepper.reset()">Reset</button>
+						<button mat-button mat-flat-button color="accent" matStepperPrevious >Back</button>
+					</div>
+
+				</div>
+			</form>
+		</mat-step>
+
+		<!--
+		<mat-step label="Exit Keyframe" state="End" [editable]="true" >
+			<br />
+			<form class="form-model-edit" [formGroup]="FormGroupAnimationMetaDataExit" >
+				<div class="form-row row new-animation">
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Component width</mat-label>
+							<input matInput type="number" placeholder="" readonly [disabled]="true" [value]="formComponent.componentmeta.width"  />
+
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Component height</mat-label>
+							<input matInput type="number" placeholder="" readonly [disabled]="true" [value]="formComponent.componentmeta.height"  />
+
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="form-row row new-animation">
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Position-X</mat-label>
+							<input matInput type="number" placeholder="" formControlName="positionX" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta_exit['positionX'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta_exit['positionX'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta_exit['positionX'].errors['required']">Position-X required</div>
+							</mat-error>
+							<mat-hint>End Position of animation</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Position-Y</mat-label>
+							<input matInput type="number" placeholder="" formControlName="positionY" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta_exit['positionY'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta_exit['positionY'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta_exit['positionY'].errors['positionY']">Position-Y required</div>
+							</mat-error>
+							<mat-hint>End Position of animation</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Opacity</mat-label>
+							<input matInput type="number" min="0" max="1" step="0.1" placeholder="" formControlName="opacity" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta_exit['opacity'].errors }" required />
+							<mat-error *ngIf="submitted && fcomponentanimationmeta_exit['opacity'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta_exit['opacity'].errors['required']">Opacity required</div>
+							</mat-error>
+							<mat-hint>End Opacity of animation</mat-hint>
+						</mat-form-field>
+					</div>
+					<div class="form-group col-12 col-md-4" >
+						<mat-form-field class="" appearance="fill">
+							<mat-label>Animation Duration (seconds)</mat-label>
+							<input matInput type="number" min="0" max="{{dataContainer.duration}}" step="0.25" placeholder="0.00" formControlName="duration" [ngClass]="{ 'is-invalid': submitted && fcomponentanimationmeta_exit['duration'].errors }" required />
+							<mat-hint>Max. length: {{dataContainer.duration}} seconds</mat-hint>
+							<mat-error *ngIf="submitted && fcomponentanimationmeta_exit['duration'].errors" class="invalid-feedback">
+								<div *ngIf="fcomponentanimationmeta_exit['duration'].errors['required']">Animation Duration is required</div>
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div style="display:flex;justify-content: space-between;">
+					<div>
+						<button
+							[disabled]="loading"
+							type="button" mat-button mat-flat-button color="primary"
+							(click)="addAnimation()">
+								<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+								Add Animation
+						</button>
+					</div>
+					<div>
+						<button mat-button mat-flat-button color="warn" (click)="stepper.reset()">Reset</button>
+						<button mat-button mat-flat-button color="accent" matStepperPrevious >Back</button>
+					</div>
+				</div>
+			</form>
+		</mat-step>
+		-->
+
+		<!-- Icon overrides. -->
+		<ng-template matStepperIcon="Selection">
+			<mat-icon>movie</mat-icon>
+		</ng-template>
+		<ng-template matStepperIcon="Start">
+			<mat-icon>play_circle_filled</mat-icon>
+		</ng-template>
+		<ng-template matStepperIcon="End">
+			<mat-icon>stop_circle</mat-icon>
+		</ng-template>
+		<ng-template matStepperIcon="Save">
+			<mat-icon>save</mat-icon>
+		</ng-template>
+
+	</mat-stepper>
+
+

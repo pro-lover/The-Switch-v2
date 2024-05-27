@@ -1,0 +1,105 @@
+@import './app.global.scss';
+
+
+@import './components/alert';
+@import './components/accordion';
+@import './components/canvas_rulers';
+@import './components/canvas_banner_creator';
+@import './components/form';
+@import './components/introjs';
+@import './components/button';
+@import './components/navigation';
+@import './components/table';
+@import './components/pagination';
+@import './components/overlay';
+
+@import './pages/dashboard';
+@import './pages/template.add.edit.banner';
+
+.app-container {
+	min-height: 100vh;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	position: relative;
+}
+
+.creative-canvas-sidenav {
+	overflow-y: hidden;
+
+	.mat-drawer-inner-container {
+		width: 100%;
+		height: 100%;
+		overflow-y: hidden;
+	}
+}
+
+.drag-drop-component-animation-edit-box {
+
+	.mat-stepper-horizontal,
+	.mat-stepper-vertical {
+		background-color: transparent;
+
+		.mat-step-text-label {
+			color: #FFFFFF;
+		}
+
+		.mat-form-field-appearance-fill .mat-form-field-flex {
+			border-radius: 0;
+			background-color: rgba(255,255,255,.1);
+		}
+
+		.mat-form-field {
+
+			.mat-hint,
+			.mat-form-field-label {
+				color: #FFFFFF;
+			}
+
+			input.mat-input-element {
+				color: $colour_yellow;
+			}
+
+			.mat-select-value {
+				color: #FFFFFF;
+				color: $colour_yellow;
+			}
+
+			.mat-form-field-wrapper {
+				.mat-form-field-underline {
+
+					&:before {
+						background-color: #FFFFFF;
+					}
+					.mat-form-field-ripple {
+						background-color: #FFFFFF;
+					}
+				}
+			}
+			&.mat-focused {
+				.mat-form-field-wrapper {
+					.mat-form-field-underline {
+						.mat-form-field-ripple {
+							background-color: $colour_yellow;
+						}
+					}
+				}
+			}
+		}
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

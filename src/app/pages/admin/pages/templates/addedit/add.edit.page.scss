@@ -1,0 +1,80 @@
+@import  '../../../../../../theme/app.global.scss';
+
+
+.form-model-edit {
+	label {
+		margin: 1em auto;
+	}
+
+	input {
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+
+	.form-group {
+		margin-bottom: 1em;
+	}
+
+	h3 {
+		text-transform: uppercase;
+	}
+
+	.mat-form-field {
+		width: 100%;
+	}
+
+	@media screen and (max-width: get-media(s)) {
+		.btn {
+			font-size: 1em;
+			padding: 1em 2em;
+		}
+	}
+
+
+
+
+		.mat-flat-button,
+		.mat-stroked-button {
+			border-radius: 0;
+		}
+
+}
+
+.accordion-headers-align.mat-accordion .mat-expansion-panel {
+	margin-bottom: 1em;
+}
+
+.accordion-headers-align .mat-expansion-panel-header-title,
+.accordion-headers-align .mat-expansion-panel-header-description {
+	//flex-basis: 0;
+	flex-grow: 1;
+	align-items: center;
+}
+
+.accordion-headers-align .mat-expansion-panel-header-title {
+	@media screen and (max-width: get-media(xs)) {
+		flex-basis: auto;
+
+	}
+}
+
+.accordion-headers-align .mat-expansion-panel-header-description {
+	justify-content: end;
+	p {
+		margin-bottom: 0;
+	}
+
+	@media screen and (max-width: get-media(xs)) {
+		justify-content: end;
+
+		p {
+			display: none;
+		}
+	}
+}
+
+canvas {
+	box-shadow: 0 0 5px;
+}

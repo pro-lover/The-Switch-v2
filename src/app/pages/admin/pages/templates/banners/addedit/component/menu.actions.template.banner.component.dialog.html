@@ -1,0 +1,131 @@
+<div class="drag-drop-component-menu-actions" cdkDragBoundary=".example-sidenav-content" cdkDrag >
+
+	<div class="component-menu-actions-dialog-actions">
+		<div class="example-handle" cdkDragHandle>
+			<!--
+			<svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+				<path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+				<path d="M0 0h24v24H0z" fill="none"></path>
+			</svg>
+			-->
+			<mat-icon>
+				drag_indicator
+			</mat-icon>
+
+		</div>
+		<button
+			mat-button
+			class="menu-button"
+			[disabled]="editComponentDialogOpen === true"
+			(click)="closeActiveComponentsActionsMenu()">
+				<mat-icon >
+					close
+				</mat-icon>
+		</button>
+
+	</div>
+
+	<div
+		class="menu-context"
+		[ngClass]="{ 'component-edit-open': editComponentDialogOpen === true }"
+		*ngIf="activeComponentMenuActions">
+			<div class="title" >
+				{{activeComponentMenuActions.name}}
+			</div>
+			<div class="menu-items-holder">
+				<!--
+				<ul class="menu-list">
+					<li class="menu-item">
+						<button
+							mat-button
+							class="menu-button"
+							[disabled]="editComponentDialogOpen === true"
+							(click)="closeActiveComponentsActionsMenu()">
+								<mat-icon >
+									close
+								</mat-icon>
+						</button>
+					</li>
+				</ul>
+				-->
+				<ul class="menu-list">
+					<li class="menu-item">
+						<button
+							mat-button
+							class="menu-button"
+							[disabled]="editComponentDialogOpen === true"
+							(click)="toggleEditComponentDialog()">
+								<mat-icon >
+									tune
+								</mat-icon>
+						</button>
+					</li>
+				</ul>
+				<ul class="menu-list">
+					<li class="menu-item">
+						<button
+							mat-button
+							class="menu-button"
+							[disabled]="editComponentDialogOpen === true"
+							(click)="activateComponentDragandDrop()">
+								<mat-icon *ngIf="componentDragandDropLock">
+									lock
+								</mat-icon>
+								<mat-icon *ngIf="!componentDragandDropLock">
+									lock_open
+								</mat-icon>
+						</button>
+					</li>
+				</ul>
+				<ul class="menu-list">
+					<li class="menu-item">
+						<button
+							[disabled]="editComponentDialogOpen === true"
+							mat-button class="menu-button"
+							(click)="duplicateComponent()">
+								<mat-icon >
+									content_copy
+								</mat-icon>
+						</button>
+					</li>
+				</ul>
+
+				<!--
+				<ul class="menu-list">
+					<li class="menu-item">
+						<button
+							mat-button class="menu-button"
+							(click)="deleteActiveComponentsEdit()"
+							[disabled]="editComponentDialogOpen === true" >
+								<mat-icon *ngIf="!activeComponentMenuActions.isDeleting">
+									delete
+								</mat-icon>
+								<span *ngIf="activeComponentMenuActions.isDeleting" class="spinner-border spinner-border-sm"></span>
+						</button>
+					</li>
+				</ul>
+				-->
+			</div>
+	</div>
+</div>
+
+<app-component-edit *ngIf="editComponentDialogOpen === true"
+	[dataTemplate]="dataTemplate"
+	[dataBanner]="dataBanner"
+	[dataContainerId]="dataContainerId"
+
+	(DeleteComponentEvent)="deleteComponentPassEvent($event)"
+	(EditComponentcloseEvent)="closeActiveComponentsEdit()"
+	(EditComponentEvent)="editComponentUpdatesFromForm($event)"
+
+	[EditActiveComponentReceived]="editableComponentsObsForDialog"
+
+	[UpdatedComponentPositionReceived]="componentPositionUpdatesReceived">
+
+		<!--
+			(EditComponentEvent)="editComponent($event)"
+			(DeleteComponentEvent)="deleteComponent($event)"
+		-->
+</app-component-edit>
+
+

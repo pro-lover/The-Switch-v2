@@ -1,0 +1,32 @@
+{
+    "database": {
+        "local": {
+            "host": "localhost",
+            "port": 8889,
+            "user": "root",
+            "password": "root",
+            "database": "bannerbuilder"
+        },
+        "prod": {
+            "host": "ls-84ed47ad793863fb61c5a507d66cbe25ada33b8f.cnzzvv3dy8z2.eu-west-1.rds.amazonaws.com",
+            "port": 3306,
+            "user": "dbbapp",
+            "password": "XB$+b86VB9gk",
+            "database": "cmdbannerio"
+        }
+    },
+    "secret": "e8bb55e7-7866-4388-b5ad-ea5fbc682b4f",
+    "emailFrom": "noreply@cmdbanner.io",
+    "sendinblue": {
+        "apiKey": "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"
+    },
+    "smtpOptions": {
+        "host": "smtp-relay.sendinblue.com",
+        "port": 587,
+        "auth": {
+            "user": "ssibusiso@5ivedesign.co.za",
+            "pass": "xsmtpsib-fa54fed7e3e5545f5cad0176b8e89c7b227dde674e5a6a5669b9da7925dd364e-dbQCmPYkE8aRJTI3"
+        }
+    }
+}
+

@@ -1,0 +1,152 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">Total Easing Types: <span *ngIf="!primaryData" class="mr-1 spinner-border spinner-border-sm"></span><span *ngIf="primaryData">{{primaryData.length}}</span></span>
+	<span class="example-spacer"></span>
+	<div class="btn-group" *ngIf="primaryData">
+		<a routerLink="create" class="btn btn-success" id="hint-action-btn-create">
+			Create Easing Type
+		</a>
+		<!--
+		<button (click)="export()" class="btn btn-secondary" id="hint-action-btn-export">
+			Export
+		</button>
+		-->
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+	<button [disabled]="!primaryData" mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<mat-accordion class="accordion-headers-align graph-panel" >
+
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				FILTERS
+			</mat-panel-title>
+			<mat-panel-description>
+						<div >
+							Show only active components?
+							<mat-slide-toggle
+								style="margin-left: 12px;"
+								color="primary"
+								(change)="onFilterChange('status')"
+								[formControl]="statusFilterValue">
+							</mat-slide-toggle>
+						</div>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+	</mat-expansion-panel>
+</mat-accordion>
+<br /><br />
+
+<table class="table table-striped" matSort (matSortChange)="sortData($event)">
+	<thead>
+		<tr>
+			<th mat-sort-header="id" >ID</th>
+			<th mat-sort-header="name" >Name</th>
+			<th mat-sort-header="description" >Description</th>
+			<th mat-sort-header="status" id="toggle-status">Status</th>
+			<!--
+			<th mat-sort-header="created" >Created</th>
+			<th mat-sort-header="updated" >Updated</th>
+			-->
+			<th ></th>
+		</tr>
+	</thead>
+	<tbody>
+        <tr *ngFor="let model of sortedData;let indexOfelement = index;">
+
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.id}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.name}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.description}}
+			</td>
+			<td >
+				<mat-slide-toggle
+					color="primary"
+					[disabled]="model.deletedAt !== null"
+					(change)="toggleStatus($event, model.id)"
+					[checked]="model.status">
+				</mat-slide-toggle>
+			</td>
+			<!--
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.created | date:'MMM d, y'}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': model.deletedAt !== null }">
+				{{model.updated | date:'short'}}
+			</td>
+			-->
+			<td style="white-space: nowrap;text-align: center;">
+				<div class="btn-group">
+
+					<a
+						*ngIf="model.deletedAt === null"
+						routerLink="edit/{{model.id}}"
+						class="mr-1 btn btn-sm btn-primary"
+						id="edit-btn"
+						[ngClass]="{ 'model-action-edit': indexOfelement === 0 }">
+							Edit
+					</a>
+
+					<button
+						*ngIf="model.deletedAt === null"
+						(click)="audit(model.id)"
+						class="btn btn-sm btn-warning"
+						id="btn-audit"
+						[disabled]="model.isVC">
+							<span *ngIf="!model.isVC">Audit</span>
+							<span *ngIf="model.isVC === true" class="spinner-border spinner-border-sm"></span>
+
+					</button>
+
+					<button
+						*ngIf="model.deletedAt === null"
+						[disabled]="model.isDeleting"
+						(click)="deleteModel(model.id)" class="btn btn-sm btn-danger btn-delete-model" id="btn-delete">
+							<span *ngIf="model.isDeleting" class="spinner-border spinner-border-sm"></span>
+							<span *ngIf="!model.isDeleting">Delete</span>
+					</button>
+
+					<button
+						*ngIf="model.deletedAt !== null"
+						[disabled]="model.isDeleting"
+						(click)="restoreModel(model.id)" class="btn btn-sm btn-warning btn-delete-model" >
+							<span *ngIf="model.isDeleting" class="spinner-border spinner-border-sm"></span>
+							<span *ngIf="!model.isDeleting">Restore</span>
+					</button>
+
+				</div>
+			</td>
+		</tr>
+		<tr *ngIf="!sortedData">
+			<td colspan="7" class="text-center">
+				<span class="spinner-border spinner-border-lg align-center"></span>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="7">
+				<mat-paginator [length]="length"
+					[showFirstLastButtons]=true
+					[pageSize]="pageSize"
+					[pageSizeOptions]="pageSizeOptions"
+					[pageIndex]="currentPage"
+					(page)="handlePage($event)"
+					aria-label="Select page">
+				</mat-paginator>
+			</td>
+		</tr>
+	</tfoot>
+</table>

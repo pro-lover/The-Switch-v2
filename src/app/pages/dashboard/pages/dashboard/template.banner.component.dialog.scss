@@ -1,0 +1,176 @@
+@import  '../../../../../theme/app.global.scss';
+
+.drag-drop-component-edit-box {
+	position: fixed;
+	top: 30%;
+	right: 30%;
+	width: 100%;
+    max-width: 30vw;
+	height: auto;
+	border: solid 1px #ccc;
+	color: rgba(0, 0, 0, 0.87);
+	cursor: default;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	text-align: center;
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(5px);
+	border-radius: 4px;
+	margin-right: 0;
+	z-index: 99999;
+	box-sizing: border-box;
+	padding: 2em 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+				0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+	&::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top:0;
+		left:0;
+	}
+
+	.title {
+		text-align: center;
+		font-weight: bold;
+		text-transform: uppercase;
+		font-family: $font_family;
+		font-size: 14px;
+
+		small {
+			font-size: 10px;
+			display: block;
+		}
+	}
+
+	.mat-bapp-content {
+
+		.mat-stepper-horizontal.bapp-dialog-stepper,
+		.mat-stepper-vertical.bapp-dialog-stepper {
+			background-color: transparent;
+		}
+
+		form {
+			label {
+				margin: 1em auto;
+			}
+
+			input {
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+
+			.form-group {
+				margin-bottom: 0;
+			}
+
+			h3 {
+				text-transform: uppercase;
+			}
+
+			.mat-form-field {
+				width: 100%;
+			}
+
+			@media screen and (max-width: get-media(s)) {
+				.btn {
+					font-size: 1em;
+					padding: 1em 2em;
+				}
+			}
+
+			.mat-flat-button,
+			.mat-stroked-button {
+				border-radius: 0;
+			}
+		}
+
+	}
+
+	.mat-card-actions.component-edit-dialog-actions {
+		position: absolute;
+		right: -20px;
+		top: -20px;
+		display: flex;
+		flex-direction: column;
+
+		.example-handle {
+			position: relative;
+			//top: 10px;
+			//right: 10px;
+			color: #242526;
+			cursor: grab;
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			background: #d0d6df;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+					0 8px 10px 1px rgba(0, 0, 0, 0.14),
+					0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+			&:hover,
+			&:active {
+				box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+					0 2px 2px 0 rgba(0, 0, 0, 0.14),
+					0 1px 5px 0 rgba(0, 0, 0, 0.12);
+			}
+		}
+
+		button {
+			border-radius: 100%;
+			width: 48px;
+			min-width: 48px;
+			height: 48px;
+			padding: 0;
+			margin: 1em auto;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+				0 8px 10px 1px rgba(0, 0, 0, 0.14),
+				0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+			&:nth-child(1),
+			&:nth-child(2) {
+				background: #d0d6df;
+			}
+
+			&:nth-child(2) {
+				background: #FFFFFF;
+				margin-bottom: 0;
+			}
+
+			&:hover,
+			&:active {
+				box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+				0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 1px 5px 0 rgba(0, 0, 0, 0.12);
+			}
+		}
+	}
+}
+
+.drag-drop-component-edit-box:active {
+	cursor: grabbing;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+				0 8px 10px 1px rgba(0, 0, 0, 0.14),
+				0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+	.example-handle {
+		cursor: grabbing;
+	}
+}

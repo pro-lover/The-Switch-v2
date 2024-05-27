@@ -1,0 +1,32 @@
+﻿<h1 mat-dialog-title>
+	{{data.title}}
+</h1>
+
+<div mat-dialog-content class="mat-typography">
+	<div class="row">
+		<div class="col-12 col-md-12">
+
+			<app-container-edit
+				[dataTemplate]="data.template"
+				[dataBanner]="data.activeBannerSize"
+				[formContainer]="data.container"
+				(FDCEvent)="passContainerFromDialog($event)">
+			</app-container-edit>
+
+		</div>
+	</div>
+</div>
+
+<hr />
+
+<div mat-dialog-actions align="end" style="margin:1em auto;margin-bottom: 0;" [mat-dialog-close]="passContainer">
+
+	<!--
+	<button mat-button mat-flat-button color="primary" [mat-dialog-close]="newComponent">
+		Add
+	</button>
+	-->
+	<button mat-button mat-stroked-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>
+		Cancel
+	</button>
+</div>

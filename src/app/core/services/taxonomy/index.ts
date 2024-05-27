@@ -1,0 +1,2 @@
+export * from './taxonomy.service';
+

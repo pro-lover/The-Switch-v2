@@ -1,0 +1,157 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">Total Accounts: <span *ngIf="!primaryData" class="mr-1 spinner-border spinner-border-sm"></span><span *ngIf="primaryData">{{primaryData.length}}</span></span>
+	<span class="example-spacer"></span>
+	<div class="btn-group" *ngIf="primaryData">
+		<a routerLink="create" class="btn btn-success" id="hint-action-btn-create">
+			Create user account
+		</a>
+		<!--
+		<button (click)="export()" class="btn btn-secondary" id="hint-action-btn-export">
+			Export
+		</button>
+		-->
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+	<button [disabled]="!primaryData" mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<mat-accordion class="accordion-headers-align graph-panel" >
+
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				FILTERS
+			</mat-panel-title>
+			<mat-panel-description>
+						<div >
+							Show only active components?
+							<mat-slide-toggle
+								style="margin-left: 12px;"
+								color="primary"
+								(change)="onFilterChange('status')"
+								[formControl]="statusFilterValue">
+							</mat-slide-toggle>
+						</div>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+	</mat-expansion-panel>
+</mat-accordion>
+<br /><br />
+
+<table class="table table-striped" matSort (matSortChange)="sortData($event)">
+	<thead>
+		<tr>
+			<th mat-sort-header="id" >ID</th>
+			<th mat-sort-header="lastName" >Name</th>
+			<th mat-sort-header="email" >Email</th>
+			<th mat-sort-header="role" >Role</th>
+			<th mat-sort-header="verified" >Verified</th>
+			<th mat-sort-header="status" id="toggle-status">Status</th>
+			<th ></th>
+		</tr>
+	</thead>
+	<tbody>
+        <tr *ngFor="let account of sortedData;let indexOfelement = index;">
+
+			<td [ngClass]="{ 'deleted-record': account.deletedAt !== null }">
+				{{account.id}}
+			</td>
+			<td [ngClass]="{ 'deleted-record': account.deletedAt !== null }">{{account.lastName}} {{account.firstName}} ({{account.title}})</td>
+			<td [ngClass]="{ 'deleted-record': account.deletedAt !== null }">{{account.email}}</td>
+			<td [ngClass]="{ 'deleted-record': account.deletedAt !== null }">{{account.role}}</td>
+
+			<td >
+				<span
+					*ngIf="account.isVerified === true">
+						<mat-icon color="primary">check_circle</mat-icon>
+				</span>
+				<span
+					*ngIf="account.isVerified === false">
+						<mat-icon color="warn">cancel</mat-icon>
+				</span>
+			</td>
+			<td >
+				<mat-slide-toggle
+					color="primary"
+					[disabled]="account.deletedAt !== null"
+					(change)="toggleStatus($event, account.id)"
+					[checked]="account.status">
+				</mat-slide-toggle>
+			</td>
+			<td style="white-space: nowrap;text-align: center;">
+				<div class="btn-group">
+
+					<a
+						*ngIf="(myaccount.id !== account.id) && (account.deletedAt === null)"
+						routerLink="edit/{{account.id}}"
+						class="mr-1 btn btn-sm btn-primary"
+						id="edit-btn"
+						[ngClass]="{ 'model-action-edit': indexOfelement === 0 }">
+							Edit
+					</a>
+					<a
+						*ngIf="myaccount.id === account.id"
+						routerLink="edit/{{account.id}}"
+						class="mr-1 btn btn-sm btn-primary"
+						id="btn-editProfile"
+						[ngClass]="{ 'model-action-edit': indexOfelement === 0 }">
+							Edit profile
+					</a>
+					<button
+						*ngIf="account.deletedAt === null"
+						(click)="audit(account.id)"
+						class="btn btn-sm btn-warning"
+						id="btn-audit"
+						[disabled]="account.isVC">
+							<span *ngIf="!account.isVC">Audit</span>
+							<span *ngIf="account.isVC" class="spinner-border spinner-border-sm"></span>
+					</button>
+
+					<button
+						*ngIf="(myaccount.id !== account.id) && (account.deletedAt === null)"
+						[disabled]="myaccount.id === account.id || account.isDeleting"
+						(click)="deleteAccount(account.id)" class="btn btn-sm btn-danger btn-delete-account" id="btn-delete">
+							<span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
+							<span *ngIf="!account.isDeleting">Delete</span>
+					</button>
+
+					<button
+						*ngIf="account.deletedAt !== null"
+						(click)="restore(account.id)"
+						class="btn btn-sm btn-success btn-restore-account"
+						[disabled]="account.isDeleting">
+							<span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
+							<span *ngIf="!account.isDeleting">Restore Record</span>
+					</button>
+
+				</div>
+			</td>
+		</tr>
+		<tr *ngIf="!sortedData">
+			<td colspan="8" class="text-center">
+				<span class="spinner-border spinner-border-lg align-center"></span>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="8">
+				<mat-paginator [length]="length"
+					[showFirstLastButtons]=true
+					[pageSize]="pageSize"
+					[pageSizeOptions]="pageSizeOptions"
+					[pageIndex]="currentPage"
+					(page)="handlePage($event)"
+					aria-label="Select page">
+				</mat-paginator>
+			</td>
+		</tr>
+	</tfoot>
+</table>

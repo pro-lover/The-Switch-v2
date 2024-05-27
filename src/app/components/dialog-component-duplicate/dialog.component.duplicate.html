@@ -1,0 +1,37 @@
+﻿<h1 mat-dialog-title>
+	{{data.title}}
+</h1>
+
+<div mat-dialog-content class="mat-typography">
+	<div class="row">
+		<div class="col-12 col-md-12">
+
+			<app-component-duplicate
+				(FDCEvent)="passComponentFromDialog($event)"
+				[dataComponent]="data.dataComponent"
+				[dataTemplate]="data.template"
+				[dataBanner]="data.dataBanner"
+				[dataContainerId]="data.dataContainerId">
+			</app-component-duplicate>
+			<!--
+			<app-component-duplicate></app-component-duplicate>
+			-->
+
+		</div>
+	</div>
+</div>
+
+<br />
+<hr />
+
+<div mat-dialog-actions align="end" style="margin:1em auto;margin-bottom: 0;" [mat-dialog-close]="passComponent">
+
+	<!--
+	<button mat-button mat-flat-button color="primary" [mat-dialog-close]="newComponent">
+		Add
+	</button>
+	-->
+	<button mat-button mat-stroked-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>
+		Cancel
+	</button>
+</div>

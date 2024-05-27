@@ -1,0 +1,932 @@
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">
+		GENERATE CREATIVES
+	</span>
+	<span class="example-spacer"></span>
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+	<button mat-icon-button class="Help" aria-label="Help" (click)="help()">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<div class="" style="padding-left: 0 !important;padding-right: 0 !important;">
+	<div class="container-fluid" style="padding-left: 0 !important;padding-right: 0 !important;">
+		<mat-stepper class="dashboard-stepper" [linear]="isLinear" #stepper [orientation]="(stepperOrientation | async)!" (selectionChange)="onStepChange($event)">
+
+			<!-- Icon overrides.  settings_suggest-->
+			<ng-template matStepperIcon="template_selection">
+				<mat-icon>web_stories</mat-icon>
+			</ng-template>
+			<ng-template matStepperIcon="assets_upload">
+				<mat-icon>design_services</mat-icon>
+			</ng-template>
+			<ng-template matStepperIcon="variations_download">
+				<mat-icon>preview</mat-icon>
+			</ng-template>
+
+			<mat-step [stepControl]="FormGroupProjectDetails" [editable]="false" [optional]="false" state="template_selection" errorMessage="Please complete all required fields.">
+				<form class="form-dashboard" [formGroup]="FormGroupProjectDetails">
+
+					<ng-template matStepLabel>
+						Select Template
+					</ng-template>
+					<!-- *ngIf="dashboardData$ | async as dashboardDb;" -->
+					<ng-container
+
+					>
+					<br /><br />
+					<div class="form-row row">
+						<div class="form-group col-12 col-md-6" id="select-client-drp">
+							<mat-form-field appearance="fill">
+								<mat-label>Select Client <span *ngIf="!uiDataReady" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+								<mat-select formControlName="projectClient" [ngClass]="{ 'is-invalid': f['projectClient'].errors }" required>
+									<mat-option></mat-option>
+									<ng-container *ngFor="let client of Clients;trackBy: ListtrackByFn">
+										<mat-option *ngIf="client.status === true" [value]="client.id" >
+											{{client.name}}
+										</mat-option>
+									</ng-container>
+								</mat-select>
+								<mat-error *ngIf="f['projectClient'].errors" class="invalid-feedback">
+									<div *ngIf="f['projectClient'].errors['required']">Client is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="form-group col-12 col-md-6" id="select-project-drp">
+							<mat-form-field appearance="fill">
+								<mat-label>Select Project</mat-label>
+								<mat-select formControlName="projectTitle" [ngClass]="{ 'is-invalid': f['projectTitle'].errors }" required>
+									<mat-option></mat-option>
+									<ng-container *ngFor="let project of availableProjects;trackBy: ListtrackByFn">
+										<mat-option *ngIf="project.status === true" [value]="project.id" >
+											{{project.name}}
+										</mat-option>
+									</ng-container>
+								</mat-select>
+								<mat-error *ngIf="f['projectTitle'].errors" class="invalid-feedback">
+									<div *ngIf="f['projectTitle'].errors['required']">Project is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="form-row row">
+						<div class="form-group col-12 col-md-6" id="select-creative-drp">
+							<mat-form-field appearance="fill">
+								<mat-label>Creative Type</mat-label>
+								<mat-select formControlName="projectBannerType" [ngClass]="{ 'is-invalid': f['projectBannerType'].errors }" required>
+									<mat-option></mat-option>
+									<ng-container *ngFor="let bannerType of availableCreativeTypes;trackBy: ListtrackByFn">
+										<mat-option *ngIf="bannerType.status === true" [value]="bannerType.id" >
+											{{bannerType.name}}
+										</mat-option>
+									</ng-container>
+
+								</mat-select>
+								<mat-error *ngIf="f['projectBannerType'].errors" class="invalid-feedback">
+									<div *ngIf="f['projectBannerType'].errors['required']">Creative Type is required</div>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="form-row row" *ngIf="f['projectBannerType'].value">
+						<div class="form-group col-12 col-md-12">
+							<p class="form-section-title" id="select-layput-drp" style="margin-top:0;">Choose a Layout</p>
+						</div>
+						<mat-error *ngIf="f['projectTemplate'].errors" class="invalid-feedback">
+							<div *ngIf="f['projectTemplate'].errors['required']">Please select a layout</div>
+							<br />
+						</mat-error>
+						<div class="form-group col-12 col-md-12">
+							<mat-radio-group aria-label="Choose a Layout" formControlName="projectTemplate" [ngClass]="{ 'is-invalid': f['projectTemplate'].errors }" required id="select-layout-btn">
+								<div class="form-row row">
+									<ng-container *ngFor="let template of availableTemplates;trackBy: ListtrackByFn">
+										<div class="form-group col-12 col-md-4" *ngIf="template.bannertypeId === f['projectBannerType'].value">
+
+											<mat-radio-button [value]="template.id"  >
+												<strong>{{template.name}}</strong>
+												<br />
+												<small>({{template.description}})</small>
+											</mat-radio-button>
+
+											<br />
+										</div>
+									</ng-container>
+								</div>
+
+							</mat-radio-group>
+						</div>
+					</div>
+					<div class="form-row row" *ngIf="activeTemplate">
+						<div class="form-group col-12 col-md-12">
+							<p class="form-section-title" style="margin-top:0;">Choose Sizes</p>
+						</div>
+						<mat-error *ngIf="f['projectBannerSizes'].errors" class="invalid-feedback">
+							<div *ngIf="f['projectBannerSizes'].errors['required']">Please select at least one banner size</div>
+							<br />
+						</mat-error>
+						<div class="form-group col-12 col-md-12" id="select-size-chk">
+							<span  class="my-checkbox" *ngFor="let size of BannerSizes;trackBy: ListtrackByFn">
+								<mat-checkbox formControlName="projectBannerSizes" [value]="size.id" (ngModelChange)="selectedBannerSize(size.id)" *ngIf="size.status === true">
+									{{size.name}}
+								</mat-checkbox>
+							</span>
+						</div>
+					</div>
+					</ng-container>
+
+					<hr />
+					<br />
+					<div style="display:flex;justify-content: space-between;">
+						<button
+							[disabled]="activeBannerSizes.length === 0"
+							mat-button mat-flat-button color="primary" matStepperNext id="next-btn">
+								Next
+						</button>
+						<button mat-button mat-flat-button color="accent" (click)="stepper.reset()">Reset</button>
+					</div>
+				</form>
+			</mat-step>
+
+			<mat-step [stepControl]="FormGroupVariations" [editable]="false" [optional]="false" state="assets_upload" errorMessage="Please upload all required assets.">
+				<form class="form-dashboard" >
+
+					<ng-template matStepLabel>
+						Upload Assets
+					</ng-template>
+					<br />
+					<ng-template matStepContent>
+						<div class="row">
+							<div class="col-2 form-dashboard" style="text-align: left;">
+								<button mat-button mat-flat-button color="accent" (click)="stepper.reset()">Reset</button>
+								<!--
+								<button mat-button mat-flat-button matStepperPrevious id="btn-back" [disabled]="variationsGenerated === true">
+									Back
+								</button>
+								-->
+							</div>
+							<div class="col-10 form-dashboard" style="text-align: right;">
+
+								<!-- variationsGenerated === true || !(noOfVariationsForGeneration === activeBannerSizes.length) -->
+
+								<button
+									mat-button mat-flat-button
+									[disabled]="variationsGenerated === true"
+									color="primary"
+									id="btn-generate"
+									(click)="generateAllVariations()">Generate All Variations
+								</button>
+								<button
+									mat-button mat-flat-button
+									[disabled]="exportingProcess === true || variationsExported === true || !(noOfVariations === activeBannerSizes.length)"
+									color="primary"
+									id="btn-export"
+									(click)="exportAllVariations()">
+										Export All Variations
+										<span *ngIf="exportingProcess" class="mr-1 spinner-border spinner-border-sm"></span>
+								</button>
+								<button
+									mat-button
+									mat-flat-button
+									color="primary" matStepperNext id="btn-download"
+									[disabled]="variationsExported === false ">
+										Next
+								</button>
+								<!--&& TotalContainersForAllCreatives < this.completedBannerVariationCounter-->
+								<!--[disabled]="!(completedBannerVariationCounter >= activeBannerSizes.length)"-->
+							</div>
+						</div>
+						<br />
+						<hr />
+						<br />
+
+						<div class="row">
+							<div class="col-12" style="text-align: left;">
+								<mat-accordion class="accordion-headers-align" >
+									<mat-expansion-panel [expanded]="indexOfelement === 0" (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngFor="let activeBannerSize of activeBannerSizes;let indexOfelement = index;trackBy: ListtrackByFn" id="edit-banner">
+										<mat-expansion-panel-header>
+											<mat-panel-title >
+													{{activeBannerSize.name}}
+											</mat-panel-title>
+											<mat-panel-description >
+
+												<mat-progress-bar
+													mode="determinate"
+													*ngIf="activeBannerSize.readyForVariations === true"
+													[value]="activeBannerSize.variationpercentage"></mat-progress-bar>
+
+												<span
+													*ngIf="activeBannerSize.readyForVariations === true">
+														<mat-icon color="primary">check_circle</mat-icon>
+												</span>
+												<span
+													class="variation-status"
+													*ngIf="activeBannerSize.readyForVariations === false">
+														<mat-icon color="warn">cancel</mat-icon>
+												</span>
+
+											</mat-panel-description>
+										</mat-expansion-panel-header>
+										<hr />
+										<br />
+										<div class="row banner-variation-option">
+											<div
+												class="col-11 control-artboard" style="text-align: left;" >
+
+
+													<mat-drawer-container class="creative-canvas-container" autosize [hasBackdrop]="false" >
+														<div class="creative-canvas-sidenav-content">
+															<div class="row">
+
+																<div
+																	class="col-12 creative-holding-section"
+																	style="padding: 0;"
+																	[ngClass]="{ 'creative-loaded': activeContainer.creativeReady === true }"
+																	*ngFor="let activeContainer of activeBannerSize.containers;trackBy: ListtrackByFn">
+
+
+																	<app-banner
+																		(variationCollectionForDownloadEvent)="acceptCollectionOfVariationsFromBannerComponent($event)"
+																		(variationCounter)="progressPercentage($event)"
+																		[populateVariations]="variationsEvent"
+																		[downloadVariations]="downloadVariationsEvent"
+
+																		(CreativeReadyEvent)="creativeReady($event)"
+
+																		[newDropReceive]="uploadedFileObs"
+																		[removeDrop]="removeUploadItemObs"
+																		[resetVariations]="resetVariationsObs"
+
+																		[playAnimationStageReceived]="playStageAnimationObs"
+																		(FrameAnimationPlayEventStart)="frameAnimationStart($event)"
+																		(FrameAnimationPlayEventEnd)="frameAnimationEnd($event)"
+																		[playAnimationGlobalStageReceived]="playGlobalAnimationObs"
+																		(GlobalAnimationPlayEventEnd)="GlobalAnimationEnd($event)"
+																		[loopAnimationStageReceived]="loopStageAnimationObs"
+
+																		[BannerComponentTemplateRules]="TemplateRules"
+
+																		[dataTemplate]="activeTemplate"
+																		[dataBanner]="activeBannerSize"
+																		[dataContainer]="activeContainer">
+
+																	</app-banner>
+
+																	<app-component-variations
+																		[ngClass]="[(activeBannerSize.componentWindowOpen === true && activeContainer.componentWindowOpen === true) ? 'open' : 'close']"
+
+																		(UploadEvent)="DragAndDropEventItem($event)"
+																		(ResetEvent)="ResetVariationsEvent($event)"
+																		(RemoveUploadEvent)="RemoveUploadEventItem($event)"
+																		(CloseEvent)="CloseComponentWindow($event)"
+
+																		[dataBanner]="activeBannerSize"
+																		[dataContainer]="activeContainer"
+																		[dataComponents]="activeContainer.components">
+																	</app-component-variations>
+
+																</div>
+
+															</div>
+														</div>
+														<!-- opened   -->
+														<mat-drawer #drawer (openedChange)="onOpenedChange($event)" class="creative-canvas-sidenav" mode="push" ></mat-drawer>
+													</mat-drawer-container>
+
+													<br />
+											</div>
+											<div class="col-1 control-panel" >
+
+												<mat-button-toggle-group
+													class="component-actions"
+													name="creativeControls"
+													aria-label="Creative Controls" >
+
+													<!--
+													<button mat-icon-button
+														color="accent"
+														(click)="refreshBanner()"
+														aria-label="Refresh Banner"
+														#tooltip="matTooltip"
+														[matTooltipPosition]="'left'"
+														matTooltipHideDelay="2000"
+														matTooltip="Refresh the Creative Canvas">
+															<mat-icon>autorenew</mat-icon>
+													</button>
+													-->
+
+
+													<ng-container *ngFor="let activeContainer of activeBannerSize.containers;trackBy: ListtrackByFn">
+
+														<button mat-icon-button
+															*ngIf="this.creativeType === 'HTML5'"
+															[color]="[(activeContainer.animation_isPlaying === true) ? 'primary' : 'accent']"
+															(click)="playAnimation(activeBannerSize, activeContainer)"
+															aria-label="Preview Creative"
+															#tooltip="matTooltip"
+															[matTooltipPosition]="'left'"
+															matTooltipHideDelay="2000"
+															matTooltip="Play Animation">
+
+																<ng-container *ngIf="activeContainer.creativeReady === true">
+																	<mat-icon *ngIf="activeContainer.animation_isPlaying === false">
+																		play_arrow
+																	</mat-icon>
+																	<mat-icon *ngIf="activeContainer.animation_isPlaying === true">
+																		pause_circle_filled
+																	</mat-icon>
+																</ng-container>
+
+																<span *ngIf="activeContainer.creativeReady === false" class="mr-1 spinner-border spinner-border-sm"></span>
+														</button>
+
+														<button mat-icon-button
+															[disabled]="animation_isPlaying === true"
+															[color]="[(activeContainer.componentWindowOpen === true) ? 'primary' : 'accent']"
+															(click)="toggleUploadWindow(activeBannerSize, activeContainer)"
+															class="toggle-btn-assets"
+															aria-label="Upload Creative Assets"
+															#tooltip="matTooltip"
+															[matTooltipPosition]="'left'"
+															matTooltipHideDelay="2000"
+															matTooltip="Toggle upload assets window for Frame {{activeContainer.name}}?">
+
+																<ng-container *ngIf="activeContainer.creativeReady === true">
+																	<mat-icon style="display: block;margin: 0 auto;">upload</mat-icon>
+																	<mat-icon style="display: block;margin: 0 auto;">filter_{{activeContainer.displayorder}}</mat-icon>
+																</ng-container>
+
+																<span *ngIf="activeContainer.creativeReady === false" class="mr-1 spinner-border spinner-border-sm"></span>
+														</button>
+
+													</ng-container>
+
+													<!--
+													<button mat-icon-button
+														[color]="[(activeBannerSize.componentWindowOpen === true) ? 'primary' : 'accent']"
+														(click)="toggleUploadWindow(activeBannerSize)"
+														aria-label="Upload Creative Assets"
+														#tooltip="matTooltip"
+														[matTooltipPosition]="'left'"
+														matTooltipHideDelay="2000"
+														matTooltip="Toggle upload assets window for Frame 1?"
+														id="toggle-btn-assets">
+															<mat-icon>upload</mat-icon>
+													</button>
+													-->
+
+												</mat-button-toggle-group>
+
+											</div>
+
+										</div>
+									</mat-expansion-panel>
+								</mat-accordion>
+							</div>
+						</div>
+					</ng-template>
+					<br /><br />
+				</form>
+			</mat-step>
+
+			<mat-step state="variations_download">
+				<form class="form-dashboard">
+					<ng-template matStepLabel>Download Creative</ng-template>
+					<br /><br />
+					<ng-template matStepContent>
+						<div class="row" *ngIf="variationCollectionForExport && activeTemplate">
+							<div class="col-12 col-md-7" style="text-align: left;">
+								<strong>Client:</strong> {{activeTemplate.client.name}}
+								<br />
+								<strong>Template Name:</strong> {{activeTemplate.name}}
+								<br />
+								<strong>Creative Type:</strong> {{activeTemplate.bannertype.name}}
+								<br />
+								<strong>Banner Sizes:</strong> {{activeBannerSizes.length}}
+								<br />
+								<strong>Variations:</strong> {{variationCollectionForExport.length}}
+								<br />
+								<strong>Variations / Banner size:</strong> {{variationCollectionForExport.length/activeBannerSizes.length | number: '1.0-0'}}
+							</div>
+							<div class="col-12 col-md-5 form-dashboard" style="text-align: right;">
+								<!--
+								<button mat-button mat-flat-button color="accent" matStepperPrevious>Back</button>
+								-->
+								<button mat-button mat-flat-button color="accent" (click)="stepper.reset()">Reset</button>
+								<button
+									mat-button mat-flat-button color="primary"
+									[disabled]="variationCollectionForExport.length <= 0 || generatingDownloads === true"
+									(click)="downloadAllVariations()"
+									id="btn-download-all">
+										Download All Variations
+										<span *ngIf="generatingDownloads" class="mr-1 spinner-border spinner-border-sm"></span>
+								</button>
+
+							</div>
+						</div>
+						<hr />
+						<br />
+
+						<mat-accordion class="accordion-headers-align graph-panel" *ngIf="activeBannerSizes.length > 1">
+
+							<mat-expansion-panel [expanded]="true">
+								<mat-expansion-panel-header>
+									<mat-panel-title>
+										FILTERS
+									</mat-panel-title>
+									<mat-panel-description>Filter by Creative Size</mat-panel-description>
+								</mat-expansion-panel-header>
+								<ng-template matExpansionPanelContent>
+									<div class="filters-container">
+										<div class="row">
+
+											<div class="col-12 col-md-4">
+												<mat-form-field hintLabel="" appearance="fill">
+													<mat-label>Select a Creative Size</mat-label>
+													<mat-select [formControl]="bannersizeFilterValue" (selectionChange)="onFilterChange('bannersize')">
+														<mat-option [value]="">All</mat-option>
+														<mat-option [value]="bannersize.bannersizeId" *ngFor="let bannersize of activeBannerSizes;trackBy: ListtrackByFn">
+															{{bannersize.name}}
+														</mat-option>
+													</mat-select>
+													<mat-hint align="end">Filter by Creative Size</mat-hint>
+												</mat-form-field>
+												<br /><br />
+											</div>
+										</div>
+									</div>
+								</ng-template>
+							</mat-expansion-panel>
+						</mat-accordion>
+						<br /><br />
+
+						<ng-container [ngSwitch]="this.creativeType">
+
+							<!-- GIFs + HTML 5(1) TABLE -->
+							<ng-container *ngSwitchCase="'GIFs'">
+
+								<table class="table table-striped table-variations-dynamic"  *ngIf="variationCollectionForExport">
+									<thead>
+										<tr>
+											<th mat-sort-header="id" >ID</th>
+											<th mat-sort-header="name">Name</th>
+											<th mat-sort-header="size">Creative</th>
+											<th>Preview</th>
+											<th style="text-align: center;">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let model of sortedData;let indexOfelement = index;trackBy: ListtrackByFn">
+											<td>
+												{{indexOfelement + 1}}
+											</td>
+											<td>
+												{{model[0].name}}
+											</td>
+											<td>
+												{{model[0].bannerComponent.bannersize.name}}
+											</td>
+											<td class="variations-preview">
+
+												<div
+													class="preview-image"
+													cdkOverlayOrigin
+													#trigger="cdkOverlayOrigin"
+													[ngClass]="{ 'model-action-preview-creative': indexOfelement === 0 }"
+													*ngFor="let frame of model;let indexOfFrame = index;"
+													>
+														<img
+															src="{{frame.image}}"
+															class="md-avatar"
+															alt="{{frame.name}}"
+															(click)="openPreview(frame)"
+															[ngClass]="{ 'preview-image-opened': frame.isOpen === true }" />
+
+														<ng-template
+															class="preview-image-open"
+															cdkConnectedOverlay
+															[cdkConnectedOverlayDisableClose]="true"
+															[cdkConnectedOverlayHasBackdrop]="true"
+															[cdkConnectedOverlayGrowAfterOpen]="true"
+															[cdkConnectedOverlayFlexibleDimensions]="true"
+															[cdkConnectedOverlayPanelClass]="'cdk-overlay-variation-pane'"
+															[cdkConnectedOverlayBackdropClass]="'cdk-overlay-preview-variation'"
+															[cdkConnectedOverlayOrigin]="trigger"
+															[cdkConnectedOverlayOpen]="frame.isOpen"
+															>
+															<div class="row">
+																<div class="col-12">
+																	<mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+																		<mat-label>Variation Label/Name</mat-label>
+																		<input matInput placeholder="" [formControl]="newVariationNameValue" [value]="frame.name">
+																	</mat-form-field>
+																	<br />
+																	<br />
+																</div>
+																<div class="col-12">
+																	<img src="{{frame.image}}" class="preview-image-fullsize" />
+																	<br />
+																	<br />
+																	<hr />
+																	<br />
+																</div>
+																<div class="col-12 col-md-6">
+																	<mat-button-toggle-group name="variation-preview-actions" aria-label="Variations Actions">
+
+																		<mat-button-toggle
+																			value="Download"
+																			mat-stroked-button color="primary"
+																			(click)="downloadVariation(indexOfelement+(currentPage*pageSize))">
+																				Download
+																		</mat-button-toggle>
+																		<mat-button-toggle
+																			value="Edit"
+																			mat-stroked-button
+																			(click)="frame.isOpen = frame.isOpen = false">
+																				Close
+																		</mat-button-toggle>
+																	</mat-button-toggle-group>
+																</div>
+																<!--
+																<div class="col-12 col-md-6" style="display: flex;justify-content: flex-end;">
+																	<mat-button-toggle-group name="variation-preview-pagination" aria-label="Variations Pagination">
+
+																		<mat-button-toggle
+																			value="Previous"
+																			style="min-width: 100px;"
+																			[disabled]="(indexOfFrame-1) <= 0"
+																			mat-stroked-button color="primary"
+																			(click)="previousPreviewVariation(
+																				(indexOfFrame-1) + (currentPage*pageSize)
+																			)"
+																			>
+																				Previous
+																		</mat-button-toggle>
+																		<mat-button-toggle
+																			value="Next"
+																			style="min-width: 100px;"
+																			[disabled]="(indexOfFrame+1) >= sortedData.length"
+																			(click)="nextPreviewVariation(
+																				(indexOfelement+1) + (currentPage*pageSize)
+																			)"
+																			mat-stroked-button color="primary">
+																				Next
+																		</mat-button-toggle>
+
+																	</mat-button-toggle-group>
+																</div>
+																-->
+															</div>
+														</ng-template>
+												</div>
+
+											</td>
+
+											<td style="white-space: nowrap;text-align: center;">
+												<div class="btn-group">
+													<!--
+													<button
+														mat-button
+														color="accent"
+														id="btn-edit"
+														class="mr-1"
+														[disabled]="model.isEditingVariation"
+														(click)="editVariationName(indexOfelement+(currentPage*pageSize))"
+														[ngClass]="{ 'model-action-change-creative-name': indexOfelement === 0 }"
+														>
+															Change Creative Name
+															<span *ngIf="model.isEditingVariation" class="mr-1 spinner-border spinner-border-sm"></span>
+													</button>
+													-->
+													<button
+														mat-button
+														color="primary"
+														id="download-individual"
+														class="mr-1"
+														[disabled]="model.isEditingVariation"
+														(click)="downloadVariation(indexOfelement+(currentPage*pageSize))"
+														[ngClass]="{ 'model-action-download-creative': indexOfelement === 0 }"
+														>
+															Download
+															<span *ngIf="model.isEditingVariation" class="mr-1 spinner-border spinner-border-sm"></span>
+													</button>
+
+												</div>
+											</td>
+
+										</tr>
+										<tr *ngIf="!variationCollectionForExport">
+											<td colspan="5" class="text-center">
+												<span class="spinner-border spinner-border-lg align-center"></span>
+											</td>
+										</tr>
+
+									</tbody>
+
+									<tfoot>
+										<tr>
+											<td colspan="5" >
+												<mat-paginator [length]="pageLength"
+												id="page-pagnation"
+													[showFirstLastButtons]=true
+													[pageSize]="pageSize"
+													[pageSizeOptions]="pageSizeOptions"
+													[pageIndex]="currentPage"
+													(page)="handlePage($event)"
+													aria-label="Select page">
+												</mat-paginator>
+											</td>
+										</tr>
+									</tfoot>
+
+								</table>
+
+							</ng-container>
+
+							<!-- HTML 5(1) TABLE -->
+							<ng-container *ngSwitchCase="'HTML5'">
+
+								<table class="table table-striped table-variations-dynamic"  *ngIf="variationCollectionForExport">
+									<thead>
+										<tr>
+											<th mat-sort-header="id" >ID</th>
+											<th mat-sort-header="name">Name</th>
+											<th mat-sort-header="size">Creative</th>
+											<th style="text-align: center;">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let model of sortedData;let indexOfelement = index;trackBy: ListtrackByFn">
+											<td>
+												{{indexOfelement + 1}}
+											</td>
+											<td>
+												{{model[0].name}}
+											</td>
+											<td>
+												{{model[0].bannerComponent.bannersize.name}}
+											</td>
+
+											<td style="white-space: nowrap;text-align: center;">
+												<div class="btn-group">
+
+													<button
+														mat-button
+														color="primary"
+														id="download-individual"
+														class="mr-1"
+														[disabled]="model.isEditingVariation"
+														(click)="downloadVariation(indexOfelement+(currentPage*pageSize))"
+														[ngClass]="{ 'model-action-download-creative': indexOfelement === 0 }"
+														>
+															Download
+															<span *ngIf="model.isEditingVariation" class="mr-1 spinner-border spinner-border-sm"></span>
+													</button>
+
+												</div>
+											</td>
+
+										</tr>
+										<tr *ngIf="!variationCollectionForExport">
+											<td colspan="4" class="text-center">
+												<span class="spinner-border spinner-border-lg align-center"></span>
+											</td>
+										</tr>
+
+									</tbody>
+
+									<tfoot>
+										<tr>
+											<td colspan="4" >
+												<mat-paginator [length]="pageLength"
+												id="page-pagnation"
+													[showFirstLastButtons]=true
+													[pageSize]="pageSize"
+													[pageSizeOptions]="pageSizeOptions"
+													[pageIndex]="currentPage"
+													(page)="handlePage($event)"
+													aria-label="Select page">
+												</mat-paginator>
+											</td>
+										</tr>
+									</tfoot>
+
+								</table>
+
+							</ng-container>
+
+							<!-- STATIC JPEG TABLE -->
+							<ng-container *ngSwitchDefault>
+
+								<table class="table table-striped table-variations-static"  *ngIf="variationCollectionForExport">
+									<thead>
+										<tr>
+											<th mat-sort-header="id" >ID</th>
+											<th mat-sort-header="name">Name</th>
+											<th>Preview</th>
+											<th style="text-align: center;">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="4" style="padding: 0;background-color: #FFFFFF;">
+												<mat-paginator [length]="pageLength"
+												id="page-pagnation"
+													[showFirstLastButtons]=true
+													[pageSize]="pageSize"
+													[pageSizeOptions]="pageSizeOptions"
+													[pageIndex]="currentPage"
+													(page)="handlePage($event)"
+													aria-label="Select page">
+												</mat-paginator>
+											</td>
+										</tr>
+									</tbody>
+									<tbody>
+										<tr *ngFor="let model of sortedData;let indexOfelement = index;trackBy: ListtrackByFn">
+											<td>
+												{{indexOfelement + 1}}
+											</td>
+											<td>
+												{{model.name}}
+											</td>
+											<td>
+												<!-- https://material.angular.io/cdk/overlay/api#CdkConnectedOverlay -->
+												<!--
+													(click)="model.isOpen = (model.isOpen ? false : true)"
+													(click)="model.isOpen = model.isOpen = true"
+													(mouseleave)="model.isOpen = model.isOpen = false"
+													(mouseenter)="model.isOpen = model.isOpen = true
+												-->
+												<div
+													class="preview-image"
+													cdkOverlayOrigin
+													#trigger="cdkOverlayOrigin"
+													[ngClass]="{ 'model-action-preview-creative': indexOfelement === 0 }"
+													>
+														<img
+															src="{{model.image}}"
+															class="md-avatar"
+															alt="{{model.name}}"
+															(click)="openPreview(model)"
+															[ngClass]="{ 'preview-image-opened': model.isOpen === true }" />
+												</div>
+												<!-- [positionChange]="openedPreview(model)" -->
+												<ng-template
+													class="preview-image-open"
+													cdkConnectedOverlay
+													[cdkConnectedOverlayDisableClose]="true"
+													[cdkConnectedOverlayHasBackdrop]="true"
+													[cdkConnectedOverlayGrowAfterOpen]="true"
+													[cdkConnectedOverlayFlexibleDimensions]="true"
+													[cdkConnectedOverlayPanelClass]="'cdk-overlay-variation-pane'"
+													[cdkConnectedOverlayBackdropClass]="'cdk-overlay-preview-variation'"
+													[cdkConnectedOverlayOrigin]="trigger"
+													[cdkConnectedOverlayOpen]="model.isOpen"
+													>
+													<div class="row">
+														<div class="col-12">
+															<mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+																<mat-label>Variation Label/Name</mat-label>
+																<input matInput placeholder="" [formControl]="newVariationNameValue" [value]="model.name">
+															</mat-form-field>
+															<br />
+															<br />
+														</div>
+														<div class="col-12">
+															<img src="{{model.image}}" class="preview-image-fullsize" />
+															<br />
+															<br />
+															<hr />
+															<br />
+														</div>
+														<div class="col-12 col-md-6">
+															<mat-button-toggle-group name="variation-preview-actions" aria-label="Variations Actions">
+																<!--
+																<mat-button-toggle
+																	value="Edit"
+																	mat-stroked-button color="primary"
+																	(click)="editVariationName(indexOfelement+(currentPage*pageSize))">
+																		Change Name
+																</mat-button-toggle>
+																-->
+																<mat-button-toggle
+																	value="Download"
+																	mat-stroked-button color="primary"
+																	(click)="downloadVariation(indexOfelement+(currentPage*pageSize))">
+																		Download
+																</mat-button-toggle>
+																<mat-button-toggle
+																	value="Edit"
+																	mat-stroked-button
+																	(click)="model.isOpen = model.isOpen = false">
+																		Close
+																</mat-button-toggle>
+															</mat-button-toggle-group>
+														</div>
+														<div class="col-12 col-md-6" style="display: flex;justify-content: flex-end;">
+															<mat-button-toggle-group name="variation-preview-pagination" aria-label="Variations Pagination">
+
+																<mat-button-toggle
+																	value="Previous"
+																	style="min-width: 100px;"
+																	[disabled]="(indexOfelement-1) <= 0"
+																	mat-stroked-button color="primary"
+																	(click)="previousPreviewVariation(
+																		(indexOfelement-1) + (currentPage*pageSize)
+																	)"
+																	>
+																		Previous
+																</mat-button-toggle>
+																<mat-button-toggle
+																	value="Next"
+																	style="min-width: 100px;"
+																	[disabled]="(indexOfelement+1) >= sortedData.length"
+																	(click)="nextPreviewVariation(
+																		(indexOfelement+1) + (currentPage*pageSize)
+																	)"
+																	mat-stroked-button color="primary">
+																		Next
+																</mat-button-toggle>
+
+															</mat-button-toggle-group>
+														</div>
+													</div>
+												</ng-template>
+											</td>
+											<td style="white-space: nowrap;text-align: center;">
+												<div class="btn-group">
+													<button
+														mat-button
+														color="accent"
+														id="btn-edit"
+														class="mr-1"
+														[disabled]="model.isEditingVariation"
+														(click)="editVariationName(indexOfelement+(currentPage*pageSize))"
+														[ngClass]="{ 'model-action-change-creative-name': indexOfelement === 0 }"
+														>
+															Change Creative Name
+															<span *ngIf="model.isEditingVariation" class="mr-1 spinner-border spinner-border-sm"></span>
+													</button>
+													<button
+														mat-button
+														color="primary"
+														id="download-individual"
+														class="mr-1"
+														[disabled]="model.isEditingVariation"
+														(click)="downloadVariation(indexOfelement+(currentPage*pageSize))"
+														[ngClass]="{ 'model-action-download-creative': indexOfelement === 0 }"
+														>
+															Download
+															<span *ngIf="model.isEditingVariation" class="mr-1 spinner-border spinner-border-sm"></span>
+													</button>
+
+												</div>
+											</td>
+										</tr>
+										<tr *ngIf="!variationCollectionForExport">
+											<td colspan="4" class="text-center">
+												<span class="spinner-border spinner-border-lg align-center"></span>
+											</td>
+										</tr>
+
+									</tbody>
+
+									<tfoot>
+										<tr>
+											<td colspan="4" >
+												<mat-paginator [length]="pageLength"
+												id="page-pagnation"
+													[showFirstLastButtons]=true
+													[pageSize]="pageSize"
+													[pageSizeOptions]="pageSizeOptions"
+													[pageIndex]="currentPage"
+													(page)="handlePage($event)"
+													aria-label="Select page">
+												</mat-paginator>
+											</td>
+										</tr>
+									</tfoot>
+
+								</table>
+
+							</ng-container>
+
+						</ng-container>
+
+					</ng-template>
+					<br />
+					<br />
+
+				</form>
+			</mat-step>
+
+		</mat-stepper>
+	</div>
+</div>
+

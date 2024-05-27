@@ -1,0 +1,68 @@
+@import './../base/variables';
+
+
+.introjs-tooltip {
+
+	&.introjs-floating {
+		min-width: 352px;
+		max-width: 500px;
+		min-width: 50vh;
+		max-width: 90vh;
+
+		.introjs-skipbutton {
+			position: absolute;
+			right: 0.5em;
+			top: 0;
+		}
+
+		.introjs-tooltip-title {
+			text-align: center;
+			padding: 20px 0;
+			text-transform: uppercase;
+			font-weight: bold;
+			width: 100%;
+		    display: block;
+		}
+	}
+
+	.introjs-tooltiptext {
+		text-align: center;
+	}
+
+	.introjs-bullets ul li a {
+		background-color: var(--primary-lighter-color);
+
+		&.active {
+			background-color: var(--primary-color);
+		}
+	}
+
+	.introjs-button {
+		font-size: 12px;
+		text-transform: uppercase;
+		font-family: $font_family;
+		text-shadow: none !important;
+	}
+
+	.introjs-prevbutton {
+		color: get-color(basic, brightest);
+		border: 1px solid var(--accent-darker-color);
+		background-color: var(--accent-color);
+		//text-shadow: 1px 1px 0 var(--accent-lighter-color);
+
+		&:hover {
+			background-color: var(--accent-darker-color);
+		}
+	}
+
+	.introjs-nextbutton {
+		color: get-color(basic, brightest);
+		border: 1px solid var(--primary-darker-color);
+		background-color: var(--primary-color);
+		//text-shadow: 1px 1px 0 var(--primary-lighter-color);
+
+		&:hover {
+			background-color: var(--primary-darker-color);
+		}
+	}
+}

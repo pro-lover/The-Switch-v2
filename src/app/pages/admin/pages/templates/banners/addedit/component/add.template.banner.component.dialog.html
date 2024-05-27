@@ -1,0 +1,358 @@
+
+<form class="form-model-edit" [formGroup]="FormGroupComponentMeta" >
+	<!-- ADDING COMPONENT -->
+	<div class="form-row row new-component">
+
+			<div class="form-group col-12 col-md-4" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Default Component Name</mat-label>
+					<div *ngIf="formDataComponentType.name === 'Button'">
+						<mat-select formControlName="defaultName" [ngClass]="{ 'is-invalid': ftemplatecomponent['defaultName'].errors }" required>
+							<mat-option value="custom">
+								Custom
+							</mat-option>
+						</mat-select>
+					</div>
+					<div *ngIf="formDataComponentType.name === 'Text'">
+						<mat-select formControlName="defaultName" [ngClass]="{ 'is-invalid': ftemplatecomponent['defaultName'].errors }" required>
+							<mat-option value="headline">
+								Headline
+							</mat-option>
+							<mat-option value="subheading">
+								Subheading
+							</mat-option>
+							<mat-option value="slogan">
+								Slogan
+							</mat-option>
+							<!--
+							<mat-option value="cta_button">
+								Call to action button
+							</mat-option>
+							<mat-option value="cta_copy">
+								Call to action copy
+							</mat-option>
+							-->
+							<mat-option value="custom">
+								Custom
+							</mat-option>
+						</mat-select>
+
+					</div>
+					<div *ngIf="formDataComponentType.name === 'Shape'">
+						<mat-select formControlName="defaultName" [ngClass]="{ 'is-invalid': ftemplatecomponent['defaultName'].errors }" required>
+							<mat-option value="General_Shape_Background">
+								Generic Rectangle Shape
+							</mat-option>
+							<mat-option value="custom">
+								Custom
+							</mat-option>
+							<!--
+							<mat-option value="CTA_Background">
+								CTA Rectangle Shape
+							</mat-option>
+							<mat-option value="Canvas_Border">
+								Border
+							</mat-option>
+							<mat-option value="General_Shape_Rounded_Rectangle">
+								Generic Rounded Rectangle Shape
+							</mat-option>
+							<mat-option value="circle">
+								Circle
+							</mat-option>
+							-->
+						</mat-select>
+					</div>
+					<div *ngIf="formDataComponentType.name === 'Image'">
+						<mat-select formControlName="defaultName" [ngClass]="{ 'is-invalid': ftemplatecomponent['defaultName'].errors }" required>
+							<mat-option value="logo">
+								Logo
+							</mat-option>
+							<mat-option value="background">
+								Background
+							</mat-option>
+							<mat-option value="device">
+								Device
+							</mat-option>
+							<mat-option value="call_to_action">
+								Call to action
+							</mat-option>
+							<mat-option value="custom">
+								Custom
+							</mat-option>
+						</mat-select>
+					</div>
+					<mat-error *ngIf="submitted && ftemplatecomponent['defaultName'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['defaultName'].errors['required']">{{formDataComponentType.name}} Component Name is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="form-group col-12 col-md-8" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Unique Component Name</mat-label>
+					<input matInput type="text" placeholder="Unique component name" formControlName="componentName" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['componentName'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['componentName'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['componentName'].errors['required']">{{formDataComponentType.name}} Component Name is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div class="form-group col-12 col-md-3" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Y-Position</mat-label>
+					<input matInput type="number" placeholder="" formControlName="positionY" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['positionY'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['positionY'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['positionY'].errors['required']">{{formDataComponentType.name}} Y-Position is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="form-group col-12 col-md-3" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>X-Position</mat-label>
+					<input matInput type="number" placeholder="" formControlName="positionX" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['positionX'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['positionX'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['positionX'].errors['required']">{{formDataComponentType.name}} X-Position is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div class="form-group col-12 col-md-3" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Width</mat-label>
+					<input matInput type="number" placeholder="" formControlName="componentWidth" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['componentWidth'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['componentWidth'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['componentWidth'].errors['required']">{{formDataComponentType.name}} Width is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div class="form-group col-12 col-md-3">
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Height</mat-label>
+					<input matInput type="number" placeholder="" formControlName="componentHeight" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['componentHeight'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['componentHeight'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['componentHeight'].errors['required']">{{formDataComponentType.name}} Height is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div class="form-group col-12 col-md-3" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Z-Index</mat-label>
+					<input matInput type="number" placeholder="" formControlName="zIndex" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['zIndex'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['zIndex'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['zIndex'].errors['required']">{{formDataComponentType.name}} Z-Index is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div *ngIf="formDataComponentType.name === 'Shape' || formDataComponentType.name === 'Button'" class="form-group col-12 col-md-4" >
+				<mat-form-field class="" appearance="fill">
+					<mat-label>Shape Colour</mat-label>
+					<input matInput type="color" placeholder="" formControlName="shapeColour" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapeColour'].errors }" required />
+					<mat-error *ngIf="submitted && ftemplatecomponent['shapeColour'].errors" class="invalid-feedback">
+						<div *ngIf="ftemplatecomponent['shapeColour'].errors['required']">{{formDataComponentType.name}} Shape Colour is required</div>
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div *ngIf="formDataComponentType.name === 'Image'" class="form-group col-12 col-md-12">
+				<app-draganddrop
+					(DDEvent)="DragAndDropEventItem($event)"
+					(removeUpload)="removeAsset($event)"
+					[resetUploads]="resetVariationsObs"
+					[dataType]="formDataComponentType.name"
+					[dataContainerId]="''"
+					[componentName]="formDataComponentType.name"
+					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						<h3>
+							Drag and Drop<br />{{formDataComponentType.name}}(s) Here
+						</h3>
+				</app-draganddrop>
+			</div>
+
+			<div class="row" *ngIf="formDataComponentType.name === 'Text' || formDataComponentType.name === 'Button'">
+
+				<div class="form-group col-12 col-md-12">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Font Family</mat-label>
+						<mat-select formControlName="fontFamilyId" [ngClass]="{ 'is-invalid': ftemplatecomponent['fontFamily'].errors }" required>
+
+							<mat-option value="{{fontFamily.id}}" *ngFor="let fontFamily of fontFamilies" style="font-family: {{fontFamily.fontFamily}}; font-weight: {{fontFamily.fontWeight}}; font-style: {{fontFamily.fontStyle}};">
+								{{fontFamily.name}}
+							</mat-option>
+
+						</mat-select>
+						<mat-error *ngIf="submitted && ftemplatecomponent['fontFamily'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['fontFamily'].errors['required']">{{formDataComponentType.name}} Font Family is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<input type="hidden" placeholder="" formControlName="fontWeight" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontWeight'].errors }" required />
+				<input type="hidden" placeholder="" formControlName="fontStyle" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontStyle'].errors }" required />
+
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Font Colour</mat-label>
+						<input matInput type="color" placeholder="" formControlName="fontColour" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontColour'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['fontColour'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['fontColour'].errors['required']">{{formDataComponentType.name}} Font Colour is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Font Size</mat-label>
+						<input matInput type="number" placeholder="" formControlName="fontSize" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontSize'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['fontSize'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['fontSize'].errors['required']">{{formDataComponentType.name}} Font Size is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Font Line Height</mat-label>
+						<input matInput type="number" placeholder="" formControlName="fontLineHeight" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontLineHeight'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['fontLineHeight'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['fontLineHeight'].errors['required']">{{formDataComponentType.name}} Font Line Height is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Text Alignment</mat-label>
+						<mat-select formControlName="textAlign" [ngClass]="{ 'is-invalid': ftemplatecomponent['textAlign'].errors }" required>
+
+							<mat-option value="left">
+								Left
+							</mat-option>
+							<mat-option value="center">
+								Center
+							</mat-option>
+							<mat-option value="right">
+								Right
+							</mat-option>
+
+						</mat-select>
+						<mat-error *ngIf="submitted && ftemplatecomponent['textAlign'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['textAlign'].errors['required']">{{formDataComponentType.name}} Text Alignment is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<div class="form-group col-12 col-md-12" >
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Text Value</mat-label>
+						<input matInput placeholder="" formControlName="fontValue" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['fontValue'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['fontValue'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['fontValue'].errors['required']">{{formDataComponentType.name}} Text Value is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+			</div>
+
+			<div class="row" *ngIf="formDataComponentType.name === 'Button'">
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Padding Top</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingTop" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapePaddingTop'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapePaddingTop'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapePaddingTop'].errors['required']">{{formDataComponentType.name}} Top Padding is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Padding Right</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingRight" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapePaddingRight'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapePaddingRight'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapePaddingRight'].errors['required']">{{formDataComponentType.name}} Right Padding is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Padding Bottom</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingBottom" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapePaddingBottom'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapePaddingBottom'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapePaddingBottom'].errors['required']">{{formDataComponentType.name}} Bottom Padding is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Padding Left</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapePaddingLeft" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapePaddingLeft'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapePaddingLeft'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapePaddingLeft'].errors['required']">{{formDataComponentType.name}} Left Padding is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Border Radius Top Left</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusTL" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapeRadiusTL'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapeRadiusTL'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapeRadiusTL'].errors['required']">{{formDataComponentType.name}} Top Left Border Radius is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Border Radius Top Right</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusTR" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapeRadiusTR'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapeRadiusTR'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapeRadiusTR'].errors['required']">{{formDataComponentType.name}} Top Right Border Radius is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Border Radius Bottom Right</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusBR" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapeRadiusBR'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapeRadiusBR'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapeRadiusBR'].errors['required']">{{formDataComponentType.name}} Bottom Right Border Radius is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="form-group col-12 col-md-3">
+					<mat-form-field class="" appearance="fill">
+						<mat-label>Border Radius Bottom Left</mat-label>
+						<input matInput type="number" min="0" placeholder="" formControlName="shapeRadiusBL" [ngClass]="{ 'is-invalid': submitted && ftemplatecomponent['shapeRadiusBL'].errors }" required />
+						<mat-error *ngIf="submitted && ftemplatecomponent['shapeRadiusBL'].errors" class="invalid-feedback">
+							<div *ngIf="ftemplatecomponent['shapeRadiusBL'].errors['required']">{{formDataComponentType.name}} Bottom Right Border Radius is required</div>
+						</mat-error>
+					</mat-form-field>
+				</div>
+			</div>
+
+			<div class="form-row row">
+				<div class="col-12 col-md-12" *ngIf="formDataComponentType.name === 'Image'" class="form-group col-12 col-md-12">
+					<button
+						[disabled]="!uploadComplete"
+						type="button" mat-flat-button color="primary"
+						(click)="addComponentToCanvas()">
+							<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+							Add {{formDataComponentType.name}}
+					</button>
+					<br /><br />
+				</div>
+				<div class="col-12 col-md-12" *ngIf="formDataComponentType.name !== 'Image'" class="form-group col-12 col-md-12">
+					<button
+						[disabled]="loading"
+						type="button" mat-flat-button color="primary"
+						(click)="addComponentToCanvas()">
+							<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+							Add {{formDataComponentType.name}}
+					</button>
+					<br /><br />
+				</div>
+			</div>
+
+	</div>
+
+</form>

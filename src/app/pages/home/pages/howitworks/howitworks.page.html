@@ -1,0 +1,62 @@
+
+<mat-toolbar class="bapp-admin-toolbar">
+
+	<span class="toolbar-title">
+		How it works
+	</span>
+	<span class="example-spacer"></span>
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark" id="hint-action-btn-back">
+			Back
+		</button>
+	</div>
+
+</mat-toolbar>
+<section class="container-fluid">
+	<main class="row">
+		<div class="col-12">
+
+			<div class="hero-section"  *ngIf="isLoggedIn$ | async; else notAuthorized">
+				<!-- CONTENT -->
+				<video
+					controls
+					muted
+					src="https://switch-cdn.co.za/cmdbanner.io/CMDBANNER-WALKTHROUGH.mp4">
+
+				</video>
+			</div>
+
+			<ng-template #notAuthorized>
+				<header id="header">
+					<div class="container">
+						<div class="row">
+							<div class="col-6 col-md-2 ">
+								<a [routerLink]="['/', path.dashboard.root]" class="logo">
+									<img src="assets/images/switch_logo_white.png" alt="SWITCH Logo /">
+								</a>
+
+							</div>
+							<div class="col-6 col-md-2 offset-md-8 ">
+								<a [routerLink]="['/auth', path.auth.signIn]" class="login">
+									<span>LOGIN</span>
+								</a>
+							</div>
+
+						</div>
+
+					</div>
+				</header>
+				<div class="hero-copy">
+					<button mat-flat-button [routerLink]="['/', path.dashboard.root]" >
+						<h1>B<span>⌘</span>NNER</h1>
+					</button>
+				</div>
+				<footer class="c-footer">
+					&copy; SWITCH ® company &ndash; <a href="https://www.switch.co.za/policies/privacy-policy.html" target="_blank" class="u-text-white">Privacy Policy</a>.
+				</footer>
+			</ng-template>
+
+		</div>
+
+	</main>
+</section>
