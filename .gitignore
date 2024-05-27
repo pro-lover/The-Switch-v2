@@ -99,6 +99,7 @@ typings
 server-linux
 server-macos
 
+api/v1/config.json
 
 # Ignore uploads folder
 api/assets/public/*
