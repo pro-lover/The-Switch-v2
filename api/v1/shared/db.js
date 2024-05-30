@@ -13,7 +13,6 @@ async function initialize() {
 	const { host, port, user, password, database } = process.env.NODE_ENV === 'production' ? config.database.prod : config.database.local;
 
     //const { host, port, user, password, database } = config.database.local;
-
 	// create db if it doesn't already exist
 
     const connection = await mysql.createConnection({ host, port, user, password });

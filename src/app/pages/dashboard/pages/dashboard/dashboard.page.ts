@@ -282,7 +282,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 						}
 					})
 
-					//console.log('availableCreativeTypes', this.availableCreativeTypes );
+					console.log('availableCreativeTypes', this.availableCreativeTypes );
 				}
 
 			}
@@ -448,12 +448,12 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	public creativeReady($event:any):void {
 
-		//console.log('creativeReady:', $event);
+		console.log('creativeReady:', $event);
 
 		this.activeBannerSizes.forEach( (size:any) => {
 			const container = size.containers.find( (container:any) => container.id === $event.containerId);
 
-			//console.log('creativeReady container:', container, size.containers);
+			console.log('creativeReady container:', container, size.containers);
 
 			if( container ) {
 
