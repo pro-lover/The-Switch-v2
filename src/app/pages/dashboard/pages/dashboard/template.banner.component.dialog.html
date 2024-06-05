@@ -35,6 +35,15 @@
 						</app-draganddrop>
 					</div>
 				</mat-step>
+				<mat-step
+					label="{{component.name}} {{component.componenttype.name}}"
+					state="text"
+					*ngIf="component.componenttype.name === 'Text' && component.smart === true"
+					[editable]="true" >
+					<div class="form-row row" >
+						<input type="text" (change)="onChange($event)" />
+					</div>
+				</mat-step>
 			</div>
 			<mat-step
 				label="Copy"
@@ -55,7 +64,7 @@
 									Drag and Drop<br />CSV/XLSX File here
 								</h3>
 						</app-draganddrop>
-						<input matInput placeholder="test" formControlName="fontFamily" />
+
 					</div>
 			</mat-step>
 

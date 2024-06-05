@@ -66,6 +66,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	public newVariationNameValue!:FormControl;
 
 	private variationsTracker:any[] = [];
+	public textOnFile:any[] = [];
 
 	/* Responsive steper listener */
 	stepperOrientation: Observable<StepperOrientation>;
@@ -454,6 +455,24 @@ export class DashboardPage implements OnInit, OnDestroy {
 			const container = size.containers.find( (container:any) => container.id === $event.containerId);
 
 			console.log('creativeReady container:', container, size.containers);
+			console.log('Meta :', container.components);
+
+			for(let i = 0;i<container.components.length;i++){
+				console.log('Meta :', container.components[i]);
+				if(container.components[i].componenttype.name == "Text"){
+
+					for (let index = 0; index < container.components[i].componentmeta.length; index++) {
+						
+						if (container.components[i].componentmeta[index].name == 'fontValue') {
+							
+
+							this.textOnFile.push(container.components[i].componentmeta[index].value)
+						}
+						
+					}
+				}
+			}
+			console.log('we here :',this.textOnFile);
 
 			if( container ) {
 
@@ -715,10 +734,10 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 */
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.warn('DragAndDropEventItem:', newItem, this.updateableComponents);
+		console.warn('DragAndDropEventItem:', newItem, this.updateableComponents);
 
 		if (!newItem || !newItem.data[0]) return;
-
+ 
 		this.files.push(newItem);
 		this.uploadedFileSubject.next(newItem);
 

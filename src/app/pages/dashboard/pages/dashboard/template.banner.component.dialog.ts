@@ -99,6 +99,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 		});
 	}
 
+
 	public ListtrackByFn(index:number, item:any) {
 		return index; // or item.id
 	}
@@ -136,10 +137,15 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 		this.uploadedFiles = [];
 		/**/
 	}
-
+	onChange(event: Event) {
+		// Get the new input value
+		const newValue = (event.target as HTMLInputElement).value;
+		// Perform actions based on the new value
+		console.log('Input value changed:', newValue);
+	  }
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.log('uploadItem:', newItem);
+		console.log('uploadItem:', newItem);
 
 		if (!newItem || !newItem.data[0]) return;
 
