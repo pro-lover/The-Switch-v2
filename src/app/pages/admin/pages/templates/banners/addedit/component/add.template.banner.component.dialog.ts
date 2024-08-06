@@ -118,7 +118,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 	 *
 	 */
 	private prepareForm() {
-
+		console.log('prepareForm')
 		if( this.formDataComponentType.name === 'Text' ) {
 
 			this.FormGroupComponentMeta = this.formBuilder.group({

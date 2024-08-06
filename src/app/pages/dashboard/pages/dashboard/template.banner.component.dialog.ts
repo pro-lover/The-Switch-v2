@@ -139,7 +139,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.log('uploadItem:', newItem);
+		console.log('uploadItem:', newItem);
 
 		if (!newItem || !newItem.data[0]) return;
 
@@ -158,7 +158,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 		this.UploadEvent.emit(uploadItem);
 
-		//console.log('UploadEvent:', this.uploadedFiles);
+		console.log('UploadEvent:', this.uploadedFiles);
 
 	}
 

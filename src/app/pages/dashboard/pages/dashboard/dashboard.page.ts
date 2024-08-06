@@ -231,7 +231,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	get f() { return this.FormGroupProjectDetails.controls; }
 
 	ngOnInit() {
-
+		console.log("ngOnInit");
 		this.initialise();
 
 		// Listen to Form Control Value Changes to dynamically populate available options
@@ -332,7 +332,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		this.selectedProjectTemplate = this.f['projectTemplate'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-			//console.log('projectTemplate:', value);
+			console.log('projectTemplate:', value);
 
 			if( value === undefined || value === '' || value === null ) {
 
@@ -381,7 +381,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	private initialise():void {
 
-		//console.info('Dashboard Component initialise');
+		console.info('Dashboard Component initialise');
 
 		this.dashboardData$ = combineLatest(
 			[
@@ -395,7 +395,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 		)
 		.pipe(
 			map(([templates, clients, bannertypes, bannersizes, projects, fonttypes]):any => {
-				//console.info('combineLatest initialise', [templates, clients, bannertypes, bannersizes, projects, fonttypes]);
+				console.info('combineLatest initialise', [templates, clients, bannertypes, bannersizes, projects, fonttypes]);
 				// combineLatest returns an array of values, here we map those values to an object
 				return { templates, clients, bannertypes, bannersizes, projects, fonttypes };
 			})
@@ -410,6 +410,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private prepDashboardData(data:any):void {
+
+		console.log('prepDashboard',data);
 
 		this.Templates = data.templates;
 		this.Clients = data.clients;
@@ -458,7 +460,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 			if( container ) {
 
 				if( $event.state === true ) {
-					//console.log('creativeReady:', $event, container);
+					console.log('creativeReady:', $event, container);
 					container.creativeReady = true;
 					this.creativeReadySubject.next(true);
 				} else {
@@ -650,7 +652,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private generateTemplateRules(dynamicComponents:any): any[] {
-
+		console.log('generateTemplateRules');
 		const TemplateRules:any[] = [];
 
 		dynamicComponents.forEach( (component:any) => {
@@ -673,7 +675,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 			} else if( component.componenttype.name === 'Image' ) {
 
-				//console.log('template rules:', component.componentmeta);
+				console.log('template rules: image', component.componentmeta);
 
 				TemplateRules.push({
 					'componentId': component.id,
@@ -715,39 +717,52 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 */
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.warn('DragAndDropEventItem:', newItem, this.updateableComponents);
+		console.warn('DragAndDropEventItem 1:', newItem, this.updateableComponents);
 
 		if (!newItem || !newItem.data[0]) return;
 
+		console.warn('DragAndDropEventItem 2:');
 		this.files.push(newItem);
+
+		console.warn('DragAndDropEventItem 3:',this.files);
 		this.uploadedFileSubject.next(newItem);
+
+		console.warn('DragAndDropEventItem 4:',this.uploadedFileSubject);
 
 		// replacing the below
 		// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
 		this.activeBannerSizes.find((x:any) => {
+			console.warn('DragAndDropEventItem 5:',x);
+			console.warn("("+'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height+")"+"==="+ newItem.stage );
 			if( ( 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage ) {
 
 				x.containers.find((y:any) => {
 
+					console.warn("("+y.id +"==="+ newItem.containerId  );
 					if( y.id === newItem.containerId ) {
 
 						let containerReady = true;
 
 						//checkRelevantUpdateableComponents.forEach((z:any) => {
+							console.warn("check in updateableComponents");
 						this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId).forEach((z:any) => {
 							if( newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button') ) {
+								console.warn("z.readyForVariations is this true");
 								z.readyForVariations = true;
 							}
 							if ( z.readyForVariations === false ) {
+								console.warn("containerReady is this true");
 								containerReady = false;
 							}
+							console.warn("updateableComponents is this true",containerReady);
 						});
 
 						if ( containerReady === true ) {
+							console.warn("containerReady is this true",containerReady);
 							y.componentWindowOpen = false;
 						}
 
-						//console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
+						console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
 					}
 
 				});
@@ -759,12 +774,12 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	public ResetVariationsEvent(data:any) {
 
-		//console.log('ResetVariationsEvent:', banner);
+		console.log('ResetVariationsEvent 1:', data);
 
 		this.activeBannerSizes.find((x:any) => {
 			if( ( 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) ===  ( 'bannerCanvas-' + data.banner.bannersize.width + '-' + data.banner.bannersize.height) ) {
 
-				console.log('ResetVariationsEvent:', data);
+				console.log('ResetVariationsEvent 2:', data);
 
 				x.containers.find((y:any) => {
 
@@ -911,13 +926,22 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	private isBannerReadyyForVariations(bannerId:string):void {
+		console.log('isBannerReadyyForVariations', bannerId);
 
 		let status = true;
+
 		const chhh = this.updateableComponents.filter((x:any) => x.bannerId === bannerId);
+
+		console.log('isBannerReadyyForVariations', chhh);
+
+		console.log("element : "+ chhh.length)
 
 		for (let index = 0; index < chhh.length; index++) {
 			const element = chhh[index];
 
+			console.log("element : "+ element)
+
+			console.log(element.readyForVariations +" === "+ false)
 			if( element.readyForVariations === false ) {
 
 				status = false;
@@ -925,7 +949,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 				break;
 			}
 		}
-
+		console.log("status ",status)
 		if( status === true ) {
 			this.activeBannerSizes.find((x:any) => {
 				if( x.id === bannerId ) {
@@ -949,13 +973,16 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	public acceptCollectionOfVariationsFromBannerComponent(bannerComponentVariationCollection:any) {
 
-		//console.log('CreativeType:', this.f['projectBannerType'].value);
-		//console.log('acceptCollectionOfVariationsFromBannerComponent:', bannerComponentVariationCollection);
+		console.log("acceptCollectionOfVariationsFromBannerComponent	",bannerComponentVariationCollection)
 
+		console.log('CreativeType:', this.f['projectBannerType'].value);
+		console.log('acceptCollectionOfVariationsFromBannerComponent:', bannerComponentVariationCollection);
+
+		console.log('CreativeType:', this.creativeType+":");
 		//const creativeType = this.BannerTypes.find((x:any) => x.id === this.f['projectBannerType'].value)?.name;
 
 		if( this.creativeType === 'GIFs' || this.creativeType === 'HTML5' ) {
-
+			console.log('if static GIFs is available');
 			this.variationsTracker.find((x:any) => {
 				if( x.bannerId === bannerComponentVariationCollection.bannerId ) {
 
@@ -1001,8 +1028,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 				}
 			});
 
-		} else if( this.creativeType === 'Static JPG' ) {
+		} else if( this.creativeType === 'static' ) {
 
+			console.log('if static JPG is available');
 			bannerComponentVariationCollection.data.forEach((x:any)=> {
 				this.variationCollectionForExport.push(x);
 			});
@@ -1177,6 +1205,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 */
 	public exportVariation(bannerComponent:any) {
 
+		console.log('exportVariation',bannerComponent);
+
 		this.downloadVariationsEvent.emit(bannerComponent);
 
 	}
@@ -1206,7 +1236,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public exportAllVariations() {
-
+		console.log('exportAllVariations');
 		this.exportingProcess = true;
 
 		this.accordion.closeAll()
@@ -1215,7 +1245,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 			this.exportVariation(x);
 		});
 
-		//this.variationsExported = true;
+		this.variationsExported = true;
 		//this.FormGroupVariations.patchValue(true);
 
 	}

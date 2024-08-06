@@ -109,7 +109,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-
+		console.log('bannerComponent__ngOnInit ');
 		// run default population functions
 
 		//this.initialiseBanner();
@@ -171,9 +171,9 @@ export class BannerComponent implements OnInit, OnDestroy {
 						break;
 				}
 
-				//console.log('this.variationsArray:', this.variationsArray);
-				//console.log('this.BannerVariations:', this.BannerVariations);
-				//console.log('this.copyVariationsArray:', this.copyVariationsArray);
+				console.log('this.variationsArray:', this.variationsArray);
+				console.log('this.BannerVariations:', this.BannerVariations);
+				console.log('this.copyVariationsArray:', this.copyVariationsArray);
 
 				//this.variationsArray = [];
 				//this.copyVariationsArray = [];
@@ -190,8 +190,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 			if( this.stage.name === ('bannerCanvas-' + evt.bannersize.width + '-' + evt.bannersize.height) ) {
 
-				//console.warn( 'Banner Directive Populate Variations::', evt);
-				//console.warn( 'Banner Directive Populate Variations Container::', this.dataContainer.id);
+				console.warn( 'Banner Directive Populate Variations::', evt);
+				console.warn( 'Banner Directive Populate Variations Container::', this.dataContainer.id);
 
 				const allVariations = this.prepareVariationsarray();
 
@@ -214,6 +214,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					counter++;
 					// pass active banner to canvas
+					console.warn( 'Variations1::', allVariations);
 					const stage = new createjs.Stage(this.elementRef.nativeElement.querySelector('canvas#' + this.canvasName));
 					stage.set({
 						mastername: this.canvasName, // for HTML5
@@ -230,6 +231,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					// find the children relevant to the current stage variation and update their values
 					variatation.forEach((y:any) => {
+						console.warn( 'Variations2::', allVariations);
 						if( y.type === 'Text' || y.type === 'Button' ) {
 
 							const keeyys = Object.keys(y.value);
@@ -252,7 +254,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 										const ButtonText = cloneText.getChildAt(1);
 
 										ButtonText.text = y.value[zKey];
-										//console.log('Cloning Button Text:', cloneText);
+										console.log('Cloning Button Text:', cloneText);
 
 									} else {
 
@@ -274,6 +276,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 							});
 
 						} else if( y.type === 'Image' ) {
+							console.warn( 'Variations3::', allVariations);
 							const stage_image_child = this.stage.getChildByName(y.name);
 							if ( stage_image_child ) {
 								const cloneImage = stage_image_child.clone();
@@ -297,7 +300,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					// add "hard" or not smart components missing in the variation
 					const missingcomponents = getDifference(this.stage.children, stage.children);
-
+					console.warn( 'Variations4::', allVariations);
 					missingcomponents.forEach((misscomp:any) => {
 						const missingComponent = this.stage.getChildByName(misscomp.name);
 						if ( missingComponent ) {
@@ -315,7 +318,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 						}
 					});
 
-					//console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
+					console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
 
 					this.sortStageChildern(stage);
 					//stage.update();
@@ -325,7 +328,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					/**/
 					const componentUpdates:any[] = [];
-
+					console.warn( 'Variations5::', allVariations);
 					stageVariationComponents.forEach( (b:any, index:number, ogArray:any) => {
 
 						if( b.smart === true ) {
@@ -391,7 +394,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 					//allNewComponentSet.push(stageVariationComponents);
 
 					//this.stages.push(stage);
-
+					console.warn( 'Variations6::', allVariations);
 					this.stages.push({
 						stage: stage,
 						components: stageVariationComponents,
@@ -429,7 +432,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 										stagevariation.timeline = timeline;
 										//this.stages[index].timeline = timeline;
 
-										//console.warn( 'this.stages:', this.stages );
+										console.warn( 'this.stages:', this.stages );
 
 										stagevariation.componentUpdates.forEach( (update:any) => {
 											if( this.dataContainer.id === update.containerId && update.counter === index) {
@@ -468,12 +471,12 @@ export class BannerComponent implements OnInit, OnDestroy {
 				}
 				/**/
 
-				//console.warn( 'allNewComponentSet:', allNewComponentSet );
+				console.warn( 'allNewComponentSet:', allNewComponentSet );
 
-				//console.warn( 'allVariations:', allVariations, this.stages );
-				//console.warn( 'copyVariationsArray:', this.copyVariationsArray );
-				//console.warn( 'variationsArray:', this.variationsArray );
-				//console.warn( 'allVariations:', allVariations );
+				console.warn( 'allVariations:', allVariations, this.stages );
+				console.warn( 'copyVariationsArray:', this.copyVariationsArray );
+				console.warn( 'variationsArray:', this.variationsArray );
+				console.warn( 'allVariations:', allVariations );
 
 				/** WIP * /
 				const offscreenCanvas: any = document.createElement('canvas');
@@ -491,7 +494,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 				/**/
 
 			}
-
+			console.warn( 'Variations7 i think problem is here::');
 		});
 
 		//Listen to Request to export variations
@@ -499,20 +502,20 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 			if (!evt || !evt.bannersize.width || !evt.bannersize.height) return;
 
-			//console.warn( 'Export Variations Event Received::', evt,);
-			//console.warn( 'Stage Name::',  this.stage.name);
-			//console.warn( 'Container ID::',  this.dataContainer.id);
+			console.warn( 'Export Variations Event Received::', evt,);
+			console.warn( 'Stage Name::',  this.stage.name);
+			console.warn( 'Container ID::',  this.dataContainer.id);
 
 			// RESET STAGE TO FIRST ONE
 			this.stage = this.stages[0].stage;
 
 			if( this.stage.name === ('bannerCanvas-' + evt.bannersize.width + '-' + evt.bannersize.height) ) {
 
-				//console.warn( 'Export Variations Stages::',  this.stage.name, this.stages.length, evt);
+				console.warn( 'Export Variations Stages::',  this.stage.name, this.stages.length, evt);
 
-				//console.warn( 'Export Variations Event Received::', evt,);
-				//console.warn( 'Stage Name::',  this.stage.name, this.stages.length);
-				//console.warn( 'Container ID::',  this.dataContainer.id);
+				console.warn( 'Export Variations Event Received::', evt,);
+				console.warn( 'Stage Name::',  this.stage.name, this.stages.length);
+				console.warn( 'Container ID::',  this.dataContainer.id);
 
 				const variationsForExport = [];
 
@@ -530,7 +533,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 					counter++;
 
 					this.percentage = (counter/totalCount *100)
-					// console.log(this.percentage);
+					 console.log(this.percentage);
 
 					variationsForExport.push({
 						uid: this.generateUUID(),
@@ -554,7 +557,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				}
 
-				//console.warn( 'EMIT Export Variations::', variationsForExport);
+				console.warn( 'EMIT Export Variations::', variationsForExport);
 
 				this.variationCollectionForDownloadEvent.emit({
 					bannerComponent: evt,
@@ -570,7 +573,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		this.resetVariations.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
 
-			//console.warn( 'New File Received:', evt);
+			console.warn( 'New File Received:', evt);
 
 			if (!evt || !evt.stage) return;
 
@@ -591,7 +594,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		// play animation request for active frame/container
 		this.playAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
 
-			//console.log('Playing animation for stage:', this.stage, evt );
+			console.log('Playing animation for stage:', this.stage, evt );
 
 			if(
 				this.stage &&
@@ -640,6 +643,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			}
 		});
 
+		console.warn( 'Variations8::');
 		this.renderAnimationsActive = (['HTML5'].includes(this.dataBanner.bannertype.name) === true ? true : false);
 
 	}
@@ -1012,10 +1016,14 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	private prepareVariationsarray(): any[] {
 
+		console.log('prepareVariationsarray');
+
 		const variationsHolder:any[] = [];
 
-		if( this.copyVariationsArray.length > 0 && this.variationsArray.length > 0 ) {
+		console.log(this.copyVariationsArray.length +" > 0 && "+this.variationsArray.length);
 
+		if( this.copyVariationsArray.length > 0 && this.variationsArray.length > 0 ) {
+			console.log("in if copy n1");
 			this.copyVariationsArray.forEach( (copy) =>{
 				// issue #141 - This is a temporary fix until it's properly resolved.
 				if( (copy.type === 'Text' && typeof copy.value === 'object') || (copy.type === 'Button' && typeof copy.value === 'object') ) {
@@ -1026,13 +1034,13 @@ export class BannerComponent implements OnInit, OnDestroy {
 			});
 
 		} else if (this.variationsArray.length > 0) {
-
+			console.log("in if image");
 			this.variationsArray.forEach( (image) => {
 				variationsHolder.push([image])
 			});
 
 		} else if (this.copyVariationsArray.length > 0) {
-
+			console.log("in if copy");
 			this.copyVariationsArray.forEach( (copy) =>{
 				if( (copy.type === 'Text' && typeof copy.value === 'object') || copy.type === 'Button' && typeof copy.value === 'object' ) {
 					variationsHolder.push([copy])
@@ -1040,7 +1048,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			});
 
 		}
-
+		console.log("variationsHolder ",variationsHolder);
 		return variationsHolder;
 
 	}
@@ -1065,7 +1073,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			case 'Text':
 			case 'Button':
 
-				//console.log('rulecheck:', rulecheck, componentData);
+				console.log('rulecheck:', rulecheck, componentData);
 
 				const ruleHeadings:any = [];
 				const spreadsheetHeadings = Object.keys(componentData[0]).map((x:any) => x.toLowerCase());
@@ -1234,6 +1242,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 	 *
 	 */
 	private populateVariationsArray( type:string, componentName: string, data:any) {
+		console.log('populateVariationsArray	',type);
 
 		switch (type) {
 
@@ -1277,11 +1286,11 @@ export class BannerComponent implements OnInit, OnDestroy {
 							}
 						);
 
-						//console.log('getCartesianProduct options:', options);
+						console.log('getCartesianProduct options:', options);
 
 						const c:any = this.getCartesianProduct(options);
 
-						//console.warn('getCartesianProduct:', c);
+						console.warn('getCartesianProduct:', c);
 
 						// https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects
 						const uniqueArray = c.filter((value:any, index:number) => {
@@ -1298,8 +1307,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 								name: componentName,
 								value: x
 							});
-							//console.log('cvArr')
-							//console.log(this.copyVariationsArray)
+							console.log('cvArr')
+							console.log(this.copyVariationsArray)
 						});
 
 						this.alertService.success(validationPassed.message, { keepAfterRouteChange: true });
