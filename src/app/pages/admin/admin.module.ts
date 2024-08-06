@@ -36,7 +36,6 @@ import {
 	TemplatesAddDialogComponent, TemplatesEditContainerFormDialogComponent
 } from './pages/templates/banners';
 
-
 @NgModule({
 	/** /
 	entryComponents: [
@@ -47,6 +46,7 @@ import {
 	],
 	/**/
 	declarations: [
+
 		TemplatesAddDialogComponent,
 		TemplateBannerDuplicateDialogComponent,
 		DialogBannerEditComponent,

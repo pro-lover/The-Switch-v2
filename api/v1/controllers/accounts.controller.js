@@ -17,7 +17,7 @@ const limiter = rateLimit({
 	max: 15 // limit each IP to 5 requests per windowMs
 });
 
-// routes
+// routes.
 router.post('/authenticate', limiter, authenticateSchema, authenticate);
 router.post('/refresh-token', refreshToken );
 router.post('/revoke-token', limiter, authorize(), revokeTokenSchema, revokeToken);

@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Guardian Sans';
+    src: url('GuardianSans-Black.eot');
+    src: url('GuardianSans-Black.eot?#iefix') format('embedded-opentype'),
+        url('GuardianSans-Black.woff2') format('woff2'),
+        url('GuardianSans-Black.woff') format('woff'),
+        url('GuardianSans-Black.ttf') format('truetype'),
+        url('GuardianSans-Black.svg#GuardianSans-Black') format('svg');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+

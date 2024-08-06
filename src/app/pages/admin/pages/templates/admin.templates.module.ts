@@ -55,7 +55,7 @@ import { TemplateBannerAddEditPage, TemplateBannerAnimationEditDialogComponent, 
 		TemplateBannerEditDialogComponent,
 		BottomSheetTemplateRulesComponent,
 		TemplateBannerMenuActionDialogComponent,
-		TemplateBannerAnimationEditDialogComponent
+		TemplateBannerAnimationEditDialogComponent,
 	],
 	imports: [
 		//AdminModule,

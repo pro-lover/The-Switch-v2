@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 		//TemplatesAddEditComponent
 	],
 	declarations: [
+
 		AppComponent,
 		AlertComponent,
 		//TemplatesAddEditComponent
