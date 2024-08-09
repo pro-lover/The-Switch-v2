@@ -23,7 +23,7 @@ function authorize(roles = []) {
 
 			if (!account || (roles.length && !roles.includes(account.role))) {
 				// account no longer exists or role not authorized
-				//console.log('WTF: ', account.role, roles);
+				////console.log('WTF: ', account.role, roles);
 				return res.status(401).json({ message: 'Unauthorized' });
 			}
 

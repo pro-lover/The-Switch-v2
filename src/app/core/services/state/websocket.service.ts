@@ -5,21 +5,21 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 //import { map, finalize } from 'rxjs/operators';
 
 export class Message {
-    constructor(
-        public sender: string,
-        public content: string,
+	constructor(
+		public sender: string,
+		public content: string,
 		public channel: string,
 		public model: string,
 		public action: string,
 		public modelId: string,
-        public isBroadcast = false,
-    ) { }
+		public isBroadcast = false,
+	) { }
 }
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
 
-    public clientMessage = '';
+	public clientMessage = '';
 	public isBroadcast = false;
 	public sender = '';
 	public serverMessages = new Array<Message>();
@@ -32,12 +32,12 @@ export class WebSocketService {
 		this.socket$
 			.subscribe({
 				next: (msg) => {
-					console.log('CMDBNR.IO - message received:',  msg);
+					//console.log('CMDBNR.IO - message received:',  msg);
 					//this.serverMessages.push(msg);
 					this.alertService.info(msg.content, { keepAfterRouteChange: true });
 				},
 				error: error => {
-					console.log(error)
+					//console.log(error)
 				}
 			});
 	}

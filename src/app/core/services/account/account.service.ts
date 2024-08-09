@@ -29,7 +29,7 @@ export class AccountService {
 
 	login(email: string, password: string) {
 
-		//console.log('AccountService.login()', email, password);
+		////console.log('AccountService.login()', email, password);
 
 		return this.http.post<Account>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
 			.pipe(map(account => {
@@ -98,7 +98,7 @@ export class AccountService {
 		return this.http.post(baseUrl, params);
 	}
 
-    update(id: number, params: any) {
+	update(id: number, params: any) {
 		return this.http.put(`${baseUrl}/${id}`, params)
 			.pipe(map((account: any) => {
 				// update the current account if it was updated
@@ -126,14 +126,14 @@ export class AccountService {
 
 	restore(id: number) {
 		return this.http.put(`${baseUrl}/${id}/restore`, {})
-		.pipe(map((account: any) => {
-			if (account.id === this.accountValue.id) {
-				// publish updated account to subscribers
-				account = { ...this.accountValue, ...account };
-				this.accountSubject.next(account);
-			}
-			return account;
-		}));
+			.pipe(map((account: any) => {
+				if (account.id === this.accountValue.id) {
+					// publish updated account to subscribers
+					account = { ...this.accountValue, ...account };
+					this.accountSubject.next(account);
+				}
+				return account;
+			}));
 	}
 
 	delete(id: string) {
@@ -145,7 +145,7 @@ export class AccountService {
 			}));
 	}
 
-    // helper methods
+	// helper methods
 
 	private refreshTokenTimeout: any;
 

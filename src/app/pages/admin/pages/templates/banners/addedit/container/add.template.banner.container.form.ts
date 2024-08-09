@@ -12,7 +12,7 @@ import { first, last } from 'rxjs/operators';
 	providers: [
 		{
 			provide: STEPPER_GLOBAL_OPTIONS,
-			useValue: {showError: true},
+			useValue: { showError: true },
 		},
 	],
 })
@@ -74,12 +74,12 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 	 */
 	private prepareForm() {
 
-		//console.log('dataBanner:', this.dataBanner);
+		////console.log('dataBanner:', this.dataBanner);
 		const sampleContainerName = this.dataBanner.bannersize.name + ' Frame ' + (this.dataBanner.containers.length + 1);
 
 		this.FormGroupContainerData = this.formBuilder.group({
 			bannerId: [this.dataBanner.id, Validators.required],
-			name: [ sampleContainerName, Validators.required],
+			name: [sampleContainerName, Validators.required],
 			description: ['', Validators.required],
 			components: ['', Validators.required]
 		});
@@ -99,9 +99,9 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 	 * newComponentObs is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	private broadcastNewContainer( newContainer: any ) {
+	private broadcastNewContainer(newContainer: any) {
 
-		console.log('Broadcast New Container:', newContainer);
+		//console.log('Broadcast New Container:', newContainer);
 
 		this.FDCEvent.emit(newContainer);
 	}
@@ -145,36 +145,36 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 			return;
 		}
 
-		const componentsToSave:any = [];
+		const componentsToSave: any = [];
 
-		this.formContainer.components.forEach((x:any)=>{
+		this.formContainer.components.forEach((x: any) => {
 			const elem = x.id.toString();
-			if(this.FormGroupContainerData.value.components.indexOf(elem) !== -1){
+			if (this.FormGroupContainerData.value.components.indexOf(elem) !== -1) {
 				componentsToSave.push(x);
 			}
 		});
 
 		//this.loading = true;
 		//this.alertService.info( 'Container Saving Test.', { keepAfterRouteChange: false });
-		//console.log('Saving Container:', this.FormGroupContainerData.value, componentsToSave);
+		////console.log('Saving Container:', this.FormGroupContainerData.value, componentsToSave);
 
 		//return;
 
-		this.containerService.create( this.FormGroupContainerData.value )
+		this.containerService.create(this.FormGroupContainerData.value)
 			.pipe(first())
 			.subscribe({
-				next: (newContainerDb:any) => {
+				next: (newContainerDb: any) => {
 
-					if( componentsToSave.length > 0) {
+					if (componentsToSave.length > 0) {
 
 						const componentsCreatePromises = [];
 						for (let index = 0; index < componentsToSave.length; index++) {
 
 							const elementComp = componentsToSave[index];
 
-							const metaData:any = {};
+							const metaData: any = {};
 
-							elementComp.componentmeta.forEach((x:any)=>{
+							elementComp.componentmeta.forEach((x: any) => {
 								metaData[x.name] = x.value;
 							});
 
@@ -194,7 +194,7 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 						forkJoin(componentsCreatePromises)
 							.pipe(last())
 							.subscribe({
-								next: ( componentsResults:any[] ) => {
+								next: (componentsResults: any[]) => {
 
 									this.alertService.success('Container Saved and Components Duplicated Successfully', { keepAfterRouteChange: true });
 
@@ -202,7 +202,7 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 
 									newContainerDb.components = componentsResults;
 
-									this.broadcastNewContainer( newContainerDb );
+									this.broadcastNewContainer(newContainerDb);
 
 								},
 								error: error => {
@@ -213,8 +213,8 @@ export class TemplatesAddContainerFormDialogComponent implements OnInit, OnDestr
 
 					} else {
 						this.loading = false;
-						this.alertService.success( 'Container Saved successfully.', { keepAfterRouteChange: false });
-						this.broadcastNewContainer( newContainerDb );
+						this.alertService.success('Container Saved successfully.', { keepAfterRouteChange: false });
+						this.broadcastNewContainer(newContainerDb);
 					}
 
 				},

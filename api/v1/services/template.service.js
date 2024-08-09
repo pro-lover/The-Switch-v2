@@ -146,7 +146,7 @@ async function create(params, editId) {
 		throw 'Template already exists. Please provide a unique Name and description.';
 	}
 
-	//console.log('Made it to create:', params);
+	////console.log('Made it to create:', params);
 
 	//return false;
 

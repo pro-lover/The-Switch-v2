@@ -82,34 +82,34 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.fontTypeService.fontType
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(fontTypes:FontType[]) =>  {
-					//console.log('collection subscription:', fontTypes);
+				(fontTypes: FontType[]) => {
+					////console.log('collection subscription:', fontTypes);
 
 					this.allData = fontTypes;
 
-					if( fontTypes !== undefined && fontTypes.length > 0 ) {
+					if (fontTypes !== undefined && fontTypes.length > 0) {
 						this.initialise(fontTypes);
 
 						this.initialiseTextFilters();
 					}
 				}
 			);
-			this.fontTypeService.getAll()
+		this.fontTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(fontTypes:FontType[]) =>  {
+				(fontTypes: FontType[]) => {
 					this.filterDataWeight = fontTypes;
 				}
 			);
-			this.fontTypeService.getAll()
+		this.fontTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(fontTypes:FontType[]) =>  {
+				(fontTypes: FontType[]) => {
 					this.filterDataStyle = fontTypes;
 				}
 			);
@@ -134,7 +134,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 	// filters
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -144,18 +144,18 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -184,7 +184,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -199,17 +199,16 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 		let storeData: any;
 
 		newdata = this.allData;
 
-		if( this.weightFilterValue.value && this.weightFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
-				if(x.id === this.weightFilterValue.value)
-				{
+		if (this.weightFilterValue.value && this.weightFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				if (x.id === this.weightFilterValue.value) {
 					storeData = x.fontWeight;
 				}
 
@@ -217,18 +216,17 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 			});
 		}
 
-		if( this.styleFilterValue.value && this.styleFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
-				if(x.id === this.styleFilterValue.value)
-				{
+		if (this.styleFilterValue.value && this.styleFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				if (x.id === this.styleFilterValue.value) {
 					storeData = x.fontStyle;
 				}
 				return x.fontStyle === storeData
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -319,7 +317,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 	}
 
 
-	private initialise( fontTypes:FontType[]):void {
+	private initialise(fontTypes: FontType[]): void {
 
 		this.primaryData = fontTypes;
 		this.sortedData = this.primaryData.slice();
@@ -330,7 +328,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -339,30 +337,31 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
-        this.fontTypeService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
+	private updateStatus(id: string, params: any): void {
+		this.fontTypeService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public previewModel(id: string): void {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isPreveiw = true;
 
-		const previewDialog = this.dialog.open( DialogPreviewComponent, {
+		const previewDialog = this.dialog.open(DialogPreviewComponent, {
 			data: {
 				title: 'Preview: ' + model.name,
 				message: '',
-				model: model			}
+				model: model
+			}
 		});
 		previewDialog.afterClosed().subscribe(result => {
 			//console.info('Font Preview closed:', result);
@@ -370,7 +369,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 
 			const dynamicStyles = document.getElementById('font-preview-stylesheet');
 
-			if( dynamicStyles ) {
+			if (dynamicStyles) {
 				dynamicStyles.remove();
 			}
 		});
@@ -380,7 +379,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.Name
@@ -395,17 +394,17 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 					.subscribe({
 						next: () => {
 							model.isDeleting = false;
-							this.alertService.success(  model.Name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.Name + ' Deleted successfully.', { keepAfterRouteChange: true });
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = new Date();
 									x.status = false;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -423,7 +422,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -437,18 +436,18 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = null;
 									x.status = true;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -466,19 +465,19 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		this.location.back();
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
-			console.log("data",data)
+		const exportArray = this.primaryData.map((data, index) => {
+			//console.log("data",data)
 
 			return {
 				'ID': data.id,
@@ -561,7 +560,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -588,7 +587,7 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
@@ -617,10 +616,10 @@ export class FontTypesListPage implements OnInit, OnDestroy {
 	templateUrl: 'dialog.preview.component.html',
 	styleUrls: ['dialog.preview.component.scss']
 })
-export class DialogPreviewComponent  implements OnInit {
+export class DialogPreviewComponent implements OnInit {
 
 	title!: string;
-  	message!: string;
+	message!: string;
 
 	constructor(
 		public dialogRef: MatDialogRef<DialogPreviewComponent>,
@@ -631,7 +630,7 @@ export class DialogPreviewComponent  implements OnInit {
 	}
 
 	ngOnInit() {
-		console.log('DialogPreviewComponent:', this.data);
+		//console.log('DialogPreviewComponent:', this.data);
 
 		const head = document.head;
 		const link = document.createElement("link");

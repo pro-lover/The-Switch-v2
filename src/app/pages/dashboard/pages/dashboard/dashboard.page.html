@@ -288,7 +288,9 @@
 
 																		[dataBanner]="activeBannerSize"
 																		[dataContainer]="activeContainer"
-																		[dataComponents]="activeContainer.components">
+																		[dataComponents]="activeContainer.components"
+																		(InputEvent)="onTextChange($event)"
+																		>
 																	</app-component-variations>
 
 																</div>

@@ -13,8 +13,8 @@ import { first } from 'rxjs/operators';
 export class SignUpPage implements OnInit {
 
 	public form!: FormGroup;
-    public loading = false;
-    public submitted = false;
+	public loading = false;
+	public submitted = false;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -54,7 +54,7 @@ export class SignUpPage implements OnInit {
 			return;
 		}
 
-		console.log('Registering...', this.form.value);
+		//console.log('Registering...', this.form.value);
 
 		this.loading = true;
 		this.accountService.register(this.form.value)

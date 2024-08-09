@@ -63,15 +63,15 @@ export class DashboardPage implements OnInit, OnDestroy {
 	public completedBannerVariationCounter = 0;
 	public TotalContainersForAllCreatives = 0;
 
-	public newVariationNameValue!:FormControl;
+	public newVariationNameValue!: FormControl;
 
-	private variationsTracker:any[] = [];
+	private variationsTracker: any[] = [];
 
 	/* Responsive steper listener */
 	stepperOrientation: Observable<StepperOrientation>;
 
 	// FORM DATA
-	public dashboardData$!:Observable<any>;
+	public dashboardData$!: Observable<any>;
 	public uiDataReady = false;
 	public BannerSizes!: BannerSize[];
 	public BannerTypes!: BannerType[];
@@ -100,10 +100,10 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	public creativeType!: string | undefined;
 
-	public updateableComponents:any[] = [];
+	public updateableComponents: any[] = [];
 
 	// Data for Step 2
-	public FormGroupVariations!:FormControl;
+	public FormGroupVariations!: FormControl;
 
 	@Output() variationsEvent = new EventEmitter<any>();
 	@Output() downloadVariationsEvent = new EventEmitter<any>();
@@ -155,8 +155,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	private playStageAnimationSubject: BehaviorSubject<any>;
 	public playStageAnimationObs: Observable<any>;
 
-	private playGlobalAnimationSubject: BehaviorSubject<boolean|null>;
-	public playGlobalAnimationObs: Observable<boolean|null>;
+	private playGlobalAnimationSubject: BehaviorSubject<boolean | null>;
+	public playGlobalAnimationObs: Observable<boolean | null>;
 
 	//loop stage animation
 	private loopStageAnimationSubject: BehaviorSubject<boolean>;
@@ -211,7 +211,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 		this.playStageAnimationSubject = new BehaviorSubject<any>(null);
 		this.playStageAnimationObs = this.playStageAnimationSubject.asObservable();
 
-		this.playGlobalAnimationSubject = new BehaviorSubject<boolean|null>(null);
+		this.playGlobalAnimationSubject = new BehaviorSubject<boolean | null>(null);
 		this.playGlobalAnimationObs = this.playGlobalAnimationSubject.asObservable();
 
 		this.loopStageAnimationSubject = new BehaviorSubject<boolean>(false);
@@ -220,18 +220,19 @@ export class DashboardPage implements OnInit, OnDestroy {
 		this.stepperOrientation = breakpointObserver
 			.observe('(min-width: 800px)')
 			.pipe(
-				map(({matches}) => (matches ? 'horizontal' : 'vertical')),
+				map(({ matches }) => (matches ? 'horizontal' : 'vertical')),
 				takeUntil(this._destroy$)
 			);
 
-			//this.webWorkerService.downloadAllVariations(['test']);
+		//this.webWorkerService.downloadAllVariations(['test']);
 	}
 
 	// convenience getter for easy access to form fields
 	get f() { return this.FormGroupProjectDetails.controls; }
 
 	ngOnInit() {
-		console.log("ngOnInit");
+		console.log("DashboardPage ________________________________________________________________[1]",);
+		//console.log("ngOnInit");
 		this.initialise();
 
 		// Listen to Form Control Value Changes to dynamically populate available options
@@ -239,7 +240,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		this.selectedClient = this.f['projectClient'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-			if( value === undefined || value === '' || value === null ) {
+			if (value === undefined || value === '' || value === null) {
 				this.f['projectTitle'].disable();
 				this.f['projectBannerType'].disable();
 
@@ -260,29 +261,29 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 				this.f['projectTitle'].enable();
 
-				this.availableProjects = this.Projects.filter( (x:Project) => x.clientId == value && x.status === true);
-				this.availableTemplates = this.Templates.filter( (x:Template) => (x.clientId == this.f['projectClient'].value && x.status === true) );
+				this.availableProjects = this.Projects.filter((x: Project) => x.clientId == value && x.status === true);
+				this.availableTemplates = this.Templates.filter((x: Template) => (x.clientId == this.f['projectClient'].value && x.status === true));
 
-				//console.log('availableTemplates', this.availableTemplates);
+				////console.log('availableTemplates', this.availableTemplates);
 
 				//reset available creative types
 				this.availableCreativeTypes.splice(0, this.availableCreativeTypes.length);
 
-				if( this.availableProjects.length <= 0 ) {
+				if (this.availableProjects.length <= 0) {
 
 					this.alertService.error('Selected Client doesn\'t have any Projects available.', { keepAfterRouteChange: true });
 					this.f['projectTitle'].disable();
 				} else {
 
-					const templateBannerTypes = this.availableTemplates.map(x=>x.bannertypeId );
+					const templateBannerTypes = this.availableTemplates.map(x => x.bannertypeId);
 					//const availableCreativeTypes:any[] = [];
-					this.BannerTypes.forEach( (x:any)=> {
-						if( templateBannerTypes.includes( x.id ) ) {
+					this.BannerTypes.forEach((x: any) => {
+						if (templateBannerTypes.includes(x.id)) {
 							this.availableCreativeTypes.push(x);
 						}
 					})
 
-					console.log('availableCreativeTypes', this.availableCreativeTypes );
+					//console.log('availableCreativeTypes', this.availableCreativeTypes);
 				}
 
 			}
@@ -290,9 +291,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		this.selectedProject = this.f['projectTitle'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-			//console.log('projectTitle:', value);
+			////console.log('projectTitle:', value);
 
-			if( value === undefined || value === '' || value === null ) {
+			if (value === undefined || value === '' || value === null) {
 
 				this.f['projectBannerType'].disable();
 				this.f['projectBannerType'].patchValue('');
@@ -309,10 +310,10 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 			this.f['projectTemplate'].patchValue('');
 
-			if( value === undefined || value === '' || value === null ) {} else {
-				const found =this.BannerTypes.find((x:any) => x.id === value)?.name;
-				if( found ) {
-					this.creativeType = this.BannerTypes.find((x:any) => x.id === value)?.name;
+			if (value === undefined || value === '' || value === null) { } else {
+				const found = this.BannerTypes.find((x: any) => x.id === value)?.name;
+				if (found) {
+					this.creativeType = this.BannerTypes.find((x: any) => x.id === value)?.name;
 				}
 
 				/** /
@@ -325,16 +326,16 @@ export class DashboardPage implements OnInit, OnDestroy {
 				}
 				/**/
 
-				//console.log('availableTemplates', this.availableTemplates);
+				////console.log('availableTemplates', this.availableTemplates);
 			}
 
 		});
 
 		this.selectedProjectTemplate = this.f['projectTemplate'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-			console.log('projectTemplate:', value);
+			//console.log('projectTemplate:', value);
 
-			if( value === undefined || value === '' || value === null ) {
+			if (value === undefined || value === '' || value === null) {
 
 				//this.f['projectBannerSizes'].disable();
 				this.f['projectBannerSizes'].patchValue(false);
@@ -352,25 +353,27 @@ export class DashboardPage implements OnInit, OnDestroy {
 				this.activeTemplate = this.Templates.find(x => x.id == value);
 
 				// available bannersizes must be based on the sizes made available by the selected template.
-				this.BannerSizes = this.activeTemplate.banners.filter( (x:Banner) => x.status === true ).map((x:any) => x.bannersize);
+				this.BannerSizes = this.activeTemplate.banners.filter((x: Banner) => x.status === true).map((x: any) => x.bannersize);
 
-				//console.log('Current JOB:', this.activeTemplate, this.BannerSizes);
+				////console.log('Current JOB:', this.activeTemplate, this.BannerSizes);
 			}
 		});
 
 	}
 
 	ngOnDestroy(): void {
+		console.log("DashboardPage ________________________________________________________________[2]",);
 		console.warn('Dashboard Component ngOnDestroy');
 		this._destroy$.next(false);
 		this._destroy$.complete();
 	}
 
-	private buildForm():void {
+	private buildForm(): void {
+		console.log("DashboardPage ________________________________________________________________[3]",);
 		this.FormGroupProjectDetails = this._formBuilder.group({
-			projectTitle: [{value:'', disabled: true}, Validators.required],
-			projectClient: [{value:'', disabled: false}, Validators.required],
-			projectBannerType: [{value:'', disabled: true}, Validators.required],
+			projectTitle: [{ value: '', disabled: true }, Validators.required],
+			projectClient: [{ value: '', disabled: false }, Validators.required],
+			projectBannerType: [{ value: '', disabled: true }, Validators.required],
 			projectTemplate: ['', Validators.required],
 			projectBannerSizes: ['', Validators.required],
 			//projectBannerSizesControl: ['', Validators.required]
@@ -379,7 +382,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 		this.FormGroupVariations = new FormControl('', Validators.required);
 	}
 
-	private initialise():void {
+	private initialise(): void {
+		console.log("DashboardPage ________________________________________________________________[56]",);
 
 		console.info('Dashboard Component initialise');
 
@@ -393,15 +397,16 @@ export class DashboardPage implements OnInit, OnDestroy {
 				this.fontTypeService.getAll()
 			]
 		)
-		.pipe(
-			map(([templates, clients, bannertypes, bannersizes, projects, fonttypes]):any => {
-				console.info('combineLatest initialise', [templates, clients, bannertypes, bannersizes, projects, fonttypes]);
-				// combineLatest returns an array of values, here we map those values to an object
-				return { templates, clients, bannertypes, bannersizes, projects, fonttypes };
-			})
-		);
+			.pipe(
+				map(([templates, clients, bannertypes, bannersizes, projects, fonttypes]): any => {
+					console.info('combineLatest initialise', [templates, clients, bannertypes, bannersizes, projects, fonttypes]);
+					//console.log(templates.getChildByName())
+					// combineLatest returns an array of values, here we map those values to an object
+					return { templates, clients, bannertypes, bannersizes, projects, fonttypes };
+				})
+			);
 
-		this.dashboardData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.dashboardData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			console.info('Dashboard Component initialise', data);
 
 			this.prepDashboardData(data);
@@ -409,9 +414,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	}
 
-	private prepDashboardData(data:any):void {
-
-		console.log('prepDashboard',data);
+	private prepDashboardData(data: any): void {
+		console.log("DashboardPage ________________________________________________________________[57]",);
+		//console.log('prepDashboard', data);
 
 		this.Templates = data.templates;
 		this.Clients = data.clients;
@@ -419,8 +424,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 		this.BannerSizes = data.bannersizes;
 		this.Projects = data.projects;
 
-		data.fonttypes.forEach( (font: FontType) => {
-			if( !document.getElementById("font-custom-stylesheet-id-" + font.id) ) {
+		data.fonttypes.forEach((font: FontType) => {
+			if (!document.getElementById("font-custom-stylesheet-id-" + font.id)) {
 				const head = document.head;
 				const link = document.createElement("link");
 
@@ -440,27 +445,27 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public onStepChange(event: any): void {
-
-		console.log('onStepChange:', event);
+		console.log("DashboardPage ________________________________________________________________[4]",);
+		//console.log('onStepChange:', event);
 
 		//if( event.selectedIndex === 2 ) {
-			//this.prepFinalVariationsArray();
+		//this.prepFinalVariationsArray();
 		//}
 	}
 
-	public creativeReady($event:any):void {
+	public creativeReady($event: any): void {
+		console.log("DashboardPage ________________________________________________________________[5]",);
+		//console.log('creativeReady:', $event);
 
-		console.log('creativeReady:', $event);
+		this.activeBannerSizes.forEach((size: any) => {
+			const container = size.containers.find((container: any) => container.id === $event.containerId);
 
-		this.activeBannerSizes.forEach( (size:any) => {
-			const container = size.containers.find( (container:any) => container.id === $event.containerId);
+			//console.log('creativeReady container:', container, size.containers);
 
-			console.log('creativeReady container:', container, size.containers);
+			if (container) {
 
-			if( container ) {
-
-				if( $event.state === true ) {
-					console.log('creativeReady:', $event, container);
+				if ($event.state === true) {
+					//console.log('creativeReady:', $event, container);
 					container.creativeReady = true;
 					this.creativeReadySubject.next(true);
 				} else {
@@ -477,9 +482,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 *
 	 */
-	public refreshBanner(db?:any) {
-
-		if( db !== undefined ) {
+	public refreshBanner(db?: any) {
+		console.log("DashboardPage ________________________________________________________________[6]",);
+		if (db !== undefined) {
 			this.refreshStageSubject.next(db);
 		} else {
 			this.refreshStageSubject.next(true);
@@ -489,8 +494,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	/**
 	 * EVENTS FOR HTML5 CANVAS CREATIVE
 	 */
-	public playAnimation( banner:any, container:any ) {
-
+	public playAnimation(banner: any, container: any) {
+		console.log("DashboardPage ________________________________________________________________[7]",);
 		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
 
 		container.animation_isPlaying = this.animation_isPlaying;
@@ -502,42 +507,45 @@ export class DashboardPage implements OnInit, OnDestroy {
 		});
 	}
 
-	public frameAnimationStart($event:any) {
+	public frameAnimationStart($event: any) {
+		console.log("DashboardPage ________________________________________________________________[8]",);
 		this.animation_isPlaying = true;
 
-		this.activeBannerSizes.forEach( (size:any) => {
-			const container = size.containers.find( (container:any) => container.id === $event );
-			if( container ) {
+		this.activeBannerSizes.forEach((size: any) => {
+			const container = size.containers.find((container: any) => container.id === $event);
+			if (container) {
 				container.animation_isPlaying = true;
 			}
 		});
 	}
 
-	public frameAnimationEnd($event:any) {
+	public frameAnimationEnd($event: any) {
+		console.log("DashboardPage ________________________________________________________________[9]",);
 		this.animation_isPlaying = false;
 
-		this.activeBannerSizes.forEach( (size:any) => {
-			const container = size.containers.find( (container:any) => container.id === $event );
-			if( container ) {
+		this.activeBannerSizes.forEach((size: any) => {
+			const container = size.containers.find((container: any) => container.id === $event);
+			if (container) {
 				container.animation_isPlaying = false;
 			}
 		});
 	}
 
-	public playGlobalAnimation( banner:any, container:any ) {
-
+	public playGlobalAnimation(banner: any, container: any) {
+		console.log("DashboardPage ________________________________________________________________[10]",);
 		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
 		this.playGlobalAnimationSubject.next(this.animation_isPlaying);
 	}
 
-	public GlobalAnimationEnd($event:any) {
+	public GlobalAnimationEnd($event: any) {
+		console.log("DashboardPage ________________________________________________________________[11]",);
 		this.animation_isPlaying = false;
 		this.playGlobalAnimationSubject.next(null);
 	}
 
-	public previewCreative(db?:any) {
-
-		if( db !== undefined ) {
+	public previewCreative(db?: any) {
+		console.log("DashboardPage ________________________________________________________________[12]",);
+		if (db !== undefined) {
 			this.refreshStageSubject.next(db);
 		} else {
 			this.refreshStageSubject.next(true);
@@ -545,6 +553,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private resetUIControls() {
+		console.log("DashboardPage ________________________________________________________________[13]",);
 		this.creativeType = undefined;
 		this.noOfVariations = 0;
 		this.completedBannerVariationCounter = 0;
@@ -558,6 +567,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private resetSelectedCreativeData() {
+		console.log("DashboardPage ________________________________________________________________[14]",);
 		this.activeTemplate = null;
 		//this.BannerSizes = [];
 		//this.TemplateRules = [];
@@ -571,7 +581,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private resetvariationsData() {
-
+		console.log("DashboardPage ________________________________________________________________[15]",);
 		this.FormGroupVariations.patchValue(false);
 		this.variationCollectionForExport.splice(0, this.variationCollectionForExport.length);
 		this.intialisePagination();
@@ -583,11 +593,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * @param id (Number)
 	 *
 	 */
-	public selectedBannerSize(id:number | string) {
+	public selectedBannerSize(id: number | string) {
+		console.log("DashboardPage ________________________________________________________________[16]",);
+		const updatableComponents: any[] = [];
 
-		const updatableComponents:any[] = [];
-
-		if( this.FormGroupProjectDetails.value.projectBannerSizes === false ) {
+		if (this.FormGroupProjectDetails.value.projectBannerSizes === false) {
 			// remove from array
 			this.activeBannerSizes = this.activeBannerSizes.filter(x => x.bannersizeId !== id);
 			this.updateableComponents = this.updateableComponents.filter(x => x.bannersizeId !== id);
@@ -595,31 +605,31 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		} else {
 
-			if( [null, undefined].includes(this.activeTemplate) ) {} else {
+			if ([null, undefined].includes(this.activeTemplate)) { } else {
 				//this.activeBannerSizes.push(this.BannerSizes.find(x => x.id === id));
 				this.activeBannerSizes.push(
-					this.activeTemplate.banners.find((x:any) => {
-						if( x.bannersizeId === id ) {
+					this.activeTemplate.banners.find((x: any) => {
+						if (x.bannersizeId === id) {
 
 							x.readyForVariations = false;
 							x.variationpercentage = 0;
 							x.componentWindowOpen = false;
 
 							// go through all components related to banner size
-							x.containers.map((y:any) => {
+							x.containers.map((y: any) => {
 
 								y.readyForVariations = false;
 								y.componentWindowOpen = false;
 								y.animation_isPlaying = false;
 								y.creativeReady = false;
 
-								y.components.map((z:any) => {
+								y.components.map((z: any) => {
 									z.bannerId = x.id;
 									z.bannersizeId = id;
 									z.containerDisplayOrder = y.displayorder;
 									z.containerDuration = y.duration;
 									// for establishing template rules
-									if( z.smart === true) {
+									if (z.smart === true) {
 										z.readyForVariations = false;
 										updatableComponents.push(z);
 									}
@@ -631,7 +641,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 					})
 				);
 
-				this.TemplateRules.push( {
+				this.TemplateRules.push({
 					'bannersizeId': id,
 					'templaterules': this.generateTemplateRules(updatableComponents)
 				});
@@ -647,18 +657,19 @@ export class DashboardPage implements OnInit, OnDestroy {
 		//this.activeBannerSizes.readyforvariations = false;
 		//console.warn('updatableComponents:', updatableComponents );
 		console.warn('activeBannerSizes:', this.activeBannerSizes);
-		console.warn('TemplateRules:', this.TemplateRules );
+		console.warn('TemplateRules:', this.TemplateRules);
 		console.warn('updatableComponents:', this.updateableComponents);
 	}
 
-	private generateTemplateRules(dynamicComponents:any): any[] {
-		console.log('generateTemplateRules');
-		const TemplateRules:any[] = [];
+	private generateTemplateRules(dynamicComponents: any): any[] {
+		console.log("DashboardPage ________________________________________________________________[17]",);
+		//console.log('generateTemplateRules');
+		const TemplateRules: any[] = [];
 
-		dynamicComponents.forEach( (component:any) => {
+		dynamicComponents.forEach((component: any) => {
 
-			if( component.componenttype.name === 'Text' || component.componenttype.name === 'Button' ) {
-				const textLength:number = (component.componentmeta.find((x:any) => x.name === 'fontValue').value).length;
+			if (component.componenttype.name === 'Text' || component.componenttype.name === 'Button') {
+				const textLength: number = (component.componentmeta.find((x: any) => x.name === 'fontValue').value).length;
 
 				TemplateRules.push({
 					'componentId': component.id,
@@ -668,14 +679,14 @@ export class DashboardPage implements OnInit, OnDestroy {
 					'type': component.componenttype.name,
 					'rules': [
 						{
-							'maximumcharacters' : textLength
+							'maximumcharacters': textLength
 						}
 					]
 				});
 
-			} else if( component.componenttype.name === 'Image' ) {
+			} else if (component.componenttype.name === 'Image') {
 
-				console.log('template rules: image', component.componentmeta);
+				//console.log('template rules: image', component.componentmeta);
 
 				TemplateRules.push({
 					'componentId': component.id,
@@ -685,8 +696,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 					'type': component.componenttype.name,
 					'rules': [
 						{
-							'width' : component.componentmeta.find((x:any) => x.name === 'width').value,
-							'height': component.componentmeta.find((x:any) => x.name === 'height').value
+							'width': component.componentmeta.find((x: any) => x.name === 'width').value,
+							'height': component.componentmeta.find((x: any) => x.name === 'height').value
 						}
 					]
 				});
@@ -697,10 +708,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private countNoofCounters() {
+		console.log("DashboardPage ________________________________________________________________[18]",);
 
 		let count = 0;
 
-		this.activeBannerSizes.forEach((x:any) => {
+		this.activeBannerSizes.forEach((x: any) => {
 			count += x.containers.length;
 		});
 
@@ -708,7 +720,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		//return count;
 	}
+	public onTextChange(datain: any){
+		console.log("DashboardPage ________________________________________________________________[19]",);
+		console.warn('onTextChange  look i am working', datain);
 
+	}
 	/**
 	 * Events for when user drags and drops files
 	 *
@@ -716,74 +732,131 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public DragAndDropEventItem(newItem: any) {
-
+		console.log("DashboardPage ________________________________________________________________[20]",);
 		console.warn('DragAndDropEventItem 1:', newItem, this.updateableComponents);
 
-		if (!newItem || !newItem.data[0]) return;
-
-		console.warn('DragAndDropEventItem 2:');
-		this.files.push(newItem);
-
-		console.warn('DragAndDropEventItem 3:',this.files);
-		this.uploadedFileSubject.next(newItem);
-
-		console.warn('DragAndDropEventItem 4:',this.uploadedFileSubject);
-
-		// replacing the below
-		// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
-		this.activeBannerSizes.find((x:any) => {
-			console.warn('DragAndDropEventItem 5:',x);
-			console.warn("("+'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height+")"+"==="+ newItem.stage );
-			if( ( 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage ) {
-
-				x.containers.find((y:any) => {
-
-					console.warn("("+y.id +"==="+ newItem.containerId  );
-					if( y.id === newItem.containerId ) {
-
-						let containerReady = true;
-
-						//checkRelevantUpdateableComponents.forEach((z:any) => {
-							console.warn("check in updateableComponents");
-						this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId).forEach((z:any) => {
-							if( newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button') ) {
-								console.warn("z.readyForVariations is this true");
-								z.readyForVariations = true;
+		if (!newItem.value)
+			{
+				if (!newItem || !newItem.data[0]) return;
+				console.log("out here ")
+				console.warn('DragAndDropEventItem 2:');
+				this.files.push(newItem);
+		
+				console.warn('DragAndDropEventItem 3:', this.files);
+				this.uploadedFileSubject.next(newItem);
+		
+				console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
+		
+				// replacing the below
+				// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
+				this.activeBannerSizes.find((x: any) => {
+					console.warn('DragAndDropEventItem 5:', x);
+					console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
+					if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
+		
+						x.containers.find((y: any) => {
+		
+							console.warn("(" + y.id + "===" + newItem.containerId);
+							if (y.id === newItem.containerId) {
+		
+								let containerReady = true;
+		
+								//checkRelevantUpdateableComponents.forEach((z:any) => {
+								console.warn("check in updateableComponents");
+								this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
+									if (newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button')) {
+										console.warn("z.readyForVariations is this true");
+										z.readyForVariations = true;
+									}
+									if (z.readyForVariations === false) {
+										console.warn("containerReady is this true");
+										containerReady = false;
+									}
+									console.warn("updateableComponents is this true", containerReady);
+								});
+		
+								if (containerReady === true) {
+									console.warn("containerReady is this true", containerReady);
+									y.componentWindowOpen = false;
+								}
+		
+								console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
 							}
-							if ( z.readyForVariations === false ) {
-								console.warn("containerReady is this true");
-								containerReady = false;
-							}
-							console.warn("updateableComponents is this true",containerReady);
+		
 						});
-
-						if ( containerReady === true ) {
-							console.warn("containerReady is this true",containerReady);
-							y.componentWindowOpen = false;
-						}
-
-						console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
+		
+						this.isBannerReadyyForVariations(x.id);
 					}
-
 				});
+			}else{
+				console.log("out here ")
+				console.warn('DragAndDropEventItem 2:');
 
-				this.isBannerReadyyForVariations(x.id);
+				if (!newItem || !newItem.value) return;
+				this.files.push(newItem);
+		
+				console.warn('DragAndDropEventItem 3:', this.files);
+				this.uploadedFileSubject.next(newItem);
+		
+				console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
+		
+				// replacing the below
+				// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
+				this.activeBannerSizes.find((x: any) => {
+					console.warn('DragAndDropEventItem 5:', x);
+					console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
+					if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
+		
+						x.containers.find((y: any) => {
+		
+							console.warn("(" + y.id + "===" + newItem.containerId);
+							if (y.id === newItem.containerId) {
+		
+								let containerReady = true;
+		
+								//checkRelevantUpdateableComponents.forEach((z:any) => {
+								console.warn("check in updateableComponents");
+								this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
+									if (newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button')) {
+										console.warn("z.readyForVariations is this true");
+										z.readyForVariations = true;
+									}
+									if (z.readyForVariations === false) {
+										console.warn("containerReady is this true");
+										containerReady = false;
+									}
+									console.warn("updateableComponents is this true", containerReady);
+								});
+		
+								if (containerReady === true) {
+									console.warn("containerReady is this true", containerReady);
+									y.componentWindowOpen = false;
+								}
+		
+								console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
+							}
+		
+						});
+		
+						this.isBannerReadyyForVariations(x.id);
+					}
+				});
 			}
-		});
+		
 	}
 
-	public ResetVariationsEvent(data:any) {
+	public ResetVariationsEvent(data: any) {
+		console.log("DashboardPage ________________________________________________________________[21]",);
+		//console.log('ResetVariationsEvent 1:', data);
 
-		console.log('ResetVariationsEvent 1:', data);
+		this.activeBannerSizes.find((x: any) => {
+			if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === ('bannerCanvas-' + data.banner.bannersize.width + '-' + data.banner.bannersize.height)) {
 
-		this.activeBannerSizes.find((x:any) => {
-			if( ( 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) ===  ( 'bannerCanvas-' + data.banner.bannersize.width + '-' + data.banner.bannersize.height) ) {
+				//console.log('ResetVariationsEvent 2:', data);
 
-				console.log('ResetVariationsEvent 2:', data);
+				x.containers.find((y: any) => {
 
-				x.containers.find((y:any) => {
-
-					if( y.id === data.containerId ) {
+					if (y.id === data.containerId) {
 
 						x.readyForVariations = false;
 						x.variationpercentage = 0;
@@ -806,33 +879,33 @@ export class DashboardPage implements OnInit, OnDestroy {
 		});
 	}
 
-	public RemoveUploadEventItem(removeItem:any) {
+	public RemoveUploadEventItem(removeItem: any) {
+		console.log("DashboardPage ________________________________________________________________[22]",);
+		//console.log('RemoveUploadEventItem:', removeItem);
+		////console.log('this.files:', this.files);
 
-		console.log('RemoveUploadEventItem:', removeItem);
-		//console.log('this.files:', this.files);
+		this.activeBannerSizes.find((x: any) => {
 
-		this.activeBannerSizes.find((x:any) => {
+			if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === removeItem.stage) {
 
-			if( ( 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === removeItem.stage ) {
+				x.containers.find((y: any) => {
 
-				x.containers.find((y:any) => {
-
-					if( y.id === removeItem.containerId ) {
+					if (y.id === removeItem.containerId) {
 
 						switch (removeItem.type) {
 
 							case 'Image':
 
 								let imageCounter = 0;
-								this.files.filter((xx:any) => (xx.type ==='Image' && xx.stage === 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) ).map((y)=> {
-									if( y.data.length > 0 ) {
+								this.files.filter((xx: any) => (xx.type === 'Image' && xx.stage === 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height)).map((y) => {
+									if (y.data.length > 0) {
 										imageCounter++;
 									}
 								});
 
-								//console.log('imageCounter:', imageCounter);
+								////console.log('imageCounter:', imageCounter);
 
-								if( imageCounter === 0 ) {
+								if (imageCounter === 0) {
 									x.variationsImageReadyCounter = 0;
 									x.variationsImageReady = false;
 									//this.noOfVariationsForGeneration = this.noOfVariationsForGeneration - 0.5;
@@ -854,7 +927,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 						this.removeUploadItemSubject.next(removeItem);
 
-						this.alertService.success('Uploaded "' + removeItem.componentName  + '" asset (Frame: ' + removeItem.containerId + ') for Creative removed successfully.', { keepAfterRouteChange: true });
+						this.alertService.success('Uploaded "' + removeItem.componentName + '" asset (Frame: ' + removeItem.containerId + ') for Creative removed successfully.', { keepAfterRouteChange: true });
 
 					}
 				});
@@ -869,35 +942,36 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * @param bannerComponent (Object)
 	 *
 	 */
-	public generateVariations(bannerComponent:any) {
-
-		//console.log('generateVariations', bannerComponent);
+	public generateVariations(bannerComponent: any) {
+		console.log("DashboardPage ________________________________________________________________[23]",);
+		////console.log('generateVariations', bannerComponent);
 		bannerComponent.componentWindowOpen = false;
 
-		bannerComponent.containers.map((x:any) => {
+		bannerComponent.containers.map((x: any) => {
 			x.componentWindowOpen = false;
 		});
 
 		this.noOfVariations++;
 		bannerComponent.readyForVariations = true;
-		this.variationsEvent.emit(bannerComponent);
+		console.log('generateVariations', this.files);
+		this.variationsEvent.emit({bannerComponent,dta:this.files});
 
 		//this.FormGroupVariations.value.variationsReady = true;
 
 	}
 
 	public generateAllVariations() {
-
+		console.log("DashboardPage ________________________________________________________________[24]",);
 		for (let index = 0; index < this.updateableComponents.length; index++) {
 			const element = this.updateableComponents[index];
 
-			if( element.readyForVariations === false ) {
+			if (element.readyForVariations === false) {
 
-				const faultyBanners = this.activeBannerSizes.find((x:any) => (x.id === element.bannerId));
+				const faultyBanners = this.activeBannerSizes.find((x: any) => (x.id === element.bannerId));
 
 				console.error('faultyBanners:', faultyBanners, element);
 
-				this.alertService.error('Please upload all the assets for the '+ faultyBanners.name +' creative before attempting to generate all variations.', { keepAfterRouteChange: true });
+				this.alertService.error('Please upload all the assets for the ' + faultyBanners.name + ' creative before attempting to generate all variations.', { keepAfterRouteChange: true });
 
 				this.variationsGenerated = false;
 
@@ -907,7 +981,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 			}
 		}
 
-		this.activeBannerSizes.forEach((x:any) => {
+		this.activeBannerSizes.forEach((x: any) => {
 			x.readyForVariations = true;
 			this.generateVariations(x);
 		});
@@ -925,34 +999,35 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * @param bannerId (String)
 	 *
 	 */
-	private isBannerReadyyForVariations(bannerId:string):void {
+	private isBannerReadyyForVariations(bannerId: string): void {
+		console.log("DashboardPage ________________________________________________________________[25]",);
 		console.log('isBannerReadyyForVariations', bannerId);
 
 		let status = true;
 
-		const chhh = this.updateableComponents.filter((x:any) => x.bannerId === bannerId);
+		const chhh = this.updateableComponents.filter((x: any) => x.bannerId === bannerId);
 
 		console.log('isBannerReadyyForVariations', chhh);
 
-		console.log("element : "+ chhh.length)
+		console.log("element : " + chhh.length)
 
 		for (let index = 0; index < chhh.length; index++) {
 			const element = chhh[index];
 
-			console.log("element : "+ element)
+			console.log("element : " , element)
 
-			console.log(element.readyForVariations +" === "+ false)
-			if( element.readyForVariations === false ) {
+			console.log(element.readyForVariations + " === " + false)
+			if (element.readyForVariations === false) {
 
 				status = false;
 
 				break;
 			}
 		}
-		console.log("status ",status)
-		if( status === true ) {
-			this.activeBannerSizes.find((x:any) => {
-				if( x.id === bannerId ) {
+		console.log("status ", status)
+		if (status === true) {
+			this.activeBannerSizes.find((x: any) => {
+				if (x.id === bannerId) {
 					x.readyForVariations = true;
 					x.componentWindowOpen = false;
 
@@ -967,28 +1042,28 @@ export class DashboardPage implements OnInit, OnDestroy {
 			});
 		}
 
-		console.warn('isBannerReadyyForVariations', this.variationsTracker, this.updateableComponents);
+		console.warn('isBannerReadyyForVariations   test: ', this.variationsTracker, this.updateableComponents);
 
 	}
 
-	public acceptCollectionOfVariationsFromBannerComponent(bannerComponentVariationCollection:any) {
+	public acceptCollectionOfVariationsFromBannerComponent(bannerComponentVariationCollection: any) {
+		console.log("DashboardPage ________________________________________________________________[26]",);
+		//console.log("acceptCollectionOfVariationsFromBannerComponent	", bannerComponentVariationCollection)
 
-		console.log("acceptCollectionOfVariationsFromBannerComponent	",bannerComponentVariationCollection)
+		//console.log('CreativeType:', this.f['projectBannerType'].value);
+		//console.log('acceptCollectionOfVariationsFromBannerComponent:', bannerComponentVariationCollection);
 
-		console.log('CreativeType:', this.f['projectBannerType'].value);
-		console.log('acceptCollectionOfVariationsFromBannerComponent:', bannerComponentVariationCollection);
-
-		console.log('CreativeType:', this.creativeType+":");
+		//console.log('CreativeType:', this.creativeType + ":");
 		//const creativeType = this.BannerTypes.find((x:any) => x.id === this.f['projectBannerType'].value)?.name;
 
-		if( this.creativeType === 'GIFs' || this.creativeType === 'HTML5' ) {
-			console.log('if static GIFs is available');
-			this.variationsTracker.find((x:any) => {
-				if( x.bannerId === bannerComponentVariationCollection.bannerId ) {
+		if (this.creativeType === 'GIFs' || this.creativeType === 'HTML5') {
+			//console.log('if static GIFs is available');
+			this.variationsTracker.find((x: any) => {
+				if (x.bannerId === bannerComponentVariationCollection.bannerId) {
 
 					x.counter = x.counter + 1;
 
-					bannerComponentVariationCollection.data.forEach((y:any)=> {
+					bannerComponentVariationCollection.data.forEach((y: any) => {
 
 						/** /
 						if( y.stageUpdateComponents === undefined || y.stageUpdateComponents.length === 0 ) {} else {
@@ -996,7 +1071,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 								const element = y.stageUpdateComponents[index];
 								y.stageComponents[element.componentIndex].componentmeta[element.componentMetaIndex].value = element.value;
 
-								console.log('y updated:', y);
+								//console.log('y updated:', y);
 							}
 						}
 						/**/
@@ -1006,32 +1081,32 @@ export class DashboardPage implements OnInit, OnDestroy {
 						);
 					});
 
-					if( x.counter == x.noOfContainers ) {
+					if (x.counter == x.noOfContainers) {
 
 						this.generateAllFrames(x.frames)
-						.then( (FinalGIFVariations:any[]) => {
+							.then((FinalGIFVariations: any[]) => {
 
-							this.variationCollectionForExport.push(FinalGIFVariations);
+								this.variationCollectionForExport.push(FinalGIFVariations);
 
-							if ( this.TotalContainersForAllCreatives === this.completedBannerVariationCounter ) {
-								this.prepFinalVariationsArray();
-								this.intialisePagination();
+								if (this.TotalContainersForAllCreatives === this.completedBannerVariationCounter) {
+									this.prepFinalVariationsArray();
+									this.intialisePagination();
 
-								this.variationsExported = true;
-								this.FormGroupVariations.patchValue(true);
-								this.exportingProcess = false;
-							}
+									this.variationsExported = true;
+									this.FormGroupVariations.patchValue(true);
+									this.exportingProcess = false;
+								}
 
-						});
+							});
 
 					}
 				}
 			});
 
-		} else if( this.creativeType === 'static' ) {
+		} else if (this.creativeType === 'static') {
 
-			console.log('if static JPG is available');
-			bannerComponentVariationCollection.data.forEach((x:any)=> {
+			//console.log('if static JPG is available');
+			bannerComponentVariationCollection.data.forEach((x: any) => {
 				this.variationCollectionForExport.push(x);
 			});
 
@@ -1048,47 +1123,48 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private prepFinalVariationsArray() {
+		console.log("DashboardPage ________________________________________________________________[27]",);
 		this.variationCollectionForExport = this.variationCollectionForExport.flat();
-		console.warn('variationCollectionForExport:', this.variationCollectionForExport );
+		console.warn('variationCollectionForExport:', this.variationCollectionForExport);
 	}
 
-	private generateAllFrames(allFrames:any[]): Promise<any> {
-
+	private generateAllFrames(allFrames: any[]): Promise<any> {
+		console.log("DashboardPage ________________________________________________________________[28]",);
 		return new Promise<any>((resolve, reject) => {
 
 			const groupedArray = groupBy(allFrames, 'containerId');
 			const containerIdKeys = Object.keys(groupedArray);
 
-			//console.log('All GIF Frames:', x.frames);
-			//console.log('GIF groupedArray:', groupedArray);
+			////console.log('All GIF Frames:', x.frames);
+			////console.log('GIF groupedArray:', groupedArray);
 
 			//groupedArray = groupedArray.reverse();
 
-			const varss:any = {};
+			const varss: any = {};
 			containerIdKeys.forEach(key => {
-				varss[key] = groupedArray[key].map((zz:any) => zz.uid );
+				varss[key] = groupedArray[key].map((zz: any) => zz.uid);
 			});
 
-			//console.log('varss:', varss);
+			////console.log('varss:', varss);
 
-			const allFramesCartesianProduct:any = getCartesianProduct(varss);
+			const allFramesCartesianProduct: any = getCartesianProduct(varss);
 
 			let GCPCounter = 0;
 
 			// initialise Arrays
-			const FinalGIFVariations:any[] = [...Array(allFramesCartesianProduct.length)].map((jj:any[]) => []);
-			FinalGIFVariations.map((j:any[]) => j = [...Array(containerIdKeys.length)].map(jj => []) );
+			const FinalGIFVariations: any[] = [...Array(allFramesCartesianProduct.length)].map((jj: any[]) => []);
+			FinalGIFVariations.map((j: any[]) => j = [...Array(containerIdKeys.length)].map(jj => []));
 
-			//console.log('allFramesCartesianProduct:', allFramesCartesianProduct);
-			//console.log('FinalGIFVariations:', FinalGIFVariations);
+			////console.log('allFramesCartesianProduct:', allFramesCartesianProduct);
+			////console.log('FinalGIFVariations:', FinalGIFVariations);
 
-			allFramesCartesianProduct.forEach( (framescombination:any) => {
+			allFramesCartesianProduct.forEach((framescombination: any) => {
 
 				for (const key in framescombination) {
 					if (Object.prototype.hasOwnProperty.call(framescombination, key)) {
 						const element = framescombination[key];
-						if( groupedArray[key] ) {
-							const uid_frame = groupedArray[key].find((ogAllFrames:any) => ogAllFrames.uid === element);
+						if (groupedArray[key]) {
+							const uid_frame = groupedArray[key].find((ogAllFrames: any) => ogAllFrames.uid === element);
 							FinalGIFVariations[GCPCounter].push(uid_frame);
 						}
 					}
@@ -1099,11 +1175,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 			});
 
 			// sort containers by user defined order
-			FinalGIFVariations.forEach((x:any[]) => {
-				x.forEach((y:any) => {
+			FinalGIFVariations.forEach((x: any[]) => {
+				x.forEach((y: any) => {
 					//const cont = y.bannerComponent.containers.find((z:any) => z.id === y.containerId);
-					//console.log('displayOrder:', cont);
-					y.displayorder = y.bannerComponent.containers.find((z:any) => z.id === y.containerId).displayorder;
+					////console.log('displayOrder:', cont);
+					y.displayorder = y.bannerComponent.containers.find((z: any) => z.id === y.containerId).displayorder;
 				});
 
 				x.sort((a, b) => (a.displayorder > b.displayorder) ? 1 : -1);
@@ -1117,56 +1193,56 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	}
 
-	private generateGIFs(variation:any[]): Promise<Blob> {
-
+	private generateGIFs(variation: any[]): Promise<Blob> {
+		console.log("DashboardPage ________________________________________________________________[29]",);
 		return new Promise<Blob>((resolve, reject) => {
 
 			// https://stackoverflow.com/questions/21913673/execute-web-worker-from-different-origin
 			urlContentToDataUri(`${environment.apiUrl}/gif.worker.js`)
-			.then(
-				(WorkerScriptResult) =>{
+				.then(
+					(WorkerScriptResult) => {
 
-					const gif = new GIF({
-						workerScript: WorkerScriptResult,
-						workers: 5,
-						quality: 10
-						//background: '#000'
-					});
+						const gif = new GIF({
+							workerScript: WorkerScriptResult,
+							workers: 5,
+							quality: 10
+							//background: '#000'
+						});
 
-					variation.forEach((variationImgFrame:any)=> {
+						variation.forEach((variationImgFrame: any) => {
 
-						//console.log('generateGIFs variation:', variationImgFrame);
+							////console.log('generateGIFs variation:', variationImgFrame);
 
-						gif.addFrame( variationImgFrame, {delay: 3000});
+							gif.addFrame(variationImgFrame, { delay: 3000 });
 
-					});
+						});
 
-					gif.on('finished', (blob: Blob)=> {
+						gif.on('finished', (blob: Blob) => {
 
-						console.log('GIF Ready:', blob, gif);
+							//console.log('GIF Ready:', blob, gif);
 
-						//const dataURL = URL.createObjectURL(blob);
+							//const dataURL = URL.createObjectURL(blob);
 
-						resolve(blob);
+							resolve(blob);
 
-					});
+						});
 
-					gif.render();
-				}
-			);
+						gif.render();
+					}
+				);
 
 		});
 	}
 
-	private generateImageFromDataURI( imgDataURL:string ): Promise<HTMLImageElement> {
-
+	private generateImageFromDataURI(imgDataURL: string): Promise<HTMLImageElement> {
+		console.log("DashboardPage ________________________________________________________________[30]",);
 		return new Promise(
 			(resolve, reject) => {
 
 				const img = new Image();
 
 				img.addEventListener("load", () => {
-					//console.log('Frame Image Loaded');
+					////console.log('Frame Image Loaded');
 
 					resolve(img);
 
@@ -1184,9 +1260,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * @param FinalGIFVariation (Array)
 	 *
 	 */
-	private GIFImagesFromDataURI( FinalGIFVariation:any[]): Promise<HTMLImageElement[]> {
-
-		const allFrameImages:any[] = [];
+	private GIFImagesFromDataURI(FinalGIFVariation: any[]): Promise<HTMLImageElement[]> {
+		console.log("DashboardPage ________________________________________________________________[31]",);
+		const allFrameImages: any[] = [];
 
 		for (let index = 0; index < FinalGIFVariation.length; index++) {
 			const element = FinalGIFVariation[index];
@@ -1203,30 +1279,30 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * @param bannerComponent (Object)
 	 *
 	 */
-	public exportVariation(bannerComponent:any) {
-
-		console.log('exportVariation',bannerComponent);
+	public exportVariation(bannerComponent: any) {
+		console.log("DashboardPage ________________________________________________________________[32]",);
+		//console.log('exportVariation', bannerComponent);
 
 		this.downloadVariationsEvent.emit(bannerComponent);
 
 	}
 
-	public progressPercentage(data:any) {
-
-		this.activeBannerSizes.find( (x) =>  {
-			if( x.bannersize.id === data.bannersizeId ) {
+	public progressPercentage(data: any) {
+		console.log("DashboardPage ________________________________________________________________[33]",);
+		this.activeBannerSizes.find((x) => {
+			if (x.bannersize.id === data.bannersizeId) {
 				x.variationpercentage = data.value;
-				if( data.value === 100 ) {
+				if (data.value === 100) {
 
-					//console.log('progressPercentage:', data );
-					//console.log('progressPercentage:', data, this.f['projectBannerType'].value);
+					////console.log('progressPercentage:', data );
+					////console.log('progressPercentage:', data, this.f['projectBannerType'].value);
 					this.completedBannerVariationCounter++;
 
 					//if ( this.TotalContainersForAllCreatives === this.completedBannerVariationCounter ) {
 					//	this.prepFinalVariationsArray();
 					//}
 
-					//console.log('completedBannerVariationCounter:', this.completedBannerVariationCounter );
+					////console.log('completedBannerVariationCounter:', this.completedBannerVariationCounter );
 				}
 			}
 		});
@@ -1236,12 +1312,12 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public exportAllVariations() {
-		console.log('exportAllVariations');
+		//console.log('exportAllVariations');
 		this.exportingProcess = true;
 
 		this.accordion.closeAll()
 
-		this.activeBannerSizes.forEach((x:any) => {
+		this.activeBannerSizes.forEach((x: any) => {
 			this.exportVariation(x);
 		});
 
@@ -1250,166 +1326,165 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	}
 
-	public downloadAllVariations(){
-
+	public downloadAllVariations() {
+		console.log("DashboardPage ________________________________________________________________[34]",);
 		this.generatingDownloads = true;
 
 		const pauseBeforeBatch = setTimeout(() => {
 
 			clearTimeout(pauseBeforeBatch);
+			console.log(this.creativeType +'=== Static JPG');
 
-			if( this.creativeType === 'Static JPG' ) {
+			if (this.creativeType === 'static') {
 
 				const zip = new JSZip();
 
-				this.activeBannerSizes.forEach((x:any) => {
-					//console.log(x.bannersize.width + 'x' + x.bannersize.height);
+				this.activeBannerSizes.forEach((x: any) => {
+					////console.log(x.bannersize.width + 'x' + x.bannersize.height);
 
 					const bannerName = x.bannersize.width + 'x' + x.bannersize.height;
 
 					const img1 = zip.folder(bannerName);
 
-					const BannersIWant = this.variationCollectionForExport.filter( (varCollection:any) =>
-						{
-							if( bannerName === (varCollection.bannerComponent.bannersize.width + 'x' + varCollection.bannerComponent.bannersize.height) )
-							{
-								return varCollection;
-							}
+					const BannersIWant = this.variationCollectionForExport.filter((varCollection: any) => {
+						if (bannerName === (varCollection.bannerComponent.bannersize.width + 'x' + varCollection.bannerComponent.bannersize.height)) {
+							return varCollection;
 						}
+					}
 					);
 
-					BannersIWant.forEach((blobs: any) =>{
-						img1?.file(blobs.name+'.jpg', blobs.blobFile);
+					BannersIWant.forEach((blobs: any) => {
+						img1?.file(blobs.name + '.jpg', blobs.blobFile);
 					});
 				});
 
-				zip.generateAsync({type:"blob"})
-				.then(	(blobs) => {
-					this.generatingDownloads = false;
-					saveAs(blobs, 'variations.zip')
-				});
+				zip.generateAsync({ type: "blob" })
+					.then((blobs) => {
+						this.generatingDownloads = false;
+						saveAs(blobs, 'variations.zip')
+					});
 
-			} else if( this.creativeType === 'GIFs' ) {
+			} else if (this.creativeType === 'GIFs') {
 
-				const allVariationsGIFImages:any[] = [];
+				const allVariationsGIFImages: any[] = [];
 
-				this.variationCollectionForExport.forEach( (GIFIMages:any[]) => {
+				this.variationCollectionForExport.forEach((GIFIMages: any[]) => {
 
 					allVariationsGIFImages.push(this.GIFImagesFromDataURI(GIFIMages));
 				});
 
 				Promise.all(allVariationsGIFImages).
-					then( (allVariationsGIFImage:any[]) => {
+					then((allVariationsGIFImage: any[]) => {
 
-						//console.log('allVariationsGIFImages', allVariationsGIFImage);
+						////console.log('allVariationsGIFImages', allVariationsGIFImage);
 
 						return urlContentToDataUri(`${environment.apiUrl}/gif.worker.js`)
-						.then(
-							(WorkerScriptResult:any) => {
+							.then(
+								(WorkerScriptResult: any) => {
 
-								return new Promise<Blob[]>((resolve, reject) => {
+									return new Promise<Blob[]>((resolve, reject) => {
 
-									let blobCounter = 0;
-									const allBlobs:any[] = [];
+										let blobCounter = 0;
+										const allBlobs: any[] = [];
 
-									const gif = new GIF({
-										workerScript: WorkerScriptResult,
-										workers: 5,
-										quality: 10,
-										debug: false
-										//background: '#000'
-									});
+										const gif = new GIF({
+											workerScript: WorkerScriptResult,
+											workers: 5,
+											quality: 10,
+											debug: false
+											//background: '#000'
+										});
 
-									gif.on('finished', (blob: Blob)=> {
+										gif.on('finished', (blob: Blob) => {
 
-										//window.open(URL.createObjectURL(blob));
+											//window.open(URL.createObjectURL(blob));
 
-										allBlobs.push(blob);
+											allBlobs.push(blob);
 
-										//console.warn('GIF Ready element['+ index + ']:');
-										//console.log('GIF Ready blob:', blob);
-										//console.log('GIF Ready gif:', gif);
+											//console.warn('GIF Ready element['+ index + ']:');
+											////console.log('GIF Ready blob:', blob);
+											////console.log('GIF Ready gif:', gif);
 
-										gif.abort();
-										// empty frames
-										gif.frames.splice(0, gif.frames.length);
+											gif.abort();
+											// empty frames
+											gif.frames.splice(0, gif.frames.length);
 
-										blobCounter++;
+											blobCounter++;
 
-										if( blobCounter === allVariationsGIFImage.length ) {
+											if (blobCounter === allVariationsGIFImage.length) {
 
-											//console.warn('allBlobs:', allBlobs, blobCounter);
+												//console.warn('allBlobs:', allBlobs, blobCounter);
 
-											//this.generatingDownloads = false;
+												//this.generatingDownloads = false;
 
-											resolve(allBlobs);
+												resolve(allBlobs);
 
-										} else {
+											} else {
 
-											console.log('Next GIF:', blobCounter);
+												//console.log('Next GIF:', blobCounter);
 
-											aadFrmw();
+												aadFrmw();
 
-										}
+											}
 
-										//console.log('GIF Ready abort:', gif);
+											////console.log('GIF Ready abort:', gif);
 
-										//gif = undefined;
-										//const dataURL = URL.createObjectURL(blob);
-										//return blob;
-
-									});
-
-									function aadFrmw() {
-										const element = allVariationsGIFImage[blobCounter];
-
-										element.forEach((variationImgFrame:any)=> {
-
-											//console.log('generateGIFs variation:', variationImgFrame);
-											gif.addFrame( variationImgFrame, {delay: 3000});
+											//gif = undefined;
+											//const dataURL = URL.createObjectURL(blob);
+											//return blob;
 
 										});
 
-										gif.render();
-									}
+										function aadFrmw() {
+											const element = allVariationsGIFImage[blobCounter];
 
-									aadFrmw();
+											element.forEach((variationImgFrame: any) => {
 
-								});
+												////console.log('generateGIFs variation:', variationImgFrame);
+												gif.addFrame(variationImgFrame, { delay: 3000 });
 
-							}
-						);
+											});
+
+											gif.render();
+										}
+
+										aadFrmw();
+
+									});
+
+								}
+							);
 
 					})
-					.then( (gifs:Blob[]) => {
+					.then((gifs: Blob[]) => {
 
-						console.log('All GIFS:', gifs);
+						//console.log('All GIFS:', gifs);
 
 						const zip = new JSZip();
 
 						/**/
 						for (let index = 0; index < gifs.length; index++) {
 							const element = gifs[index];
-							zip.file( generateUUID()+'.gif', element);
+							zip.file(generateUUID() + '.gif', element);
 						}
 
-						zip.generateAsync({type:"blob"})
-						.then((blobs) => {
-							this.generatingDownloads = false;
-							saveAs(blobs, 'GIF-VARIATIONS.zip')
-						});
+						zip.generateAsync({ type: "blob" })
+							.then((blobs) => {
+								this.generatingDownloads = false;
+								saveAs(blobs, 'GIF-VARIATIONS.zip')
+							});
 						/**/
 					});
 
-			} else if( this.creativeType === 'HTML5' ) {
+			} else if (this.creativeType === 'HTML5') {
 
-				const allVariationsHTML5:any[] = [];
+				const allVariationsHTML5: any[] = [];
 
 				//let count = 0;
 
-				this.variationCollectionForExport.forEach((x:any, counter:number) => {
+				this.variationCollectionForExport.forEach((x: any, counter: number) => {
 
-					const stages:any[] = [];
+					const stages: any[] = [];
 					const banner = x[0].bannerComponent;
 					for (let index = 0; index < x.length; index++) {
 						const element = x[index];
@@ -1430,61 +1505,61 @@ export class DashboardPage implements OnInit, OnDestroy {
 				});
 
 				Promise.all(allVariationsHTML5)
-				.then( (allVariationsHTML5:any[]) => {
+					.then((allVariationsHTML5: any[]) => {
 
-					this.alertService.info('All HTML5 Data Prepped. Please be Patient.', { keepAfterRouteChange: true });
+						this.alertService.info('All HTML5 Data Prepped. Please be Patient.', { keepAfterRouteChange: true });
 
-					//console.log('All HTML5 Prep Data:', allVariationsHTML5);
+						////console.log('All HTML5 Prep Data:', allVariationsHTML5);
 
-					const allZipBlobs:any[] = [];
+						const allZipBlobs: any[] = [];
 
-					allVariationsHTML5.forEach((variationFiles:any, index:number) => {
+						allVariationsHTML5.forEach((variationFiles: any, index: number) => {
 
-						allZipBlobs.push(this.bannerCreatorService.generateBatchZIPpackage(variationFiles));
+							allZipBlobs.push(this.bannerCreatorService.generateBatchZIPpackage(variationFiles));
 
-					});
-
-					Promise.all(allZipBlobs)
-					.then( (allZipBlob:any[]) => {
-						//console.log('All HTML5 Variation ZIPS:', allZipBlob);
-
-						const groupResultsByBannerSize = groupBy( allZipBlob, 'name' );
-
-						//console.log('All HTML5 Variation ZIPS:', groupResultsByBannerSize);
-
-						this.alertService.info('All HTML5 Creatives Ready. Creating your final file. Please be patient.', { keepAfterRouteChange: true });
-
-						/**/
-						const zip = new JSZip();
-
-						const constBannersizes = Object.keys(groupResultsByBannerSize);
-
-						constBannersizes.forEach((bannersize:string) => {
-							const element = groupResultsByBannerSize[bannersize];
-
-							const bannersizeFolderName = zip.folder(bannersize);
-							//bannersizeFolderName.file(countVar+'.zip', element.blobFile);
-
-							let countVar = 0;
-
-							element.forEach((variationBlob:any) => {
-								bannersizeFolderName?.file(`${bannersize}-${countVar}.zip`, variationBlob.blob);
-								countVar++;
-							});
 						});
 
-						zip.generateAsync({type:"blob"})
-							.then((blobs) => {
-								console.log('All HTML5 Variation ZIP Ready:', blobs);
-								this.alertService.success('HTML5 Variations Ready for download.', { keepAfterRouteChange: true });
-								this.generatingDownloads = false;
-								saveAs(blobs, 'HTML5-VARIATIONS.zip');
+						Promise.all(allZipBlobs)
+							.then((allZipBlob: any[]) => {
+								////console.log('All HTML5 Variation ZIPS:', allZipBlob);
+
+								const groupResultsByBannerSize = groupBy(allZipBlob, 'name');
+
+								////console.log('All HTML5 Variation ZIPS:', groupResultsByBannerSize);
+
+								this.alertService.info('All HTML5 Creatives Ready. Creating your final file. Please be patient.', { keepAfterRouteChange: true });
+
+								/**/
+								const zip = new JSZip();
+
+								const constBannersizes = Object.keys(groupResultsByBannerSize);
+
+								constBannersizes.forEach((bannersize: string) => {
+									const element = groupResultsByBannerSize[bannersize];
+
+									const bannersizeFolderName = zip.folder(bannersize);
+									//bannersizeFolderName.file(countVar+'.zip', element.blobFile);
+
+									let countVar = 0;
+
+									element.forEach((variationBlob: any) => {
+										bannersizeFolderName?.file(`${bannersize}-${countVar}.zip`, variationBlob.blob);
+										countVar++;
+									});
+								});
+
+								zip.generateAsync({ type: "blob" })
+									.then((blobs) => {
+										//console.log('All HTML5 Variation ZIP Ready:', blobs);
+										this.alertService.success('HTML5 Variations Ready for download.', { keepAfterRouteChange: true });
+										this.generatingDownloads = false;
+										saveAs(blobs, 'HTML5-VARIATIONS.zip');
+									});
+								/**/
+
 							});
-						/**/
 
 					});
-
-				});
 
 			}
 
@@ -1495,8 +1570,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * Dashboard Step 3 Variations Pagination
 	 *
 	 */
-	public sortData(sort: Sort) : void {
-
+	public sortData(sort: Sort): void {
+		console.log("DashboardPage ________________________________________________________________[35]",);
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
 			this.sortedData = data;
@@ -1513,20 +1588,22 @@ export class DashboardPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
+		console.log("DashboardPage ________________________________________________________________[36]",);
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
 	public setPageSizeOptions(setPageSizeOptionsInput: string) {
+		console.log("DashboardPage ________________________________________________________________[37]",);
 		if (setPageSizeOptionsInput) {
 			this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
 		}
 	}
 
 	public handlePage(e: any) {
-
+		console.log("DashboardPage ________________________________________________________________[38]",);
 		/** /
-		console.log('Paginating:', e, {
+		//console.log('Paginating:', e, {
 			'previousStage': this.stages[e.previousPageIndex],
 			'currentStage': this.stages[e.pageIndex]
 		});
@@ -1538,6 +1615,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private iterator() {
+		console.log("DashboardPage ________________________________________________________________[39]",);
 		const end = (this.currentPage + 1) * this.pageSize;
 		const start = this.currentPage * this.pageSize;
 		const part = this.variationCollectionForExport.slice(start, end);
@@ -1545,6 +1623,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private intialisePagination() {
+		console.log("DashboardPage ________________________________________________________________[40]",);
 		this.sortedData = this.variationCollectionForExport.slice();
 		this.pageLength = this.sortedData.length;
 		this.iterator();
@@ -1554,7 +1633,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * Filter Functions
 	 *
 	 */
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
+		console.log("DashboardPage ________________________________________________________________[41]",);
 
 		let newdata: any;
 
@@ -1569,8 +1649,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		newdata = this.variationCollectionForExport;
 
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.bannersizeId === this.bannersizeFilterValue.value
 			});
 		}
@@ -1595,14 +1675,15 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public back(): void {
+		console.log("DashboardPage ________________________________________________________________[42]",);
 		this.location.back();
 	}
 
 	public help(): void {
-
+		console.log("DashboardPage ________________________________________________________________[43]",);
 		this.introJS.refresh();
 
-		if (this.activeBannerSizes.length <= 0 ) {
+		if (this.activeBannerSizes.length <= 0) {
 
 			this.introJS.setOptions({
 				showStepNumbers: true,
@@ -1643,14 +1724,14 @@ export class DashboardPage implements OnInit, OnDestroy {
 					/**/
 				]
 			})
-			.onbeforechange(function(targetElement) {
-				//console.log('onchange', targetElement);
-				if( targetElement.id ==='select-project-drp' ) {
+				.onbeforechange(function (targetElement) {
+					////console.log('onchange', targetElement);
+					if (targetElement.id === 'select-project-drp') {
 
-				}
-			});
+					}
+				});
 
-		} else if (this.activeBannerSizes.length > 0 && this.completedBannerVariationCounter < this.activeBannerSizes.length ) {
+		} else if (this.activeBannerSizes.length > 0 && this.completedBannerVariationCounter < this.activeBannerSizes.length) {
 
 			this.introJS.setOptions({
 				showStepNumbers: true,
@@ -1729,7 +1810,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		}
 
-		//console.log(this.completedBannerVariationCounter, this.activeBannerSizes.length);
+		////console.log(this.completedBannerVariationCounter, this.activeBannerSizes.length);
 
 		//this.introJS.addHints();
 
@@ -1739,36 +1820,43 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleUploadWindow(banner:any, container:any) {
+	public toggleUploadWindow(banner: any, container: any) {
+		console.log("DashboardPage ________________________________________________________________[44]",);
+		//console.log("________________________________________________________start________________________________________________________________________");
+		//console.log(banner);
+		//console.log(container);
 
-		if( banner.componentWindowOpen === true && container.componentWindowOpen === true ) {
+		if (banner.componentWindowOpen === true && container.componentWindowOpen === true) {
 			banner.componentWindowOpen = false;
 			container.componentWindowOpen = false;
 
 		} else {
-			banner.containers.map((x:any) => {
+			banner.containers.map((x: any) => {
 				x.componentWindowOpen = false;
 			});
 			banner.componentWindowOpen = true;
 			container.componentWindowOpen = true;
 		}
+
+		//console.log("_____________________________________________________end___________________________________________________________________________");
 	}
 
-	public CloseComponentWindow($event:any) {
-
+	public CloseComponentWindow($event: any) {
+		console.log("DashboardPage ________________________________________________________________[45]",);
 		$event.dataBanner.componentWindowOpen = false;
 		$event.dataContainer.componentWindowOpen = false;
 	}
 
 	public onOpenedChange(o: boolean) {
-		console.log(`Drawer IsOpen: ${o}`);
+		console.log("DashboardPage ________________________________________________________________[46]",);
+		//console.log(`Drawer IsOpen: ${o}`);
 	}
 
 	public openPreview(variation: any): void {
-
-		this.variationCollectionForExport.map((x)=>{
-			if( x.isOpen === true ) {
-				this.newVariationNameValue.setValue(x.name, {emitEvent:false});
+		console.log("DashboardPage ________________________________________________________________[47]",);
+		this.variationCollectionForExport.map((x) => {
+			if (x.isOpen === true) {
+				this.newVariationNameValue.setValue(x.name, { emitEvent: false });
 				x.isOpen = false;
 			}
 			//x.isOpen = false
@@ -1778,13 +1866,14 @@ export class DashboardPage implements OnInit, OnDestroy {
 		this.variationPreviewConfig(variation);
 	}
 
-	private variationPreviewConfig(variation:any):void {
-
+	private variationPreviewConfig(variation: any): void {
+		console.log("DashboardPage ________________________________________________________________[48]",variation);
+		console.log(this.newVariationNameValue)
 		this.newVariationNameValue = new FormControl('');
 		// this.newVariationNameValue = new FormControl('', Validators.required);
 		this.newVariationNameValue.patchValue(variation.name);
-
-		if( this.newVariationNameValue ) {
+		console.log(this.newVariationNameValue)
+		if (this.newVariationNameValue) {
 			this.newVariationNameValue.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 				variation.name = value;
 			});
@@ -1792,21 +1881,21 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public editVariationName(id: number): void {
-
-		//console.log('id',id);
+		console.log("DashboardPage ________________________________________________________________[49]",);
+		////console.log('id',id);
 		const model = this.variationCollectionForExport[id];
 		model.isEditingVariation = true;
 
-		const previewDialog = this.dialog.open( DialogEditVariationFormComponent, {
+		const previewDialog = this.dialog.open(DialogEditVariationFormComponent, {
 			data: {
 				name: model.name,
 				model: model
-							}
+			}
 		});
 
 		previewDialog.afterClosed().subscribe(result => {
 
-			if( result === false ) {
+			if (result === false) {
 
 				this.alertService.info('Creative Name Unchanged.', { keepAfterRouteChange: true });
 
@@ -1815,28 +1904,30 @@ export class DashboardPage implements OnInit, OnDestroy {
 			} else {
 				//console.info('Value updated closed:', result);
 				model.isEditingVariation = false;
-				this.variationCollectionForExport.find((x:any, index:number) => index === id).name = result;
+				this.variationCollectionForExport.find((x: any, index: number) => index === id).name = result;
 				this.alertService.info('Creative Name Changed Successfully.', { keepAfterRouteChange: true });
 			}
 		});
 	}
 
 	public downloadVariation(id: number): void {
+		console.log("DashboardPage ________________________________________________________________[50]",);
+		console.log(this.creativeType);
 
-		if( this.creativeType === 'Static JPG' ) {
+		if (this.creativeType === 'static') {
 
 			const model = this.variationCollectionForExport[id];
 
 			const anchor = document.createElement("a");
-			anchor.setAttribute( "download", model.name + '.png');
-			anchor.setAttribute( "href", model.image);
+			anchor.setAttribute("download", model.name + '.png');
+			anchor.setAttribute("href", model.image);
 
 			anchor.click();
 
-		} else if( this.creativeType === 'GIFs' ) {
+		} else if (this.creativeType === 'GIFs') {
 
 			let model = this.variationCollectionForExport[id];
-			//console.log('Download GIF Variation:', id, model);
+			////console.log('Download GIF Variation:', id, model);
 
 			model = model.reverse();
 
@@ -1848,24 +1939,24 @@ export class DashboardPage implements OnInit, OnDestroy {
 			}
 
 			Promise.all(allFrameImages)
-			.then( (allFrames:any[]) => {
-				this.generateGIFs(allFrames)
-				.then( (gifBlob:any) => {
+				.then((allFrames: any[]) => {
+					this.generateGIFs(allFrames)
+						.then((gifBlob: any) => {
 
-					window.open(URL.createObjectURL(gifBlob));
+							window.open(URL.createObjectURL(gifBlob));
 
+						});
 				});
-			});
 
-		} else if( this.creativeType === 'HTML5' ) {
+		} else if (this.creativeType === 'HTML5') {
 
 			const model = this.variationCollectionForExport[id];
 
-			console.log('Download HTML5 Variation:', id, model);
+			//console.log('Download HTML5 Variation:', id, model);
 
 			const banner = model[0].bannerComponent;
-			const stages:any[] = [];
-			model.forEach((x:any) => {
+			const stages: any[] = [];
+			model.forEach((x: any) => {
 				stages.push(
 					{
 						components: x.stageComponents,
@@ -1874,18 +1965,18 @@ export class DashboardPage implements OnInit, OnDestroy {
 			});
 
 			this.bannerCreatorService.buildHTML5ForExport(banner, stages)
-			.then((files:any) => {
-				console.log('Download HTML5 Variation Files:', files);
-			});
+				.then((files: any) => {
+					//console.log('Download HTML5 Variation Files:', files);
+				});
 
 		}
 
 	}
 
 	public nextPreviewVariation(id: number): void {
-
+		console.log("DashboardPage ________________________________________________________________[51]",);
 		const model = this.variationCollectionForExport[id];
-		const oldmodel = this.variationCollectionForExport[(id -1)];
+		const oldmodel = this.variationCollectionForExport[(id - 1)];
 
 		oldmodel.isOpen = false;
 		model.isOpen = true;
@@ -1895,7 +1986,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public previousPreviewVariation(id: number): void {
-
+		console.log("DashboardPage ________________________________________________________________[52]",);
 		const model = this.variationCollectionForExport[id];
 		const oldmodel = this.variationCollectionForExport[(id + 1)];
 
@@ -1906,7 +1997,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	}
 
-	public ListtrackByFn(index:number, item:any) {
+	public ListtrackByFn(index: number, item: any) {
+		//console.log("DashboardPage ________________________________________________________________[53]",);
 		return index; // or item.id
 	}
 
@@ -1916,7 +2008,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	templateUrl: 'dialog.edit.variations.component.html',
 	styleUrls: ['dialog.edit.variations.component.scss']
 })
-export class DialogEditVariationFormComponent  implements OnInit {
+export class DialogEditVariationFormComponent implements OnInit {
 
 	public form!: FormGroup;
 	//public id!: string;
@@ -1929,10 +2021,11 @@ export class DialogEditVariationFormComponent  implements OnInit {
 		private formBuilder: FormBuilder,
 		public dialogRef: MatDialogRef<DialogEditVariationFormComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
-	) {}
+	) { }
 
 	get f() { return this.form.controls; }
 	ngOnInit() {
+		console.log("DialogEditVariationFormComponent ________________________________________________________________[54]",);
 		//this.isAddMode = !this.id;
 
 		this.form = this.formBuilder.group({
@@ -1944,10 +2037,11 @@ export class DialogEditVariationFormComponent  implements OnInit {
 	}
 
 	public onSubmit(): void {
+		console.log("DialogEditVariationFormComponent ________________________________________________________________[55]",);
 		this.submitted = true;
 
 		//console.warn('value', this.form.value);
-		//console.log('Submit',this.submitted);
+		////console.log('Submit',this.submitted);
 
 		// reset alerts on submit
 		this.alertService.clear();

@@ -20,12 +20,12 @@ export class DialogBannerContainerEditComponent {
 		public dialogRef: MatDialogRef<DialogBannerContainerEditComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
-		//console.log('DialogBannerContainerEditComponent:', this.data);
+		////console.log('DialogBannerContainerEditComponent:', this.data);
 	}
 
-	public passContainerFromDialog(component:any) {
+	public passContainerFromDialog(component: any) {
 
-		//console.log('Adding Component From Dialog:', component);
+		////console.log('Adding Component From Dialog:', component);
 
 		this.passContainer = component;
 

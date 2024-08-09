@@ -57,22 +57,22 @@ export class AccountsListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.accountService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(accounts:Account[]) => {
+				(accounts: Account[]) => {
 
-				this.allData = accounts;
+					this.allData = accounts;
 
-				console.log("allData",this.allData)
+					//console.log("allData",this.allData)
 
-				if( accounts !== undefined && accounts.length > 0 ) {
-					this.initialise(accounts);
+					if (accounts !== undefined && accounts.length > 0) {
+						this.initialise(accounts);
+					}
 				}
-			}
-		);
+			);
 
 		this.onboarding();
 
@@ -93,7 +93,7 @@ export class AccountsListPage implements OnInit, OnDestroy {
 		this._destroy$.next(false);
 		this._destroy$.complete();
 	}
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -108,8 +108,8 @@ export class AccountsListPage implements OnInit, OnDestroy {
 
 		newdata = this.allData;
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -199,30 +199,30 @@ export class AccountsListPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialise(accounts:Account[]):void {
+	private initialise(accounts: Account[]): void {
 
-				this.primaryData = accounts;
-				this.sortedData = this.primaryData.slice();
+		this.primaryData = accounts;
+		this.sortedData = this.primaryData.slice();
 
-				this.length = this.sortedData.length;
+		this.length = this.sortedData.length;
 
-				console.log("Acc",this.primaryData);
+		//console.log("Acc",this.primaryData);
 
-				this.iterator();
+		this.iterator();
 
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = true;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data) => {
+		const exportArray = this.primaryData.map((data) => {
 
 			return {
 				'ID': data.id,
@@ -252,7 +252,7 @@ export class AccountsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: number) {
+	public toggleStatus(event: any, id: number) {
 
 		/**/
 		this.updateStatus(id, {
@@ -261,27 +261,27 @@ export class AccountsListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: number, params: any ) {
-        this.accountService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Account Status changed successfully', { keepAfterRouteChange: true });
-                    //this.router.navigate(['../../'], { relativeTo: this.route });
+	private updateStatus(id: number, params: any) {
+		this.accountService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Account Status changed successfully', { keepAfterRouteChange: true });
+					//this.router.navigate(['../../'], { relativeTo: this.route });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public deleteAccount(id: string) {
 		const account = this.primaryData.find(x => x.id === id);
 		account.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Deleting Account',
 				message: 'Are you sure you want to delete Account: ' + account.title + ' ' + account.firstName + ' ' + account.lastName
@@ -319,7 +319,7 @@ export class AccountsListPage implements OnInit, OnDestroy {
 		const account = this.primaryData.find(x => x.id === id);
 
 		/***/
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoring Record',
 				message: 'Are you sure you want to restore Account: ' + account.title + ' ' + account.firstName + ' ' + account.lastName

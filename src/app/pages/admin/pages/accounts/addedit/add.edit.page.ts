@@ -67,9 +67,9 @@ export class AccountsAddEditPage implements OnInit {
 		if (!this.isAddMode) {
 			this.accountService.getById(this.id)
 				.pipe(first())
-				.subscribe( (x) => {
+				.subscribe((x) => {
 					this.form.patchValue(x);
-					if( this.account.id === x.id ) {
+					if (this.account.id === x.id) {
 						this.f['role'].disable();
 					}
 				});
@@ -104,7 +104,7 @@ export class AccountsAddEditPage implements OnInit {
 		this.introJS.setOptions({
 			showStepNumbers: true,
 			showProgress: true,
-			steps : [
+			steps: [
 				{
 					intro: 'Click here to go back to previous page.',
 					element: '#btn-back'
@@ -146,7 +146,7 @@ export class AccountsAddEditPage implements OnInit {
 					intro: "Click here to cancel creation of new user.",
 					element: '#btn-cancel'
 				}
-		],
+			],
 		});
 	}
 
@@ -162,40 +162,40 @@ export class AccountsAddEditPage implements OnInit {
 	}
 
 	private createAccount() {
-        this.accountService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.accountService.create(this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
+					this.router.navigate(['../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	private updateAccount() {
-		//console.log('updateAccount', this.form.value);
+		////console.log('updateAccount', this.form.value);
 		//return
-        this.accountService.update(this.id, this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Update successful', { keepAfterRouteChange: true });
+		this.accountService.update(this.id, this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Update successful', { keepAfterRouteChange: true });
 
-					if( this.account.role === 'Admin') {
-	                    this.router.navigate(['../../'], { relativeTo: this.route });
+					if (this.account.role === 'Admin') {
+						this.router.navigate(['../../'], { relativeTo: this.route });
 					} else {
 						this.location.back();
 					}
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 }

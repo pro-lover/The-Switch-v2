@@ -73,7 +73,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	//public FormGroupEditComponentMeta!: FormGroup;
 	//public FormGroupBannerLayout!: FormGroup;
 
-	public pageData$!:Observable<any>;
+	public pageData$!: Observable<any>;
 	public formDataFonts!: FontType[];
 	public formDataClients!: Client[];
 	public formDataBannerSizes!: BannerSize[];
@@ -95,7 +95,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	public editingComponentActionsMenu!: any;
 
 	// animations
-	private timeline!:Timeline;
+	private timeline!: Timeline;
 	private TimelineInitialised = false;
 	public TimelineOpen = false;
 	public animationEditUI = false;
@@ -156,19 +156,19 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	public refreshStageObs: Observable<boolean | any>;
 
 	//play stage animation
-	private playStageAnimationSubject: BehaviorSubject<boolean|null>;
-	public playStageAnimationObs: Observable<boolean|null>;
+	private playStageAnimationSubject: BehaviorSubject<boolean | null>;
+	public playStageAnimationObs: Observable<boolean | null>;
 
-	private playGlobalAnimationSubject: BehaviorSubject<boolean|null>;
-	public playGlobalAnimationObs: Observable<boolean|null>;
+	private playGlobalAnimationSubject: BehaviorSubject<boolean | null>;
+	public playGlobalAnimationObs: Observable<boolean | null>;
 
 	//loop stage animation
 	private loopStageAnimationSubject: BehaviorSubject<boolean>;
 	public loopStageAnimationObs: Observable<boolean>;
 
 	//preview stage
-	private previewStageSubject: BehaviorSubject<boolean|null>;
-	public previewStageObs: Observable<boolean|null>;
+	private previewStageSubject: BehaviorSubject<boolean | null>;
+	public previewStageObs: Observable<boolean | null>;
 
 	//Download GIF/HTML5
 	private generateSubject: BehaviorSubject<boolean>;
@@ -237,19 +237,19 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		//this.editableAnimationSubjectForDialog = new BehaviorSubject<boolean>(false);
 		//this.editableAnimationObsForDialog = this.editableAnimationSubjectForDialog.asObservable();
 
-		this.playStageAnimationSubject = new BehaviorSubject<boolean|null>(null);
+		this.playStageAnimationSubject = new BehaviorSubject<boolean | null>(null);
 		this.playStageAnimationObs = this.playStageAnimationSubject.asObservable();
 
-		this.playGlobalAnimationSubject = new BehaviorSubject<boolean|null>(null);
+		this.playGlobalAnimationSubject = new BehaviorSubject<boolean | null>(null);
 		this.playGlobalAnimationObs = this.playGlobalAnimationSubject.asObservable();
 
 		this.loopStageAnimationSubject = new BehaviorSubject<boolean>(false);
 		this.loopStageAnimationObs = this.loopStageAnimationSubject.asObservable();
 
-		this.refreshStageSubject = new BehaviorSubject<boolean|any>(false);
+		this.refreshStageSubject = new BehaviorSubject<boolean | any>(false);
 		this.refreshStageObs = this.refreshStageSubject.asObservable();
 
-		this.previewStageSubject = new BehaviorSubject<boolean|null>(null);
+		this.previewStageSubject = new BehaviorSubject<boolean | null>(null);
 		this.previewStageObs = this.previewStageSubject.asObservable();
 
 		this.generateSubject = new BehaviorSubject<boolean>(false);
@@ -264,7 +264,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	// convenience getter for easy access to form fields for editing components data
 	//get ftemplateeditcomponent() { return this.FormGroupEditComponentMeta.controls; }
 
-	@ViewChild('walkthrough01') walkthrough01!:ElementRef<HTMLElement>;
+	@ViewChild('walkthrough01') walkthrough01!: ElementRef<HTMLElement>;
 	@ViewChild('drawer') sidedrawer!: MatDrawer;
 	@ViewChild('timelineCanvas') timelineCanvas!: ElementRef<HTMLElement>;
 
@@ -350,18 +350,18 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private initialise():void {
+	private initialise(): void {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.account = x);
+			.subscribe((x: any) => this.account = x);
 
 		if (!this.isAddMode) {
 
 			this.templateService.getById(this.TemplateId)
 				.pipe(first())
 				.pipe(takeUntil(this._destroy$))
-				.subscribe( (x:any) => {
+				.subscribe((x: any) => {
 
 					console.log('Template:', x);
 
@@ -387,14 +387,14 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				this.fontTypeService.getAll()
 			]
 		)
-		.pipe(
-			map(([templates, clients, bannertypes, bannersizes, componenttypes, fonttypes]):any => {
-				// combineLatest returns an array of values, here we map those values to an object
-				return { templates, clients, bannertypes, bannersizes, componenttypes, fonttypes };
-			})
-		);
+			.pipe(
+				map(([templates, clients, bannertypes, bannersizes, componenttypes, fonttypes]): any => {
+					// combineLatest returns an array of values, here we map those values to an object
+					return { templates, clients, bannertypes, bannersizes, componenttypes, fonttypes };
+				})
+			);
 
-		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			//console.info('Edit Template Banner Page Data initialise', data);
 
 			this.prepPageData(data);
@@ -402,16 +402,16 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	public creativeReady($event:any):void {
+	public creativeReady($event: any): void {
 
-		if( $event === true ) {
+		if ($event === true) {
 			this.creativeReadySubject.next(true);
 		} else {
 			this.creativeReadySubject.next(false);
 		}
 	}
 
-	private resetUIVariables():void {
+	private resetUIVariables(): void {
 
 		this.activeContainer = null;
 
@@ -444,7 +444,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	private prepPageData(data:any):void {
+	private prepPageData(data: any): void {
 
 		this.formDataFonts = data.fonttypes;
 		this.formDataClients = data.clients;
@@ -452,8 +452,8 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		this.formDataBannerSizes = data.bannersizes;
 		this.formDataComponentType = data.componenttypes;
 
-		data.fonttypes.forEach( (font: FontType) => {
-			if( !document.getElementById("font-custom-stylesheet-id-" + font.id) ) {
+		data.fonttypes.forEach((font: FontType) => {
+			if (!document.getElementById("font-custom-stylesheet-id-" + font.id)) {
 				const head = document.head;
 				const link = document.createElement("link");
 
@@ -468,22 +468,22 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialiseDataBasedOnContainer(){
+	private initialiseDataBasedOnContainer() {
 
-		//console.log('Container Value Set?', this.formControlActiveContainer.value);
+		console.log('Container Value Set?', this.formControlActiveContainer.value);
 
 		//this.activeBannerSizes = [];
 
-		const banner = this.template.banners.find( (y:any) => y.id == this.BannerId);
-		//console.log('Banner:', banner );
+		const banner = this.template.banners.find((y: any) => y.id == this.BannerId);
+		console.log('Banner:', banner );
 
-		this.activeBannerSizes.unshift( banner );
+		this.activeBannerSizes.unshift(banner);
 
 		console.log('activeBannerSize:', this.activeBannerSizes );
 
-		banner.containers.forEach( (container:any, index:number) => {
+		banner.containers.forEach((container: any, index: number) => {
 
-			if( index === 0 && this.formControlActiveContainer.value === '' ) {
+			if (index === 0 && this.formControlActiveContainer.value === '') {
 
 				console.warn('Default Container:', container);
 
@@ -507,29 +507,29 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialiseContainerComponentMetaData( container:any, banner:any ){
+	private initialiseContainerComponentMetaData(container: any, banner: any) {
 
 		this.resetUIVariables();
 
-		container.components.forEach( (component:any) => {
+		container.components.forEach((component: any) => {
 
-			const meta:any = {};
-			component.componentmeta.forEach((element:any) => {
+			const meta: any = {};
+			component.componentmeta.forEach((element: any) => {
 				meta[element.name] = element.value;
 			});
 
-			if( component.componenttype.name === 'Image' ) {
+			if (component.componenttype.name === 'Image') {
 
-				async function readImageFilePath(path_image:string){
+				async function readImageFilePath(path_image: string) {
 					const response = await fetch(path_image);
 					return await response.blob();
 				}
 
-				const ImgDataURI = readImageFilePath(component.componentmeta.find((y:any) => y.name === 'path').value);
+				const ImgDataURI = readImageFilePath(component.componentmeta.find((y: any) => y.name === 'path').value);
 
-				ImgDataURI.then((obj:any)=>{
+				ImgDataURI.then((obj: any) => {
 
-					//console.log('ImgDataURI:', obj, ImgDataURI);
+					console.log('ImgDataURI:', obj, ImgDataURI);
 
 					meta['dataFile'] = obj;
 
@@ -565,7 +565,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				});
 			}
 
-			if( component.animations.length > 0 ) {
+			if (component.animations.length > 0) {
 				this.componentAnimations.push(component.animations);
 			}
 
@@ -575,26 +575,26 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 		this.componentAnimations = this.componentAnimations.flat();
 
-		//console.log('componentAnimations:', this.componentAnimations);
+		console.log('componentAnimations:', this.componentAnimations);
 
-		//console.log('componentMetaFiles:', this.componentMetaFiles);
-		//console.log('activeContainer:', this.activeContainer);
+		console.log('componentMetaFiles:', this.componentMetaFiles);
+		console.log('activeContainer:', this.activeContainer);
 	}
 
 	/**
 	 * SWITCH BETWEEN CREATIVE FRAMES / CONTAINERS
 	 */
 	private listenToFormInputChanges() {
-		this.formControlActiveContainer.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value:number) => {
+		this.formControlActiveContainer.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value: number) => {
 
-			const banner = this.template.banners.find( (y:any) => y.id == this.BannerId);
-			const container = banner.containers.find( (y:any) => y.id == value);
+			const banner = this.template.banners.find((y: any) => y.id == this.BannerId);
+			const container = banner.containers.find((y: any) => y.id == value);
 
 			//this.closeActiveAnimationEdit();
 			//this.closeActiveComponentActionsMenu();
 			//this.resetTimeline();
 
-			this.initialiseContainerComponentMetaData (
+			this.initialiseContainerComponentMetaData(
 				container,
 				banner
 			);
@@ -607,15 +607,15 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 			this.refreshBanner(this.activeContainer);
 
 			//if( this.TimelineOpen === true ) {
-				this.intialiseTimeLine();
+			this.intialiseTimeLine();
 			//}
 
 		});
 
-		this.formControlActiveContainerOrder.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value:number) => {
+		this.formControlActiveContainerOrder.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value: number) => {
 
-			//console.log('Active Container:', this.activeContainer);
-			//console.log('Active Container Order:', value);
+			console.log('Active Container:', this.activeContainer);
+			console.log('Active Container Order:', value);
 
 			//this.containerUpdate = true;
 			//this.formControlActiveContainer.disable();
@@ -625,10 +625,10 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 			//this.updateContainer();
 		});
 
-		this.formControlActiveContainerDuration.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value:number) => {
+		this.formControlActiveContainerDuration.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value: number) => {
 
-			//console.log('Active Container:', this.activeContainer);
-			//console.log('Active Container Duration:', value);
+			console.log('Active Container:', this.activeContainer);
+			console.log('Active Container Duration:', value);
 
 			//this.containerUpdate = true;
 			//this.formControlActiveContainer.disable();
@@ -643,9 +643,9 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	 * EVENTS FOR EDITING CANVAS COMPONENTS
 	 */
 
-	public addComponentDialog(component:any) {
+	public addComponentDialog(component: any) {
 
-		const confirmDialog = this.dialog.open( DialogBannerComponentAddComponent, {
+		const confirmDialog = this.dialog.open(DialogBannerComponentAddComponent, {
 			data: {
 				title: 'Add ' + component.name,
 				message: '',
@@ -657,36 +657,36 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		});
 		confirmDialog.afterClosed().subscribe(result => {
 
-			//console.log('newComponent from dialog:', result);
+			console.log('newComponent from dialog:', result);
 
 			if (result !== undefined && result !== false) {
 
-				//console.log('newComponent from dialog:', result);
+				console.log('newComponent from dialog:', result);
 				//this.alertService.success( component.name + ' added successfully.', { keepAfterRouteChange: false });
 
 				this.addComponent(result);
 
 			} else {
-				this.alertService.info( 'Cancel Adding Component ' + component.name, { keepAfterRouteChange: false });
+				this.alertService.info('Cancel Adding Component ' + component.name, { keepAfterRouteChange: false });
 			}
 		});
 	}
 
 	// component menu actions
-	public selectComponentFromControlMenu( event:any ):void {
+	public selectComponentFromControlMenu(event: any): void {
 
 		this.componentEditUI = true;
 
-		const component = this.activeContainer.components.find( (y:any) => y.id == event.id);
+		const component = this.activeContainer.components.find((y: any) => y.id == event.id);
 
-		//console.log('selectComponentFromControlMenu:', event, component);
+		console.log('selectComponentFromControlMenu:', event, component);
 
 		this.editingComponentActionsMenu = component;
 		this.editableComponentActionMenuSubject.next(component);
 
 	}
 
-	public dropComponentOrder( event:CdkDragDrop<any[]> ):void {
+	public dropComponentOrder(event: CdkDragDrop<any[]>): void {
 		console.log('dropComponentOrder:', event);
 
 		if (event.previousContainer === event.container) {
@@ -701,15 +701,15 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		}
 	}
 
-	public activeComponentsActionMenu( event:any ):void {
+	public activeComponentsActionMenu(event: any): void {
 
 		this.componentEditUI = true;
-		//console.log('activeComponentsActionMenu:', event);
+		console.log('activeComponentsActionMenu:', event);
 		this.editingComponentActionsMenu = event;
 		this.editableComponentActionMenuSubject.next(event);
 	}
 
-	public closeActiveComponentActionsMenu():void {
+	public closeActiveComponentActionsMenu(): void {
 
 		this.componentEditUI = false;
 
@@ -724,14 +724,14 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	 * is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	private addComponent(component:any) {
+	private addComponent(component: any) {
 
 		//this.componentMetaFiles.push(component);
 
 		this.componentMetaFiles.push(component);
 
 		this.newComponentSubject.next({
-			stage: 'bannerCanvas-'+ this.activeBannerSizes[0].bannersize.width +'-'+ this.activeBannerSizes[0].bannersize.height,
+			stage: 'bannerCanvas-' + this.activeBannerSizes[0].bannersize.width + '-' + this.activeBannerSizes[0].bannersize.height,
 			stages: this.activeBannerSizes[0].containers.length,
 			type: component.componenttype.name.toLowerCase(),
 			data: component
@@ -745,7 +745,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	 * is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	public unlockComponent(data:any) {
+	public unlockComponent(data: any) {
 
 		//console.warn('Unlock Component:', data );
 
@@ -758,32 +758,32 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	}
 
 	/**/
-	public editComponent(data:any) {
+	public editComponent(data: any) {
 
 		//this.componentMetaFiles.push(component);
 
 		//console.warn('Template Page Pass Component Updates to Banner Creator:', data );
 
-		if( data.component.componenttypeName === 'Image' ) {
+		if (data.component.componenttypeName === 'Image') {
 
-			if( data.component.componentmeta.newimage !== undefined && data.component.componentmeta.newimage === true ) {
+			if (data.component.componentmeta.newimage !== undefined && data.component.componentmeta.newimage === true) {
 
 				//console.warn('New Image update page component meta and container meta:', data );
 
 				// update component in active container as well
 				this.activeContainer.components
-				.find((x:any) => x.id == data.component.componentId).componentmeta
-				.filter((y:any) => {
-					if(y.name == 'path') {
-						y.value = data.component.componentmeta.path;
+					.find((x: any) => x.id == data.component.componentId).componentmeta
+					.filter((y: any) => {
+						if (y.name == 'path') {
+							y.value = data.component.componentmeta.path;
 
-						// update meta files
-						this.componentMetaFiles = this.componentMetaFiles.filter(x => x.id !== data.component.componentId);
-						this.componentMetaFiles.push(y);
+							// update meta files
+							this.componentMetaFiles = this.componentMetaFiles.filter(x => x.id !== data.component.componentId);
+							this.componentMetaFiles.push(y);
 
-						//console.warn('Updated Container Components and ComponentMetaFiles', y );
-					}
-				});
+							//console.warn('Updated Container Components and ComponentMetaFiles', y );
+						}
+					});
 
 			} else {
 				//console.warn('Temp Image no updates:', data, this.componentMetaFiles );
@@ -805,11 +805,11 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	}
 	/**/
 
-	public deleteComponent(component:any) {
+	public deleteComponent(component: any) {
 
 		//this.componentMetaFiles.push(component);
 
-		console.warn('Delete Component:', component );
+		console.warn('Delete Component:', component);
 		//console.info('Template editComponent:', component, this.updateComponentSubject);
 
 		this.componentMetaFiles = this.componentMetaFiles.filter(x => x.id !== component.id);
@@ -818,11 +818,11 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		this.componentAnimations = this.componentAnimations.filter(x => x.componentId !== component.id);
 
 		// remove from active container as well
-		this.activeContainer.components = this.activeContainer.components.filter((x:any) => x.id !== component.id);
+		this.activeContainer.components = this.activeContainer.components.filter((x: any) => x.id !== component.id);
 
 		/**/
 		this.deleteComponentSubject.next({
-			stage: 'bannerCanvas-'+ component.bannerWidth +'-'+ component.bannerHeight,
+			stage: 'bannerCanvas-' + component.bannerWidth + '-' + component.bannerHeight,
 			stages: 1,
 			type: component.componenttype.name.toLowerCase(),
 			data: component
@@ -833,11 +833,11 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	/**
 	 * CONTROL PANEL DIALOG TRIGGERS
 	 */
-	public addContainerDialog(container:any) {
+	public addContainerDialog(container: any) {
 
 		console.log('addContainerDialog:', container);
 
-		const confirmDialog = this.dialog.open( DialogBannerContainerAddComponent, {
+		const confirmDialog = this.dialog.open(DialogBannerContainerAddComponent, {
 			data: {
 				title: 'Add New Container/Frame?',
 				message: '',
@@ -858,18 +858,18 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				this.activeBannerSizes[0].containers.push(result);
 
 			} else {
-				this.alertService.info( 'Action Cancelled.', { keepAfterRouteChange: false });
+				this.alertService.info('Action Cancelled.', { keepAfterRouteChange: false });
 			}
 		});
 	}
 
-	public editContainerDialog(container:any) {
+	public editContainerDialog(container: any) {
 
-		//console.log('editContainerDialog:', container);
+		console.log('editContainerDialog:', container);
 
 		this.containerUpdate = true;
 
-		const editDialog = this.dialog.open( DialogBannerContainerEditComponent, {
+		const editDialog = this.dialog.open(DialogBannerContainerEditComponent, {
 			width: '700px',
 			data: {
 				title: 'Edit Container/Frame:' + container.name,
@@ -882,11 +882,11 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		});
 		editDialog.afterClosed().subscribe(result => {
 
-			//console.log('newComponent from dialog:', result);
+			console.log('newComponent from dialog:', result);
 
 			if ([undefined, false, null, ''].includes(result)) {
 
-				this.alertService.info( 'Action Cancelled.', { keepAfterRouteChange: false });
+				this.alertService.info('Action Cancelled.', { keepAfterRouteChange: false });
 
 				this.containerUpdate = false;
 
@@ -901,7 +901,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				this.formControlActiveContainerClickThroughURL.patchValue(result.clickThroughURL);
 
 
-				this.activeBannerSizes[0].containers = this.activeBannerSizes[0].containers.filter((x:any) => x.id !== result.id);
+				this.activeBannerSizes[0].containers = this.activeBannerSizes[0].containers.filter((x: any) => x.id !== result.id);
 				this.activeBannerSizes[0].containers.push(result);
 
 				this.initialiseContainerComponentMetaData(result, result.banner);
@@ -914,7 +914,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 					clearTimeout(patience);
 
-				}, 2000 );
+				}, 2000);
 
 			}
 		});
@@ -933,23 +933,23 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				'duration': (this.activeContainer.duration === null) ? 15 : this.activeContainer.duration
 			}
 		)
-		.pipe(first())
-		.subscribe({
-			next: (updatedContainer) => {
-				console.log('Updated Container:', updatedContainer);
-				this.alertService.success('Container updated successfully.', { keepAfterRouteChange: true });
-				this.containerUpdate = false;
+			.pipe(first())
+			.subscribe({
+				next: (updatedContainer) => {
+					console.log('Updated Container:', updatedContainer);
+					this.alertService.success('Container updated successfully.', { keepAfterRouteChange: true });
+					this.containerUpdate = false;
 
-				this.initialiseContainerComponentMetaData(updatedContainer, updatedContainer.banner);
+					this.initialiseContainerComponentMetaData(updatedContainer, updatedContainer.banner);
 
-				this.refreshBanner(this.activeContainer);
+					this.refreshBanner(this.activeContainer);
 
-			},
-			error: error => {
-				this.alertService.error(error);
-				this.containerUpdate = false;
-			}
-		});
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.containerUpdate = false;
+				}
+			});
 	}
 
 	/**
@@ -961,41 +961,41 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		this.resetTimeline();
 
 		this.timeline = new timelineModule.Timeline({
-				id:'timeline',
-				headerHeight: 62
-			} as TimelineOptions
+			id: 'timeline',
+			headerHeight: 62
+		} as TimelineOptions
 		);
 
-		const rows:any[] = [];
+		const rows: any[] = [];
 
 		// Accepts the array and key
-		const groupBy = (array:any, key:string) => {
+		const groupBy = (array: any, key: string) => {
 			// Return the end result
-			return array.reduce((result:any, currentValue:any) => {
-			// If an array already present for key, push it to the array. Else create an array and push the object
-			(result[currentValue[key]] = result[currentValue[key]] || []).push(
-				currentValue
-			);
-			// Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-			return result;
+			return array.reduce((result: any, currentValue: any) => {
+				// If an array already present for key, push it to the array. Else create an array and push the object
+				(result[currentValue[key]] = result[currentValue[key]] || []).push(
+					currentValue
+				);
+				// Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+				return result;
 			}, {}); // empty object is the initial value for result object
 		}
 
 		const byComponent = groupBy(this.componentAnimations, 'componentId');
 
-		//console.log('GroupBy Component:', byComponent );
+		console.log('GroupBy Component:', byComponent );
 
 		for (const key in byComponent) {
 			if (Object.prototype.hasOwnProperty.call(byComponent, key)) {
 				const value = byComponent[key];
 
-				const animations = value.map( (animation:any) => animation.animationmeta);
-				const keyframez:any[] = [];
-				animations.forEach( (animation:any) => {
+				const animations = value.map((animation: any) => animation.animationmeta);
+				const keyframez: any[] = [];
+				animations.forEach((animation: any) => {
 
-					const ofInterest = animation.find( (keyframe:any) => {
-						if( keyframe.name === 'startTime' ) {
-							//console.log('keyframe:', keyframe);
+					const ofInterest = animation.find((keyframe: any) => {
+						if (keyframe.name === 'startTime') {
+							console.log('keyframe:', keyframe);
 							return {
 								animationId: keyframe.animationId,
 								value: keyframe.value
@@ -1005,7 +1005,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 						}
 					});
 
-					if( ofInterest ) {
+					if (ofInterest) {
 
 						keyframez.push(
 							{
@@ -1020,7 +1020,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 				rows.push(
 					{
 						title: value[0].name,
-						componentName: (this.activeContainer.components.find( (meta:any) => meta.id === value[0].componentId ).name ),
+						componentName: (this.activeContainer.components.find((meta: any) => meta.id === value[0].componentId).name),
 						group: value[0].componentId,
 						max: this.activeContainer.duration * 1000,
 						height: 40,
@@ -1041,7 +1041,7 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		/* generate outline left nodes */
 		const options = this.timeline.getOptions();
 		const headerElement = document.getElementById('outline-header');
-		if( headerElement ) {
+		if (headerElement) {
 			headerElement.style.maxHeight = headerElement.style.minHeight = options.headerHeight + 'px';
 		}
 
@@ -1060,19 +1060,19 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	private activeKeyFrame:any;
+	private activeKeyFrame: any;
 
-	private timelineEventListners():void {
+	private timelineEventListners(): void {
 
 		this.timeline.onDragStarted((args: TimelineDragEvent) => {
 			if (args) {
 
-				if ( this.animationEditUI === false ) {
+				if (this.animationEditUI === false) {
 
 					const keyframe = args.target.keyframe as any;
-					const animationDetails = this.componentAnimations.find((animation:any) => animation.id === keyframe.animationId);
+					const animationDetails = this.componentAnimations.find((animation: any) => animation.id === keyframe.animationId);
 
-					this.activeAnimationsEdit( animationDetails );
+					this.activeAnimationsEdit(animationDetails);
 
 				}
 
@@ -1081,10 +1081,10 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 
 		this.timeline.onDragFinished((args: TimelineDragEvent) => {
 			if (args) {
-				//console.log('onDragFinished:', args);
+				console.log('onDragFinished:', args);
 
 				const keyframe = args.target.keyframe as any;
-				const animationDetails = this.componentAnimations.find((animation:any) => animation.id === keyframe.animationId);
+				const animationDetails = this.componentAnimations.find((animation: any) => animation.id === keyframe.animationId);
 
 				this.componentAnimationPositionUpdateEventfromPage.emit({
 					posData: args.pos,
@@ -1097,28 +1097,28 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 		this.timeline.onDoubleClick((args: TimelineClickEvent) => {
 			if (args) {
 
-				//console.log('onDoubleClick:', args.target);
+				console.log('onDoubleClick:', args.target);
 
-				if( args.target?.type === 'keyframe' ) {
+				if (args.target?.type === 'keyframe') {
 
 					const keyframe = args.target.keyframe as any;
-					const animationDetails = this.componentAnimations.find((animation:any) => animation.id === keyframe.animationId);
+					const animationDetails = this.componentAnimations.find((animation: any) => animation.id === keyframe.animationId);
 
 					//keyframe.fillColor = '#c2185b';
 
 					console.log('Keyframe selected:', {
-						'row': args.target.row,
+					'row': args.target.row,
 						'keyframe': args.target.keyframe,
-						'animation': animationDetails
-					});
+							'animation': animationDetails
+				});
 
-					//this.activeKeyFrame = args.target.keyframe;
+		//this.activeKeyFrame = args.target.keyframe;
 
-					this.activeAnimationsEdit( animationDetails );
-					//this.editingAnimation = animationDetails;
+		this.activeAnimationsEdit(animationDetails);
+		//this.editingAnimation = animationDetails;
 
-				}
-			}
+	}
+}
 		});
 
 		/** /
@@ -1173,197 +1173,197 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	}
 
 	/*Handle Animation Events*/
-	public animationSelectMode():void {
-		if (this.timeline) {
-			this.timeline.setInteractionMode(TimelineInteractionMode.Selection);
-		}
+	public animationSelectMode(): void {
+	if(this.timeline) {
+	this.timeline.setInteractionMode(TimelineInteractionMode.Selection);
+}
 	}
-	public animationPanMode():void {
-		if (this.timeline) {
-			this.timeline.setInteractionMode(TimelineInteractionMode.Pan);
-		}
+	public animationPanMode(): void {
+	if(this.timeline) {
+	this.timeline.setInteractionMode(TimelineInteractionMode.Pan);
+}
 	}
-	public animationZoomMode():void {
-		if (this.timeline) {
-			this.timeline.setInteractionMode(TimelineInteractionMode.Zoom);
-		}
+	public animationZoomMode(): void {
+	if(this.timeline) {
+	this.timeline.setInteractionMode(TimelineInteractionMode.Zoom);
+}
 	}
 
 	public onOpenedChange(o: boolean) {
-		//console.log(`Drawer IsOpen: ${o}`);
+	console.log(`Drawer IsOpen: ${o}`);
 
-		this.TimelineOpen = o;
+	this.TimelineOpen = o;
 
-		if( o === true && this.TimelineInitialised === false ) {
-			this.TimelineInitialised = true;
+	if (o === true && this.TimelineInitialised === false) {
+		this.TimelineInitialised = true;
+		this.intialiseTimeLine();
+		//this.timeline.redraw();
+	}
+
+	if (o === false) {
+		console.log('disposing timeline');
+		this.closeActiveAnimationEdit();
+	}
+}
+
+	public addAnimationDialog(component: any) {
+
+	const confirmDialog = this.dialog.open(DialogBannerContainerAnimationAddComponent, {
+		width: '500px',
+		data: {
+			title: 'Add Animation to ' + component.name + ' component?',
+			message: '',
+			component: component,
+			template: this.template,
+			container: this.activeContainer,
+			activeBannerSize: this.activeBannerSizes[0],
+		}
+	});
+	confirmDialog.afterClosed().subscribe(result => {
+
+		console.log('Animation from dialog:', result);
+
+		if ([undefined, null, false].includes(result)) {
+
+			this.alertService.info('Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
+
+		} else {
+
+			this.alertService.success(component.name + ' animation added successfully.', { keepAfterRouteChange: false });
+
+			console.log('passAnimation from dialog:', result, this.componentAnimations);
+
+			//find animation from container:
+			this.activeContainer.components.find((x: any) => {
+				if (x.id === result.componentId) {
+					x.animations.push(result);
+					this.updateComponentSubject.next({
+						stage: 'bannerCanvas-' + this.activeBannerSizes[0].bannersize.width + '-' + this.activeBannerSizes[0].bannersize.height,
+						stages: 1,
+						type: x.componenttype.name,
+						data: result.component
+					});
+
+					this.refreshStageSubject.next(true);
+				}
+			});
+
+			this.componentAnimations.push(result);
+
 			this.intialiseTimeLine();
-			//this.timeline.redraw();
+
 		}
+	});
+}
 
-		if( o === false ) {
-			//console.log('disposing timeline');
-			this.closeActiveAnimationEdit();
+	public editAnimationDialog(id: string) {
+
+	const component = (this.componentMetaFiles.find((meta: any) => meta.id === id));
+
+	const confirmDialog = this.dialog.open(DialogBannerContainerAnimationAddComponent, {
+		data: {
+			title: 'Editing ' + component.name + ' animation',
+			message: '',
+			component: component,
+			template: this.template,
+			container: this.activeContainer,
+			activeBannerSize: this.activeBannerSizes[0],
 		}
-	}
+	});
+	confirmDialog.afterClosed().subscribe(result => {
 
-	public addAnimationDialog(component:any) {
+		console.log('Animation from dialog:', result);
 
-		const confirmDialog = this.dialog.open( DialogBannerContainerAnimationAddComponent, {
-			width: '500px',
-			data: {
-				title: 'Add Animation to ' + component.name + ' component?',
-				message: '',
-				component: component,
-				template: this.template,
-				container: this.activeContainer,
-				activeBannerSize: this.activeBannerSizes[0],
-			}
-		});
-		confirmDialog.afterClosed().subscribe(result => {
+		if ([undefined, null, false].includes(result)) {
 
-			console.log('Animation from dialog:', result);
+			this.alertService.info('Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
 
-			if ([undefined, null, false].includes(result)) {
+		} else {
 
-				this.alertService.info( 'Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
+			console.log('passAnimation from dialog:', result);
+			this.alertService.success(component.name + ' animation edited successfully.', { keepAfterRouteChange: false });
 
-			} else {
+		}
+	});
+}
 
-				this.alertService.success( component.name + ' animation added successfully.', { keepAfterRouteChange: false });
+	public addAnimationDialogByKeyframe(id: string) {
 
-				//console.log('passAnimation from dialog:', result, this.componentAnimations);
+	const component = (this.componentMetaFiles.find((meta: any) => meta.id === id));
 
-				//find animation from container:
-				this.activeContainer.components.find((x:any) => {
-					if(x.id === result.componentId) {
-						x.animations.push( result );
-						this.updateComponentSubject.next({
-							stage: 'bannerCanvas-' + this.activeBannerSizes[0].bannersize.width + '-' + this.activeBannerSizes[0].bannersize.height,
-							stages: 1,
-							type: x.componenttype.name,
-							data: result.component
-						});
+	const confirmDialog = this.dialog.open(DialogBannerContainerAnimationAddComponent, {
+		width: '500px',
+		data: {
+			title: 'Add Keyframe to ' + component.name + ' component?',
+			message: '',
+			component: component,
+			template: this.template,
+			container: this.activeContainer,
+			activeBannerSize: this.activeBannerSizes[0],
+		}
+	});
+	confirmDialog.afterClosed().subscribe(result => {
 
-						this.refreshStageSubject.next(true);
-					}
-				});
+		console.log('Animation from dialog:', result);
 
-				this.componentAnimations.push( result );
+		if ([undefined, null, false].includes(result)) {
 
-				this.intialiseTimeLine();
+			this.alertService.info('Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
 
-			}
-		});
-	}
+		} else {
 
-	public editAnimationDialog(id:string) {
+			console.log('passAnimation from dialog:', result);
+			this.alertService.success(component.name + ' animation added successfully.', { keepAfterRouteChange: false });
 
-		const component = (this.componentMetaFiles.find( (meta:any) => meta.id === id ));
+			this.componentAnimations.push(result);
 
-		const confirmDialog = this.dialog.open( DialogBannerContainerAnimationAddComponent, {
-			data: {
-				title: 'Editing ' + component.name + ' animation',
-				message: '',
-				component: component,
-				template: this.template,
-				container: this.activeContainer,
-				activeBannerSize: this.activeBannerSizes[0],
-			}
-		});
-		confirmDialog.afterClosed().subscribe(result => {
+			//find animation from container:
+			this.activeContainer.components.find((x: any) => {
+				if (x.id === result.componentId) {
+					x.animations.push(result);
+					this.updateComponentSubject.next({
+						stage: 'bannerCanvas-' + this.activeBannerSizes[0].bannersize.width + '-' + this.activeBannerSizes[0].bannersize.height,
+						stages: 1,
+						type: x.componenttype.name,
+						data: result.component
+					});
 
-			console.log('Animation from dialog:', result);
+					this.refreshStageSubject.next(true);
+				}
+			});
 
-			if ([undefined, null, false].includes(result)) {
+			this.intialiseTimeLine();
 
-				this.alertService.info( 'Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
-
-			} else {
-
-				console.log('passAnimation from dialog:', result);
-				this.alertService.success( component.name + ' animation edited successfully.', { keepAfterRouteChange: false });
-
-			}
-		});
-	}
-
-	public addAnimationDialogByKeyframe(id:string) {
-
-		const component = (this.componentMetaFiles.find( (meta:any) => meta.id === id ));
-
-		const confirmDialog = this.dialog.open( DialogBannerContainerAnimationAddComponent, {
-			width: '500px',
-			data: {
-				title: 'Add Keyframe to ' + component.name + ' component?',
-				message: '',
-				component: component,
-				template: this.template,
-				container: this.activeContainer,
-				activeBannerSize: this.activeBannerSizes[0],
-			}
-		});
-		confirmDialog.afterClosed().subscribe(result => {
-
-			console.log('Animation from dialog:', result);
-
-			if ([undefined, null, false].includes(result)) {
-
-				this.alertService.info( 'Cancel Adding Animation to Component ' + component.name, { keepAfterRouteChange: false });
-
-			} else {
-
-				//console.log('passAnimation from dialog:', result);
-				this.alertService.success( component.name + ' animation added successfully.', { keepAfterRouteChange: false });
-
-				this.componentAnimations.push( result );
-
-				//find animation from container:
-				this.activeContainer.components.find((x:any) => {
-					if(x.id === result.componentId) {
-						x.animations.push( result );
-						this.updateComponentSubject.next({
-							stage: 'bannerCanvas-' + this.activeBannerSizes[0].bannersize.width + '-' + this.activeBannerSizes[0].bannersize.height,
-							stages: 1,
-							type: x.componenttype.name,
-							data: result.component
-						});
-
-						this.refreshStageSubject.next(true);
-					}
-				});
-
-				this.intialiseTimeLine();
-
-			}
-		});
-	}
+		}
+	});
+}
 
 	private resetTimeline() {
-		const timelineCanvas = this.timelineCanvas.nativeElement.querySelector('canvas');
-		const context = this.timelineCanvas.nativeElement.querySelector('canvas')?.getContext('2d');
+	const timelineCanvas = this.timelineCanvas.nativeElement.querySelector('canvas');
+	const context = this.timelineCanvas.nativeElement.querySelector('canvas')?.getContext('2d');
 
-		//console.log('timelineCanvas:', timelineCanvas );
+	console.log('timelineCanvas:', timelineCanvas );
 
-		if( timelineCanvas && context ) {
-			context.clearRect(0, 0, timelineCanvas.offsetWidth, timelineCanvas.offsetHeight);
-			timelineCanvas.remove();
-		}
+	if (timelineCanvas && context) {
+		context.clearRect(0, 0, timelineCanvas.offsetWidth, timelineCanvas.offsetHeight);
+		timelineCanvas.remove();
 	}
+}
 
 	/**
 	 * Dialog for editing animation keyframe
 	 */
-	public activeAnimationsEdit( event:any ):void {
+	public activeAnimationsEdit(event: any): void {
 
-		if( this.animationEditUI === true ) {
-			this.animationEditUI = false;
-			this.editingAnimation = null;
-		} else {
+	if(this.animationEditUI === true ) {
+	this.animationEditUI = false;
+	this.editingAnimation = null;
+} else {
 
-			this.animationEditUI = true;
-			this.editingAnimation = event;
+	this.animationEditUI = true;
+	this.editingAnimation = event;
 
-		}
+}
 		//this.editableAnimationSubjectForDialog.next(event);
 		//this.editableAnimationSubject.next(event);
 	}
@@ -1371,11 +1371,11 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	/**
 	 * Close animation edit dialog
 	 */
-	public closeActiveAnimationEdit():void {
+	public closeActiveAnimationEdit(): void {
 
-		this.animationEditUI = false;
-		this.editingAnimation = null;
-	}
+	this.animationEditUI = false;
+	this.editingAnimation = null;
+}
 
 	/**
 	 * Sends animtion updates emitted through
@@ -1384,193 +1384,193 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	 * is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	public editAnimation(component:any) {
+	public editAnimation(component: any) {
 
-		//console.warn('editAnimation:', component, this.componentAnimations , this.timeline.getAllKeyframes() );
+	//console.warn('editAnimation:', component, this.componentAnimations , this.timeline.getAllKeyframes() );
 
-		const selectedKeyframe = this.timeline.getAllKeyframes().find( (keyframe:any) => keyframe.animationId === component.animationId ) as any;
+	const selectedKeyframe = this.timeline.getAllKeyframes().find((keyframe: any) => keyframe.animationId === component.animationId) as any;
 
-		//console.warn('editAnimation:', selectedKeyframe, component );
-		//const staleComponent = this.componentAnimations.find((x)=> {
-		this.componentAnimations.find((x)=> {
-			if( x.id === component.animationId ) {
+	//console.warn('editAnimation:', selectedKeyframe, component );
+	//const staleComponent = this.componentAnimations.find((x)=> {
+	this.componentAnimations.find((x) => {
+		if (x.id === component.animationId) {
 
-				x.animationmeta.forEach( (y:any) => {
-					if( y.name === 'positionX') {
-						y.value = component.animationmeta.positionX;
-					}
-					if( y.name === 'positionY') {
-						y.value = component.animationmeta.positionY;
-					}
-					if( y.name === 'startTime') {
-						y.value = component.animationmeta.startTime;
-						selectedKeyframe.val = parseInt( component.animationmeta.startTime ) * 1000;
-						selectedKeyframe.fillColor = '#007663';
-					}
-					if( y.name === 'duration') {
-						y.value = component.animationmeta.duration;
-					}
-					if( y.name === 'opacity') {
-						y.value = component.animationmeta.opacity;
-					}
-				});
+			x.animationmeta.forEach((y: any) => {
+				if (y.name === 'positionX') {
+					y.value = component.animationmeta.positionX;
+				}
+				if (y.name === 'positionY') {
+					y.value = component.animationmeta.positionY;
+				}
+				if (y.name === 'startTime') {
+					y.value = component.animationmeta.startTime;
+					selectedKeyframe.val = parseInt(component.animationmeta.startTime) * 1000;
+					selectedKeyframe.fillColor = '#007663';
+				}
+				if (y.name === 'duration') {
+					y.value = component.animationmeta.duration;
+				}
+				if (y.name === 'opacity') {
+					y.value = component.animationmeta.opacity;
+				}
+			});
 
-				this.intialiseTimeLine();
+			this.intialiseTimeLine();
 
-				// refresh HTML5 stage
-				this.refreshStageSubject.next(true);
-			}
-		});
+			// refresh HTML5 stage
+			this.refreshStageSubject.next(true);
+		}
+	});
 
-	}
+}
 
-	public deleteAnimation(component:any) {
-		//console.warn('Deleted Animation:', component, this.componentAnimations );
+	public deleteAnimation(component: any) {
+	//console.warn('Deleted Animation:', component, this.componentAnimations );
 
-		this.componentAnimations = this.componentAnimations.filter((x)=> x.id !== component.id);
-		this.intialiseTimeLine();
-	}
+	this.componentAnimations = this.componentAnimations.filter((x) => x.id !== component.id);
+	this.intialiseTimeLine();
+}
 
 	/**
 	 * EVENTS FOR CANVAS CREATIVE
 	 */
 	public playAnimation() {
 
-		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
-		this.playStageAnimationSubject.next(this.animation_isPlaying);
-		// close timeline if opened
-		this.sidedrawer.close();
-	}
+	this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
+	this.playStageAnimationSubject.next(this.animation_isPlaying);
+	// close timeline if opened
+	this.sidedrawer.close();
+}
 
 	public playGlobalAnimation() {
 
-		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
-		this.playGlobalAnimationSubject.next(this.animation_isPlaying);
-		// close timeline if opened
-		this.sidedrawer.close();
-	}
+	this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
+	this.playGlobalAnimationSubject.next(this.animation_isPlaying);
+	// close timeline if opened
+	this.sidedrawer.close();
+}
 
-	public frameAnimationEnd($event:any) {
-		this.animation_isPlaying = false;
-		this.playStageAnimationSubject.next(null);
+	public frameAnimationEnd($event: any) {
+	this.animation_isPlaying = false;
+	this.playStageAnimationSubject.next(null);
 
-		//this.refreshBanner();
-	}
+	//this.refreshBanner();
+}
 
-	public GlobalAnimationEnd($event:any) {
-		this.animation_isPlaying = false;
-		this.playGlobalAnimationSubject.next(null);
-	}
+	public GlobalAnimationEnd($event: any) {
+	this.animation_isPlaying = false;
+	this.playGlobalAnimationSubject.next(null);
+}
 
 	public loopAnimation() {
 
-		this.animation_isLooping = this.animation_isLooping === true ? false : true;
+	this.animation_isLooping = this.animation_isLooping === true ? false : true;
 
-		this.loopStageAnimationSubject.next(this.animation_isLooping);
+	this.loopStageAnimationSubject.next(this.animation_isLooping);
+}
+
+	public restartAnimation(db ?: any) {
+
+	if (db !== undefined) {
+		this.refreshStageSubject.next(db);
+	} else {
+		this.refreshStageSubject.next(true);
 	}
+}
 
-	public restartAnimation(db?:any) {
+	public refreshBanner(db ?: any) {
 
-		if( db !== undefined ) {
-			this.refreshStageSubject.next(db);
-		} else {
-			this.refreshStageSubject.next(true);
+	if (db !== undefined) {
+		this.refreshStageSubject.next(db);
+	} else {
+		this.refreshStageSubject.next(true);
+	}
+}
+
+	public exportCreative(): void {
+
+	//this.generateSubject.next(this.activeContainer);
+
+	this.generateSubject.next(this.activeBannerSizes[0].containers);
+}
+
+	public previewCreative(): void {
+	//this.alertService.info( 'WIP - Preview the current Creative.', { keepAfterRouteChange: false });
+	this.previewActive = (this.previewActive === true) ? false : true;
+	this.previewStageSubject.next(this.previewActive);
+}
+
+	public creativeRules(): void {
+	console.log('componentMetaFiles', this.activeContainer.components);
+
+	const tempRules = this.bannerService.generateBannerComponentRules(this.activeContainer.components);
+
+	console.log('creativeRules:', tempRules );
+
+	this._bottomSheet.open(
+		BottomSheetTemplateRulesComponent,
+		{
+			data: tempRules
 		}
-	}
+	);
 
-	public refreshBanner(db?:any) {
-
-		if( db !== undefined ) {
-			this.refreshStageSubject.next(db);
-		} else {
-			this.refreshStageSubject.next(true);
-		}
-	}
-
-	public exportCreative():void {
-
-		//this.generateSubject.next(this.activeContainer);
-
-		this.generateSubject.next(this.activeBannerSizes[0].containers);
-	}
-
-	public previewCreative():void {
-		//this.alertService.info( 'WIP - Preview the current Creative.', { keepAfterRouteChange: false });
-		this.previewActive = (this.previewActive === true) ? false : true;
-		this.previewStageSubject.next(this.previewActive);
-	}
-
-	public creativeRules():void {
-		//console.log('componentMetaFiles', this.activeContainer.components);
-
-		const tempRules = this.bannerService.generateBannerComponentRules(this.activeContainer.components);
-
-		console.log('creativeRules:', tempRules );
-
-		this._bottomSheet.open(
-			BottomSheetTemplateRulesComponent,
-			{
-				data: tempRules
-			}
-		);
-
-		//this.alertService.info( 'WIP - Preview the current Creative Size Rules.', { keepAfterRouteChange: false });
-	}
+	//this.alertService.info( 'WIP - Preview the current Creative Size Rules.', { keepAfterRouteChange: false });
+}
 
 	/** GENERAL UI  **/
 
 	public back(): void {
-		this.location.back();
-	}
+	this.location.back();
+}
 
 	private onboarding(): void {
 
-		this.introJS.setOptions({
-			showStepNumbers: true,
-			showProgress: true,
-			/** /
-			steps: [
-				{
-					title: 'Template Banner Design',
-					intro: "As an Admin user, you can design the layout of for the banner."
-				}
+	this.introJS.setOptions({
+		showStepNumbers: true,
+		showProgress: true,
+		/** /
+		steps: [
+			{
+				title: 'Template Banner Design',
+				intro: "As an Admin user, you can design the layout of for the banner."
+			}
 
-				{
-					element: '.walkthrough-adding-components',
-					intro: "Click here to create a new account.",
-					position: 'bottom-right-aligned'
-				},
-				/** /
-			],
-			/**/
-			hints: [
-				{
-					element: '#mat-tab-label-0-0',
-					hint: 'Click here to add new components.',
-					hintPosition: 'top-middle',
-				},
-				{
-					element: '#mat-tab-label-0-1',
-					hint: 'Once a component is added. It will be listed in this tab for you to edit/save.',
-					hintPosition: 'top-middle'
-				}
-			]
-			/**/
-		});
-	}
+			{
+				element: '.walkthrough-adding-components',
+				intro: "Click here to create a new account.",
+				position: 'bottom-right-aligned'
+			},
+			/** /
+		],
+		/**/
+		hints: [
+			{
+				element: '#mat-tab-label-0-0',
+				hint: 'Click here to add new components.',
+				hintPosition: 'top-middle',
+			},
+			{
+				element: '#mat-tab-label-0-1',
+				hint: 'Once a component is added. It will be listed in this tab for you to edit/save.',
+				hintPosition: 'top-middle'
+			}
+		]
+		/**/
+	});
+}
 
 	public help(): void {
 
-		this.introJS.refresh();
+	this.introJS.refresh();
 
-		this.introJS.addHints();
+	this.introJS.addHints();
 
-		this.introJS.showHints();
+	this.introJS.showHints();
 
-		//this.introJS.start();
+	//this.introJS.start();
 
-		this.alertService.info( 'Help/Onboarding Feature still in WIP.', { keepAfterRouteChange: false });
-	}
+	this.alertService.info('Help/Onboarding Feature still in WIP.', { keepAfterRouteChange: false });
+}
 
 	/** POSSIBLY DEPRECATED **/
 
@@ -1581,10 +1581,10 @@ export class TemplateBannerAddEditPage implements OnInit, OnDestroy {
 	 * through componentPositionUpdate (defined and initialised in add.edit.component.ts)
 	 *
 	 */
-	public acceptComponentPositionUpdates(event:any) {
-		//console.log('acceptComponentPositionUpdates:', event);
+	public acceptComponentPositionUpdates(event: any) {
+	console.log('acceptComponentPositionUpdates:', event);
 
-		this.componentPositionUpdateEventfromPage.emit(event);
-	}
+	this.componentPositionUpdateEventfromPage.emit(event);
+}
 
 }

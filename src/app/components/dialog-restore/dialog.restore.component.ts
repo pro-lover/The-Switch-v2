@@ -7,10 +7,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 	styleUrls: ['dialog.restore.component.scss']
 })
 
-export class DialogRestoreComponent  implements OnInit {
+export class DialogRestoreComponent implements OnInit {
 
 	title!: string;
-  	message!: string;
+	message!: string;
 
 	projectId!: any[];
 	roleName!: string;
@@ -25,6 +25,6 @@ export class DialogRestoreComponent  implements OnInit {
 	}
 
 	ngOnInit() {
-		console.log('DialogRestoreComponent:', this.data);
+		//console.log('DialogRestoreComponent:', this.data);
 	}
 }

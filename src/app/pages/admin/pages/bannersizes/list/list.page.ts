@@ -7,10 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { DialogConfirmComponent, DialogRestoreComponent } from '@app/components';
-import { Account, BannerSize, BannerType, Client, ComponentModel, Template  } from '@app/core/models';
-import { AccountService, AlertService, BannerSizeService , BannerTypeService, ClientService, ComponentService, TemplateService } from '@app/core/services';
+import { Account, BannerSize, BannerType, Client, ComponentModel, Template } from '@app/core/models';
+import { AccountService, AlertService, BannerSizeService, BannerTypeService, ClientService, ComponentService, TemplateService } from '@app/core/services';
 import * as introJs from 'intro.js';
-import { Subject,Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { first, map, startWith, takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
 
@@ -90,17 +90,17 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.bannerSizeService.bannerSize
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('collection subscription:', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('collection subscription:', bannersizes);
 
-					this.allData =bannersizes;
+					this.allData = bannersizes;
 
-					if( bannersizes !== undefined && bannersizes.length > 0 ) {
+					if (bannersizes !== undefined && bannersizes.length > 0) {
 						this.initialise(bannersizes);
 
 						this.initialiseTextFilters();
@@ -108,11 +108,11 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 				}
 			);
 
-			this.templateService.getAll()
+		this.templateService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('templates', templates);
+				(templates: Template[]) => {
+					////console.log('templates', templates);
 					this.filterDataTemplates = templates;
 				}
 			);
@@ -120,8 +120,8 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		this.bannerTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannertypes:BannerType[]) =>  {
-					//console.log('bannertypes', bannertypes);
+				(bannertypes: BannerType[]) => {
+					////console.log('bannertypes', bannertypes);
 					this.filterDataBannerTypes = bannertypes;
 				}
 			);
@@ -129,8 +129,8 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		this.bannerSizeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('bannersizes', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('bannersizes', bannersizes);
 					this.filterDataBannerSizes = bannersizes;
 				}
 			);
@@ -138,8 +138,8 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		this.clientService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					//console.log('Clients', clients);
+				(clients: Client[]) => {
+					////console.log('Clients', clients);
 					this.filterDataClients = clients;
 				}
 			);
@@ -161,7 +161,7 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 	// filters
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -171,18 +171,18 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -209,11 +209,11 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 				break;
 		}
 
-		//console.log('selectedTextFilter['+type+']:', this.sortedData);
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -228,7 +228,7 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -243,32 +243,32 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 
 		newdata = this.allData;
 
-		if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.template.clientId === this.clientFilterValue.value
 			});
 		}
 
-		if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.templateId === this.templateFilterValue.value
 			});
 		}
 
-		if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.bannertypeId === this.bannertypeFilterValue.value
 			});
 		}
 
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.bannersizeId === this.bannersizeFilterValue.value
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -358,7 +358,7 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialise( bannersizes:BannerSize[]):void {
+	private initialise(bannersizes: BannerSize[]): void {
 
 		this.primaryData = bannersizes;
 		this.sortedData = this.primaryData.slice();
@@ -369,7 +369,7 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string) {
+	public toggleStatus(event: any, id: string) {
 
 		/**/
 		this.updateStatus(id, {
@@ -378,26 +378,26 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ) {
-        this.bannerSizeService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
+	private updateStatus(id: string, params: any) {
+		this.bannerSizeService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public deleteModel(id: string) {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -411,9 +411,9 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -431,7 +431,7 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -445,10 +445,10 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -514,17 +514,17 @@ export class BannerSizesListPage implements OnInit, OnDestroy {
 		this.introJS.start();
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 
 			return {
 				'ID': data.id,

@@ -29,10 +29,10 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 	@Input() dataTemplate!: Template;
 	@Input() dataContainerId!: string;
 	//wait for component to be emitted
-	@Input()EditActiveComponentReceived!: any;
+	@Input() EditActiveComponentReceived!: any;
 
 	// toggle edit canvas controls
-	public activeComponentMenuActions:any;
+	public activeComponentMenuActions: any;
 	public editComponentDialogOpen = false;
 	public componentDragandDropLock = true;
 	private editableComponentsSubjectForDialog: BehaviorSubject<boolean>;
@@ -46,7 +46,7 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 
 	// component updates from canvas to form
 	@Output() EditComponentEvent = new EventEmitter<any>();
-	@Input()componentPositionUpdatesReceived!: any;
+	@Input() componentPositionUpdatesReceived!: any;
 	// component updates from form
 	//private updatedComponentFormDataSubject: BehaviorSubject<any>;
 	//public updatedComponentFormDataObs: Observable<any>;
@@ -76,14 +76,14 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 
 	ngOnInit() {
 
-		this.EditActiveComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.EditActiveComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			this.EditActiveComponentsMenuActions(evt);
 		});
 
-		this.componentPositionUpdatesReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.componentPositionUpdatesReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			//console.log('updated component position', evt);
+			////console.log('updated component position', evt);
 		});
 
 	}
@@ -94,7 +94,7 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 		this._destroy$.complete();
 	}
 
-	public EditActiveComponentsMenuActions( event:any ):void {
+	public EditActiveComponentsMenuActions(event: any): void {
 
 		if (!event) return;
 
@@ -112,23 +112,23 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 	}
 
 	// component action menu triggers
-	public closeActiveComponentsActionsMenu():void {
-		//console.log('Close Component Menu Actions');
+	public closeActiveComponentsActionsMenu(): void {
+		////console.log('Close Component Menu Actions');
 		this.elementRef.nativeElement.querySelector('.drag-drop-component-menu-actions').classList.remove('active');
 		this.ComponentMenuActionscloseEvent.emit(true);
 	}
 
 	// component edit dialog triggers
-	public toggleEditComponentDialog():void {
+	public toggleEditComponentDialog(): void {
 		this.editComponentDialogOpen = true;
 		this.editableComponentsSubjectForDialog.next(this.activeComponentMenuActions);
 	}
 
-	public duplicateComponent():void {
+	public duplicateComponent(): void {
 
-		console.log('duplicate component:', this.activeComponentMenuActions, this.dataBanner);
+		//console.log('duplicate component:', this.activeComponentMenuActions, this.dataBanner);
 
-		const duplicateDialog = this.dialog.open( DialogBannerComponentDuplicateComponent, {
+		const duplicateDialog = this.dialog.open(DialogBannerComponentDuplicateComponent, {
 			width: '400px',
 			data: {
 				title: 'Duplicate ' + this.activeComponentMenuActions.componenttype.name + '?',
@@ -142,43 +142,43 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 		});
 		duplicateDialog.afterClosed().subscribe(result => {
 
-			//console.log('newComponent from dialog:', result);
+			////console.log('newComponent from dialog:', result);
 
 			if (result !== undefined && result !== false) {
 
-				console.log('passContainer from dialog:', result);
+				//console.log('passContainer from dialog:', result);
 				//this.alertService.success( component.name + ' added successfully.', { keepAfterRouteChange: false });
 				//this.addComponent(result);
 
 			} else {
-				this.alertService.info( 'Duplication cancelled.', { keepAfterRouteChange: false });
+				this.alertService.info('Duplication cancelled.', { keepAfterRouteChange: false });
 			}
 		});
 	}
 
-	public editComponentUpdatesFromForm(component:any) {
+	public editComponentUpdatesFromForm(component: any) {
 
 		//console.warn('Edit Dialog Component Updates:', component, this.activeComponentMenuActions );
 		this.updateComponentMetaTemporary(component);
 
 		this.EditComponentEvent.emit({
-			stage: 'bannerCanvas-'+ component.bannerWidth +'-'+ component.bannerHeight,
+			stage: 'bannerCanvas-' + component.bannerWidth + '-' + component.bannerHeight,
 			stages: 1,
 			type: component.componenttypeName.toLowerCase(),
 			component: component
 		});
 	}
 
-	private updateComponentMetaTemporary(component:any):void {
+	private updateComponentMetaTemporary(component: any): void {
 
 		this.activeComponentMenuActions.smart = component.smart;
 
 		for (const key in component.componentmeta) {
 			if (Object.prototype.hasOwnProperty.call(component.componentmeta, key)) {
 				const meta = component.componentmeta[key];
-				const oldValue = this.activeComponentMenuActions.componentmeta.find((metaItem:any) => metaItem.name === key);
+				const oldValue = this.activeComponentMenuActions.componentmeta.find((metaItem: any) => metaItem.name === key);
 				if ([undefined, null].includes(oldValue)) {
-					//console.log('NOT FOUND', key, oldValue, meta);
+					////console.log('NOT FOUND', key, oldValue, meta);
 					//oldValue[key] = meta;
 				} else {
 					oldValue.value = meta;
@@ -188,28 +188,28 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 	}
 
 	// component drag and drop
-	public closeActiveComponentsEdit():void {
+	public closeActiveComponentsEdit(): void {
 		this.editComponentDialogOpen = false;
 		this.editableComponentsSubjectForDialog.next(false);
 
 		this.toggleComponentDragandDrop(true);
 	}
 
-	public activateComponentDragandDrop():void {
-		//console.log('deactivating/ activating component drag and drop');
+	public activateComponentDragandDrop(): void {
+		////console.log('deactivating/ activating component drag and drop');
 
 		const DragandDropLockStatus = (this.componentDragandDropLock === true) ? false : true;
 
 		this.toggleComponentDragandDrop(DragandDropLockStatus);
 
-		if( DragandDropLockStatus === false ) {
+		if (DragandDropLockStatus === false) {
 			this.toggleEditComponentDialog();
 		} else {
 			this.closeActiveComponentsEdit();
 		}
 	}
 
-	private toggleComponentDragandDrop( status:boolean):void {
+	private toggleComponentDragandDrop(status: boolean): void {
 
 		this.componentDragandDropLock = status;
 		this.ComponentUnlockEvent.emit({
@@ -221,7 +221,7 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 	/** /
 	public deleteActiveComponentsEdit():void {
 
-		//console.log('deleteActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
+		////console.log('deleteActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
 
 		this.activeComponentMenuActions.isDeleting = true;
 
@@ -245,7 +245,7 @@ export class TemplateBannerMenuActionDialogComponent implements OnInit, OnDestro
 	}
 	/**/
 
-	public deleteComponentPassEvent(component:any) {
+	public deleteComponentPassEvent(component: any) {
 
 		//console.warn('Delete Component:', component );
 

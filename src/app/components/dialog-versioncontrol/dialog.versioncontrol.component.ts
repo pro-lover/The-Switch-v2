@@ -9,12 +9,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 	providers: [DatePipe]
 })
 
-export class DialogVersionControlComponent  implements OnInit, OnDestroy {
+export class DialogVersionControlComponent implements OnInit, OnDestroy {
 
 	@ViewChild('tableDataSet') tabledbset!: ElementRef;
 
 	title!: string;
-  	message!: string;
+	message!: string;
 	notice!: string;
 
 	constructor(
@@ -27,27 +27,26 @@ export class DialogVersionControlComponent  implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		if( this.data.type === undefined ) {
+		if (this.data.type === undefined) {
 			this.data.type = 'default';
 		}
 
-		console.log('data:', this.data);
+		//console.log('data:', this.data);
 
-		if( this.data.history.length === 0 ) {
+		if (this.data.history.length === 0) {
 			this.notice = 'No version history available';
 			//this.data.history.push(this.data.latest);
 		}
 	}
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		//let that = this;
 
-		if( this.data.history.length > 0 ) {
+		if (this.data.history.length > 0) {
 			this.generateTableContents();
 
-			this.tabledbset.nativeElement.querySelectorAll('button').forEach( (el:any,index:number) => {
-				el.addEventListener( 'click', (evt:any) =>{
+			this.tabledbset.nativeElement.querySelectorAll('button').forEach((el: any, index: number) => {
+				el.addEventListener('click', (evt: any) => {
 					this.restore(evt.target.getAttribute('data-id'), evt.target.getAttribute('data-hid'));
 				});
 			});
@@ -58,15 +57,15 @@ export class DialogVersionControlComponent  implements OnInit, OnDestroy {
 		console.info('DialogVersionControlComponent ngOnDestroy:');
 	}
 
-	public onChange (action:string): void {
-		//console.log('New Project selected:', this.projectId );
+	public onChange(action: string): void {
+		////console.log('New Project selected:', this.projectId );
 	}
 
-	public restore ( id:string|number, hid:string|number ): void {
+	public restore(id: string | number, hid: string | number): void {
 
-		const restorHistory = this.data.history.find((x:any) => x.hid == hid);
+		const restorHistory = this.data.history.find((x: any) => x.hid == hid);
 
-		console.log('Restore:', this.data.model, id, hid, restorHistory );
+		//console.log('Restore:', this.data.model, id, hid, restorHistory );
 
 		this.dialogRef.close(restorHistory);
 	}
@@ -83,7 +82,7 @@ export class DialogVersionControlComponent  implements OnInit, OnDestroy {
 		const keys = Object.keys(obj[0]);
 		let thr = "";
 		thr = "<tr>";
-		keys.forEach((key:any,index:number) => {
+		keys.forEach((key: any, index: number) => {
 			thr += "<th>" + key.toUpperCase() + "</th>";
 		});
 		thr += "<th></th>";
@@ -92,10 +91,10 @@ export class DialogVersionControlComponent  implements OnInit, OnDestroy {
 
 		// create table body:
 		let tr = "";
-		obj.forEach( (item:any,index:number) => {
+		obj.forEach((item: any, index: number) => {
 			tr += "<tr>";
-			Object.keys(item).forEach((key,indexx) => {
-				tr += "<td>" + ( ( key === 'created' || key === 'updated' || key === 'archivedAt' ) ? this.datePipe.transform(item[key], 'yyyy-MM-dd h:mm:ss a' ) : item[key] ) + "</td>";
+			Object.keys(item).forEach((key, indexx) => {
+				tr += "<td>" + ((key === 'created' || key === 'updated' || key === 'archivedAt') ? this.datePipe.transform(item[key], 'yyyy-MM-dd h:mm:ss a') : item[key]) + "</td>";
 			});
 			tr += `<td>
 				<button class="btn btn-sm btn-primary restore-history" data-id="${item.id}" data-hid="${item.hid}">Restore</button>

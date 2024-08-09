@@ -160,8 +160,8 @@ async function update(id, params, editId) {
     // copy params to model and save
     Object.assign(model, params);
 
-	//console.log('Container update params: ', params);
-	//console.log('Container before update: ', model);
+	////console.log('Container update params: ', params);
+	////console.log('Container before update: ', model);
 
     model.updated = Date.now();
 	model.lastEditedBy = editId;

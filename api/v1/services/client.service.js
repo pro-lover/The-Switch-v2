@@ -63,7 +63,7 @@ async function getById(id) {
 		model.history = [];
 	}
 
-	//console.log(model);
+	////console.log(model);
     return basicDetails(model);
 }
 
@@ -88,7 +88,7 @@ async function create(params, editId) {
 async function update(id, params, editId) {
 	const model = await getClient(id);
 
-	//console.log('projectResearcher:');
+	////console.log('projectResearcher:');
 
     // validate
 	// validate (if name/shortname was changed)
@@ -140,7 +140,7 @@ async function restore(id, editId) {
 // helper functions
 
 async function getClient(id) {
-	//console.log('looking for:', id);
+	////console.log('looking for:', id);
     const model = await db.Client.findByPk(id, {
 		paranoid: false,
 		include:[

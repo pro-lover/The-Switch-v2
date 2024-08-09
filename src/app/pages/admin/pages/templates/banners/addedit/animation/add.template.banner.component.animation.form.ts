@@ -188,7 +188,7 @@ export class TemplatesAddAnimationFormDialogComponent implements OnInit, OnDestr
 
 		const animationNameExists = this.formComponent.animations.find( (animation:any) => animation.name === (this.formComponent.name) );
 
-		//console.log('animationNameExists', animationNameExists, this.formComponent.animations);
+		////console.log('animationNameExists', animationNameExists, this.formComponent.animations);
 
 		if( animationNameExists ) {
 
@@ -229,7 +229,7 @@ export class TemplatesAddAnimationFormDialogComponent implements OnInit, OnDestr
 	 */
 	private broadcastNewAnimation( newAnimation: any ) {
 
-		console.log('Broadcast New Animation:', newAnimation);
+		//console.log('Broadcast New Animation:', newAnimation);
 
 		this.AddAnimationEvent.emit(newAnimation);
 	}
@@ -275,7 +275,7 @@ export class TemplatesAddAnimationFormDialogComponent implements OnInit, OnDestr
 		animationData.animationmeta = this.FormGroupAnimationMetaData.value;
 		//this.loading = true;
 		//this.alertService.info( 'Container Saving Test.', { keepAfterRouteChange: false });
-		console.log('Saving Animation:', animationData);
+		//console.log('Saving Animation:', animationData);
 
 		//return;
 
@@ -284,7 +284,7 @@ export class TemplatesAddAnimationFormDialogComponent implements OnInit, OnDestr
 			.subscribe({
 				next: (newAnimation:any) => {
 
-					console.log('New Animation:', newAnimation);
+					//console.log('New Animation:', newAnimation);
 
 					this.loading = false;
 					this.alertService.success( 'Animation Saved successfully.', { keepAfterRouteChange: false });

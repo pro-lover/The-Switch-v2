@@ -25,9 +25,9 @@ export class DialogBannerComponentAddComponent {
 
 	}
 
-	public passComponentFromDialog(component:any) {
+	public passComponentFromDialog(component: any) {
 
-		//console.log('Adding Component From Dialog:', component);
+		////console.log('Adding Component From Dialog:', component);
 
 		this.passComponent = component;
 

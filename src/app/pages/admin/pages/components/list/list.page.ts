@@ -93,17 +93,17 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.componentService.component
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(componentModels:ComponentModel[]) =>  {
-					//console.log('collection subscription:', componentModels);
+				(componentModels: ComponentModel[]) => {
+					////console.log('collection subscription:', componentModels);
 
 					this.allData = componentModels;
 
-					if( componentModels !== undefined && componentModels.length > 0 ) {
+					if (componentModels !== undefined && componentModels.length > 0) {
 						this.initialise(componentModels);
 
 						this.initialiseTextFilters();
@@ -114,8 +114,8 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		this.templateService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('templates', templates);
+				(templates: Template[]) => {
+					////console.log('templates', templates);
 					this.filterDataTemplates = templates;
 				}
 			);
@@ -123,8 +123,8 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		this.bannerTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannertypes:BannerType[]) =>  {
-					//console.log('bannertypes', bannertypes);
+				(bannertypes: BannerType[]) => {
+					////console.log('bannertypes', bannertypes);
 					this.filterDataBannerTypes = bannertypes;
 				}
 			);
@@ -132,8 +132,8 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		this.bannerSizeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('bannersizes', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('bannersizes', bannersizes);
 					this.filterDataBannerSizes = bannersizes;
 				}
 			);
@@ -141,8 +141,8 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		this.clientService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					//console.log('Clients', clients);
+				(clients: Client[]) => {
+					////console.log('Clients', clients);
 					this.filterDataClients = clients;
 				}
 			);
@@ -168,7 +168,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 	// filters
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -178,18 +178,18 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -216,11 +216,11 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 				break;
 		}
 
-		//console.log('selectedTextFilter['+type+']:', this.sortedData);
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -235,7 +235,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -250,32 +250,32 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 		newdata = this.allData;
 
-		if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container?.banner.template.clientId === this.clientFilterValue.value
 			});
 		}
 
-		if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container?.banner.templateId === this.templateFilterValue.value
 			});
 		}
 
-		if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container?.banner.bannertypeId === this.bannertypeFilterValue.value
 			});
 		}
 
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container?.banner.bannersizeId === this.bannersizeFilterValue.value
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -365,7 +365,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialise( componentModels:ComponentModel[]):void {
+	private initialise(componentModels: ComponentModel[]): void {
 
 		this.primaryData = componentModels;
 		this.sortedData = this.primaryData.slice();
@@ -376,7 +376,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -385,7 +385,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
+	private updateStatus(id: string, params: any): void {
 		this.componentService.updateStatus(id, params)
 			.pipe(first())
 			.subscribe({
@@ -403,7 +403,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -417,9 +417,9 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -437,7 +437,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -451,10 +451,10 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -520,18 +520,18 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 
 			return {
 				'ID': data.id,
@@ -561,7 +561,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -589,7 +589,7 @@ export class ComponentsListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

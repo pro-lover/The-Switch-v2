@@ -239,13 +239,13 @@ async function updateMeta(id, params, editId) {
 	componentMeta.forEach( async (prime) => {
 
 		if( prime.name === 'positionX' ) {
-			//console.log('componentMeta:', prime.name, params.positionX);
+			////console.log('componentMeta:', prime.name, params.positionX);
 			prime.value = params.componentmeta.positionX;
 			prime.updated = Date.now();
 			prime.lastEditedBy = editId;
 		}
 		if( prime.name === 'positionY' ) {
-			//console.log('componentMeta:', prime.name, params.positionY);
+			////console.log('componentMeta:', prime.name, params.positionY);
 			prime.value = params.componentmeta.positionY;
 			prime.updated = Date.now();
 			prime.lastEditedBy = editId;

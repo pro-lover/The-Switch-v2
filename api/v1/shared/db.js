@@ -134,7 +134,7 @@ async function initialize() {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	/***/
 
@@ -171,14 +171,14 @@ async function initialize() {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	db.ComponentMeta.sync({
 		alter: {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 
 	/*** /
@@ -187,21 +187,21 @@ async function initialize() {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	db.Component.sync({
 		alter: {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	db.BannerSize.sync({
 		alter: {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	/***/
 
@@ -266,7 +266,7 @@ async function initialize() {
 			drop: false
 		}
 	}).catch(function(err){
-		console.log(err);
+		//console.log(err);
 	});
 	/**/
 }

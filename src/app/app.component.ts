@@ -38,8 +38,8 @@ export class AppComponent implements OnInit {
 		private webSocketService: WebSocketService
 	) {
 
-		this.accountService.account.subscribe( (x:any) =>  {
-			if( x === null ) {} else {
+		this.accountService.account.subscribe((x: any) => {
+			if (x === null) { } else {
 
 				this.authService.isLoggedIn$.next(true);
 
@@ -61,20 +61,20 @@ export class AppComponent implements OnInit {
 			.subscribe((event) => {
 				if (event instanceof NavigationStart) {
 
-					if( document.getElementById('primaryNav') !== null ) {
+					if (document.getElementById('primaryNav') !== null) {
 
-						this.renderer.removeClass(document.getElementById('primaryNav'),  'show');
+						this.renderer.removeClass(document.getElementById('primaryNav'), 'show');
 					}
 
 					if (this.previousUrl) {
-						this.renderer.removeClass(document.body,  'page-' + this.previousUrl);
+						this.renderer.removeClass(document.body, 'page-' + this.previousUrl);
 
 					}
 					event.url = event.url.replace(/\//g, '-');
 					event.url = event.url.split('?')[0];
 					const currentUrlSlug = event.url.slice(1);
 					if (currentUrlSlug) {
-						this.renderer.addClass( document.body, 'page-' + currentUrlSlug );
+						this.renderer.addClass(document.body, 'page-' + currentUrlSlug);
 					}
 					this.previousUrl = currentUrlSlug;
 
@@ -96,22 +96,22 @@ export class AppComponent implements OnInit {
 	}
 
 	private deviceFunction() {
-		//console.log('hello `Home` component');
+		////console.log('hello `Home` component');
 		this.deviceInfo = this.deviceService.getDeviceInfo();
 		const isMobile = this.deviceService.isMobile();
 		const isTablet = this.deviceService.isTablet();
 		const isDesktopDevice = this.deviceService.isDesktop();
 		//console.info('deviceInfo', this.deviceInfo);
-		//console.log('isMobile', isMobile);  			// returns if the device is a mobile device (android / iPhone / windows-phone etc)
-		//console.log('isTablet', isTablet);  				// returns if the device us a tablet (iPad etc)
-		//console.log('isDesktopDevice', isDesktopDevice); 	// returns if the app is running on a Desktop browser.
+		////console.log('isMobile', isMobile);  			// returns if the device is a mobile device (android / iPhone / windows-phone etc)
+		////console.log('isTablet', isTablet);  				// returns if the device us a tablet (iPad etc)
+		////console.log('isDesktopDevice', isDesktopDevice); 	// returns if the app is running on a Desktop browser.
 
 		isMobile ? this.renderer.addClass(document.body, 'is-mobile') : this.renderer.removeClass(document.body, 'is-mobile');
 		isTablet ? this.renderer.addClass(document.body, 'is-tablet') : this.renderer.removeClass(document.body, 'is-tablet');
 		isDesktopDevice ? this.renderer.addClass(document.body, 'is-desktop') : this.renderer.removeClass(document.body, 'is-desktop');
 
-		this.renderer.addClass(document.body, 'is-os-' + this.deviceInfo.os.toLowerCase() );
-		this.renderer.addClass(document.body, 'is-browser-' + this.deviceInfo.browser.toLowerCase() );
-		this.renderer.addClass(document.body, 'is-orientation-' + this.deviceInfo.orientation.toLowerCase() );
+		this.renderer.addClass(document.body, 'is-os-' + this.deviceInfo.os.toLowerCase());
+		this.renderer.addClass(document.body, 'is-browser-' + this.deviceInfo.browser.toLowerCase());
+		this.renderer.addClass(document.body, 'is-orientation-' + this.deviceInfo.orientation.toLowerCase());
 	}
 }

@@ -30,9 +30,9 @@ export class HeaderComponent implements AfterViewInit {
 		private accountService: AccountService,
 		private elementRef: ElementRef
 	) {
-		this.accountService.account.subscribe( (x:any) =>  {
+		this.accountService.account.subscribe((x: any) => {
 
-			if( x === null ) {} else {
+			if (x === null) { } else {
 
 				this.account = x;
 			}
@@ -40,8 +40,8 @@ export class HeaderComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		console.log('');
-		//console.log('this.account:', this.account);
+		//console.log('');
+		////console.log('this.account:', this.account);
 		/* * /
 		const dropdowns = this.elementRef.nativeElement.querySelectorAll('.dropdown-toggle')
 		dropdowns.forEach((dd: any)=>{

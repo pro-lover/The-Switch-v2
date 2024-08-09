@@ -22,10 +22,10 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 	//user onboarding
 	private introJS = introJs();
 
-	public pageData$!:Observable<any>;
-	public formDataAnimationTypes:any = [];
-	public formDataEasingTypes:any = [];
-	public formDataAnimations:any = [];
+	public pageData$!: Observable<any>;
+	public formDataAnimationTypes: any = [];
+	public formDataEasingTypes: any = [];
+	public formDataAnimations: any = [];
 
 	form!: FormGroup;
 	id!: string;
@@ -65,7 +65,7 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 			componentId: ['', Validators.required],
 			animationtypeId: ['', Validators.required],
 			easingtypeId: ['', Validators.required],
-			timelineorder: ['', [ Validators.required, Validators.minLength(1) ]],
+			timelineorder: ['', [Validators.required, Validators.minLength(1)]],
 			animationloop: ['', Validators.required],
 			name: ['', Validators.required],
 			status: ['', Validators.required],
@@ -77,15 +77,15 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 		if (!this.isAddMode) {
 			this.animationService.getById(this.id)
 				.pipe(first())
-				.subscribe( (x) => {
+				.subscribe((x) => {
 					this.form.patchValue(x);
 				});
 
-			const animationNameExists = this.formDataAnimations.find( (animation:any) => animation.name === (this.f['name'] + '_animation') );
+			const animationNameExists = this.formDataAnimations.find((animation: any) => animation.name === (this.f['name'] + '_animation'));
 
-			//console.log('animationNameExists', animationNameExists, this.formComponent.animations);
+			////console.log('animationNameExists', animationNameExists, this.formComponent.animations);
 
-			if( animationNameExists ) {
+			if (animationNameExists) {
 
 				//this.alertService.error('This component name already exists. Please select "Custom" and specify a unique name.');
 
@@ -126,10 +126,10 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 		}
 	}
 
-	private initialise():void {
+	private initialise(): void {
 
 		/** /
-		console.log('Available Defaults:', {
+		//console.log('Available Defaults:', {
 			'formComponent': this.formComponent,
 			'dataBanner': this.dataBanner,
 			'dataContainer': this.dataContainer,
@@ -144,21 +144,21 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 				this.easingTypeService.getAll()
 			]
 		)
-		.pipe(
-			map(([animations, animationTypes, easingTypes]):any => {
-				// combineLatest returns an array of values, here we map those values to an object
-				return { animations, animationTypes, easingTypes };
-			})
-		);
+			.pipe(
+				map(([animations, animationTypes, easingTypes]): any => {
+					// combineLatest returns an array of values, here we map those values to an object
+					return { animations, animationTypes, easingTypes };
+				})
+			);
 
-		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			//console.info('Animation Dialog Component initialise', data);
 
 			this.prepPageData(data);
 		});
 	}
 
-	private prepPageData(data:any):void {
+	private prepPageData(data: any): void {
 
 		this.formDataAnimations = data.animations;
 		this.formDataAnimationTypes = data.animationTypes;
@@ -169,7 +169,7 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 
 	}
 
-	private getRandomArbitrary(min:number, max:number) {
+	private getRandomArbitrary(min: number, max: number) {
 		return Math.random() * (max - min) + min;
 	}
 
@@ -227,36 +227,36 @@ export class AnimationsAddEditPage implements OnInit, OnDestroy {
 	}
 
 	private createRecord() {
-        this.animationService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.animationService.create(this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
+					this.router.navigate(['../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	private updateRecord() {
-        this.animationService.update(this.id, this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.animationService.update(this.id, this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Update successful', { keepAfterRouteChange: true });
+					this.router.navigate(['../../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
-	public ListtrackByFn(index:number, item:any) {
+	public ListtrackByFn(index: number, item: any) {
 		return index; // or item.id
 	}
 

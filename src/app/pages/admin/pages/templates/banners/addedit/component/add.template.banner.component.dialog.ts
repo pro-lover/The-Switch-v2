@@ -16,7 +16,7 @@ import { first, takeUntil } from 'rxjs/operators';
 	providers: [
 		{
 			provide: STEPPER_GLOBAL_OPTIONS,
-			useValue: {showError: true},
+			useValue: { showError: true },
 		},
 	],
 })
@@ -79,23 +79,23 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 	get ftemplatecomponent() { return this.FormGroupComponentMeta.controls; }
 
 	ngOnInit() {
-
+		console.log('ngOnInit_add.template',this.formDataComponentType)
 		this.isAddMode = true;
 
-		if ( this.formDataComponentType.name == 'Text' || this.formDataComponentType.name == 'Button' ) {
+		if (this.formDataComponentType.name == 'Text' || this.formDataComponentType.name == 'Button') {
 
-				this.fontTypeService.fontType.pipe(takeUntil(this._destroy$)).subscribe((data: FontType[]) => {
-					if( data !== null ) {
-						this.fontFamilies = data;
+			this.fontTypeService.fontType.pipe(takeUntil(this._destroy$)).subscribe((data: FontType[]) => {
+				if (data !== null) {
+					this.fontFamilies = data;
 
-						//console.warn('Text AddComponent FontFamilies:', this.fontFamilies);
-					}
-				});
+					//console.warn('Text AddComponent FontFamilies:', this.fontFamilies);
+				}
+			});
 		}
 
 		this.bannerService.getById(this.dataBanner.id).pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
-			//console.log('Current Banner From DB:', data);
-			this.activeBannerComponents = data.containers.find( (container:any) => container.id === this.dataBannerContainerId ).components;
+			////console.log('Current Banner From DB:', data);
+			this.activeBannerComponents = data.containers.find((container: any) => container.id === this.dataBannerContainerId).components;
 		});
 
 		//this.activeBannerComponents = this.dataBanner.containers.find( (container:any) => container.id === this.dataBannerContainerId ).components;
@@ -118,8 +118,8 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 	 *
 	 */
 	private prepareForm() {
-		console.log('prepareForm')
-		if( this.formDataComponentType.name === 'Text' ) {
+		//console.log('prepareForm')
+		if (this.formDataComponentType.name === 'Text') {
 
 			this.FormGroupComponentMeta = this.formBuilder.group({
 				componentTypeId: [this.formDataComponentType.id, Validators.required],
@@ -144,9 +144,9 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 			this.ftemplatecomponent['fontFamilyId'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-				this.fontFamilies.find( (font) => {
-					if( parseInt(font.id) === parseInt(value) ) {
-						//console.log('fontFamily:', font);
+				this.fontFamilies.find((font) => {
+					if (parseInt(font.id) === parseInt(value)) {
+						////console.log('fontFamily:', font);
 						this.ftemplatecomponent['fontFamily'].patchValue(font.fontFamily);
 						this.ftemplatecomponent['fontWeight'].patchValue(font.fontWeight);
 						this.ftemplatecomponent['fontStyle'].patchValue(font.fontStyle);
@@ -155,7 +155,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 			});
 
-		} else if( this.formDataComponentType.name === 'Shape' ) {
+		} else if (this.formDataComponentType.name === 'Shape') {
 
 			this.FormGroupComponentMeta = this.formBuilder.group({
 				componentTypeId: [this.formDataComponentType.id, Validators.required],
@@ -170,7 +170,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 				componentHeight: ['', Validators.required],
 			});
 
-		} else if( this.formDataComponentType.name === 'Button' ) {
+		} else if (this.formDataComponentType.name === 'Button') {
 
 			this.FormGroupComponentMeta = this.formBuilder.group({
 				componentTypeId: [this.formDataComponentType.id, Validators.required],
@@ -247,9 +247,9 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 			this.ftemplatecomponent['fontFamilyId'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-				this.fontFamilies.find( (font) => {
-					if( parseInt(font.id) === parseInt(value) ) {
-						//console.log('fontFamily:', font);
+				this.fontFamilies.find((font) => {
+					if (parseInt(font.id) === parseInt(value)) {
+						////console.log('fontFamily:', font);
 						this.ftemplatecomponent['fontFamily'].patchValue(font.fontFamily);
 						this.ftemplatecomponent['fontWeight'].patchValue(font.fontWeight);
 						this.ftemplatecomponent['fontStyle'].patchValue(font.fontStyle);
@@ -276,7 +276,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 		this.ftemplatecomponent['defaultName'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
-			if( value === "custom" ) {
+			if (value === "custom") {
 
 				this.ftemplatecomponent['componentName'].patchValue('');
 
@@ -284,11 +284,11 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 				//const componentCheck = this.dataBanner.containers.find( (container:any) => container.id === this.dataBannerContainerId ).components;
 
-				const componentNameExists = this.activeBannerComponents.find( (component:any) => component.name === value);
+				const componentNameExists = this.activeBannerComponents.find((component: any) => component.name === value);
 
-				//console.log('componentNameExists', componentCheck, componentNameExists);
+				////console.log('componentNameExists', componentCheck, componentNameExists);
 
-				if( componentNameExists ) {
+				if (componentNameExists) {
 
 					this.alertService.error('This component name already exists. Please select "Custom" and specify a unique name.');
 
@@ -318,14 +318,14 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 	}
 
-	private noSpecialCharactersandSpace ( str:string ):string {
+	private noSpecialCharactersandSpace(str: string): string {
 
 		return str.replace(/[^\w]/gi, '_');
 		//return str.replace(/[^A-Z0-9]+/ig, "_");
 
 	}
 
-	private getRandomArbitrary(min:number, max:number) {
+	private getRandomArbitrary(min: number, max: number) {
 		return Math.random() * (max - min) + min;
 	}
 
@@ -338,7 +338,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.log('uploadItem:', newItem);
+		////console.log('uploadItem:', newItem);
 
 		if (!newItem || !newItem.data[0]) return;
 
@@ -350,7 +350,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 
 	}
 
-	public resetAssets(banner:any) {
+	public resetAssets(banner: any) {
 		this.ResetEvent.emit(banner);
 
 		this.resetVariationsSubject.next({
@@ -361,10 +361,10 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 		//this.uploadedFiles = [];
 	}
 
-	public removeAsset(removeItem:any) {
+	public removeAsset(removeItem: any) {
 
-		//console.log('removeAsset:', removeItem );
-		//console.log('uploadedFiles:', this.uploadedFiles );
+		////console.log('removeAsset:', removeItem );
+		////console.log('uploadedFiles:', this.uploadedFiles );
 
 		this.RemoveUploadEvent.emit(removeItem);
 
@@ -388,7 +388,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 	private setupNewComponentMetaData() {
 		let componentMetaData: any;
 
-		if( this.formDataComponentType.name === 'Text' ) {
+		if (this.formDataComponentType.name === 'Text') {
 
 			componentMetaData = {
 				width: this.FormGroupComponentMeta.value['componentWidth'],
@@ -407,7 +407,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 				textAlign: this.FormGroupComponentMeta.value['textAlign']
 			}
 
-		} else if( this.formDataComponentType.name === 'Image' ) {
+		} else if (this.formDataComponentType.name === 'Image') {
 
 			if (this.uploadedItem === null || this.uploadedItem === undefined) {
 				this.alertService.error('Please upload image');
@@ -418,7 +418,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 			/** /
 			const imageDataUri = async () => {
 				const a = await this.getDataURI( this.uploadedItem );
-				console.log('imageDataUri:', a);
+				//console.log('imageDataUri:', a);
 				return a;
 			};
 			/**/
@@ -434,7 +434,7 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 				//dataFile: (async () => {await this.getDataURI(this.uploadedItem)})
 			}
 
-		} else if( this.formDataComponentType.name === 'Button' ) {
+		} else if (this.formDataComponentType.name === 'Button') {
 
 			componentMetaData = {
 				width: this.FormGroupComponentMeta.value['componentWidth'],
@@ -487,9 +487,9 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 	 * newComponentObs is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	private broadcastUpdatedComponentInputChanges( newComponent: any ) {
+	private broadcastUpdatedComponentInputChanges(newComponent: any) {
 
-		console.log('Broadcase New Component:', newComponent);
+		//console.log('Broadcase New Component:', newComponent);
 
 		// addImage/Text/Shape functions in Banner.creator expect an object and not an array of objects
 		//newComponent.componentmeta = this.setupNewComponentMetaData();
@@ -557,55 +557,55 @@ export class TemplatesAddDialogComponent implements OnInit, OnDestroy {
 		return;
 		/**/
 
-		if( this.formDataComponentType.name === 'Image' ) {
+		if (this.formDataComponentType.name === 'Image') {
 
-			const filePath = 'client-id-' + this.dataTemplate.clientId + '/template-id-' +this.dataTemplate.id + '/banner-id-' + this.dataBanner.id + '/container-id-' + this.dataBannerContainerId; //+ '/' + this.formDataComponentType.componentmeta.dataFileName;
+			const filePath = 'client-id-' + this.dataTemplate.clientId + '/template-id-' + this.dataTemplate.id + '/banner-id-' + this.dataBanner.id + '/container-id-' + this.dataBannerContainerId; //+ '/' + this.formDataComponentType.componentmeta.dataFileName;
 
-			this.componentService.upload( {
+			this.componentService.upload({
 				'file': newComponent.componentmeta.dataFile,
 				'path': filePath
 			})
-			.pipe(first())
-			.subscribe({
-				next: (results:any) => {
+				.pipe(first())
+				.subscribe({
+					next: (results: any) => {
 
-					newComponent.componentmeta.dataFilePath = results.data;
+						newComponent.componentmeta.dataFilePath = results.data;
 
-					//return;
+						//return;
 
-					this.componentService.create( newComponent )
-						.pipe(first())
-						.subscribe({
-							next: (newComponentDb:any) => {
-								this.loading = false;
-								this.alertService.success( newComponent.name + ' Saved successfully.', { keepAfterRouteChange: false });
+						this.componentService.create(newComponent)
+							.pipe(first())
+							.subscribe({
+								next: (newComponentDb: any) => {
+									this.loading = false;
+									this.alertService.success(newComponent.name + ' Saved successfully.', { keepAfterRouteChange: false });
 
-								//const componentMetaData = this.setupNewComponentMetaData();
-								this.broadcastUpdatedComponentInputChanges( newComponentDb );
-							},
-							error: error => {
-								this.loading = false;
-								this.alertService.error(error);
-							}
-						});
-				},
-				error: error => {
-					this.loading = false;
-					this.alertService.error(error);
-				}
-			});
+									//const componentMetaData = this.setupNewComponentMetaData();
+									this.broadcastUpdatedComponentInputChanges(newComponentDb);
+								},
+								error: error => {
+									this.loading = false;
+									this.alertService.error(error);
+								}
+							});
+					},
+					error: error => {
+						this.loading = false;
+						this.alertService.error(error);
+					}
+				});
 
 		} else {
 
-			this.componentService.create( newComponent )
+			this.componentService.create(newComponent)
 				.pipe(first())
 				.subscribe({
-					next: (newComponentDb:any) => {
+					next: (newComponentDb: any) => {
 						this.loading = false;
-						this.alertService.success( newComponent.name + ' Saved successfully.', { keepAfterRouteChange: false });
+						this.alertService.success(newComponent.name + ' Saved successfully.', { keepAfterRouteChange: false });
 
 						//const componentMetaData = this.setupNewComponentMetaData();
-						this.broadcastUpdatedComponentInputChanges( newComponentDb );
+						this.broadcastUpdatedComponentInputChanges(newComponentDb);
 					},
 					error: error => {
 						this.loading = false;

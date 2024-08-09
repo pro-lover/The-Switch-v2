@@ -23,8 +23,8 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 	public loading = false;
 	public submitted = false;
 
-	public formContainers!:any[];
-	public formComponentMeta:any;
+	public formContainers!: any[];
+	public formComponentMeta: any;
 
 	//
 	@Input() dataBanner!: any;
@@ -43,7 +43,7 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 		private formBuilder: FormBuilder,
 		private alertService: AlertService,
 		private componentService: ComponentService
-	) {}
+	) { }
 
 	// convenience getter for easy access to form fields for editing components data
 	get ftemplatecomponent() { return this.FormGroupComponentDuplicate.controls; }
@@ -61,16 +61,16 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 		this._destroy$.complete();
 	}
 
-	public initialise():void {
+	public initialise(): void {
 
-		//console.log('dataBanner', this.dataBanner);
-		//console.log('dataComponent', this.dataComponent);
-		//console.log('sampleComponentName', this.dataComponent.componenttype.name.toLowerCase() );
+		////console.log('dataBanner', this.dataBanner);
+		////console.log('dataComponent', this.dataComponent);
+		////console.log('sampleComponentName', this.dataComponent.componenttype.name.toLowerCase() );
 
 		this.formContainers = this.dataBanner.containers;
-		this.formComponentMeta = this.dataComponent.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+		this.formComponentMeta = this.dataComponent.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 
-		//console.log('formComponentMeta', this.formComponentMeta );
+		////console.log('formComponentMeta', this.formComponentMeta );
 		//this.dataComponent = event;
 
 		this.prepareForm();
@@ -94,27 +94,27 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 		this.FormGroupComponentDuplicate = this.formBuilder.group({
 			name: [sampleComponentName, Validators.required],
 			description: ['N/A', Validators.required],
-			smart: [ this.dataComponent.smart, Validators.required],
-			status: [ true, Validators.required],
-			componenttypeId: [ this.dataComponent.componenttypeId, Validators.required],
-			containerId: [ '', Validators.required],
-			componentmeta: [ this.formComponentMeta, Validators.required],
+			smart: [this.dataComponent.smart, Validators.required],
+			status: [true, Validators.required],
+			componenttypeId: [this.dataComponent.componenttypeId, Validators.required],
+			containerId: ['', Validators.required],
+			componentmeta: [this.formComponentMeta, Validators.required],
 		});
 
 		this.ftemplatecomponent['containerId'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
-			console.log('Updated Selected Container ID:', value);
+			//console.log('Updated Selected Container ID:', value);
 		});
 
 	}
 
-	private noSpecialCharactersandSpace ( str:string ):string {
+	private noSpecialCharactersandSpace(str: string): string {
 
 		return str.replace(/[^\w]/gi, '_');
 		//return str.replace(/[^A-Z0-9]+/ig, "_");
 
 	}
 
-	private getRandomArbitrary(min:number, max:number) {
+	private getRandomArbitrary(min: number, max: number) {
 		return Math.random() * (max - min) + min;
 	}
 
@@ -127,9 +127,9 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 	 * newComponentObs is subscribed to banner.creator.directive.ts
 	 *
 	 */
-	private broadcastNewComponent( newComponent: any ) {
+	private broadcastNewComponent(newComponent: any) {
 
-		console.log('Broadcast Duplicated Component:', newComponent);
+		//console.log('Broadcast Duplicated Component:', newComponent);
 
 		this.FDCEvent.emit(newComponent);
 	}
@@ -152,7 +152,7 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 			return;
 		}
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm duplicate action?',
 				message: 'Are you sure you want to duplicate this component: ' + this.dataComponent.name + '?.'
@@ -185,27 +185,27 @@ export class TemplateBannerDuplicateDialogComponent implements OnInit, OnDestroy
 			return;
 		}
 
-		console.log('Saving Component:', this.FormGroupComponentDuplicate.value);
+		//console.log('Saving Component:', this.FormGroupComponentDuplicate.value);
 
 		//return;
 
 		this.componentService.create(this.FormGroupComponentDuplicate.value)
-		.pipe(last())
-		.subscribe({
-			next: ( duplicatedComponent:any ) => {
+			.pipe(last())
+			.subscribe({
+				next: (duplicatedComponent: any) => {
 
-				this.alertService.success('Component Duplicated Successfully', { keepAfterRouteChange: true });
+					this.alertService.success('Component Duplicated Successfully', { keepAfterRouteChange: true });
 
-				this.loading = false;
+					this.loading = false;
 
-				this.broadcastNewComponent( duplicatedComponent );
+					this.broadcastNewComponent(duplicatedComponent);
 
-			},
-			error: error => {
-				this.alertService.error(error);
-				this.loading = false;
-			}
-		});
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 
 	}
 }

@@ -25,11 +25,11 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 	public submitted = false;
 	public changesHaveBeenSaved = true;
 
-	public pageData$!:Observable<any>;
+	public pageData$!: Observable<any>;
 
-	public formDataAnimations:any = [];
-	public formDataAnimationTypes:any = [];
-	public formDataEasingTypes:any = [];
+	public formDataAnimations: any = [];
+	public formDataAnimationTypes: any = [];
+	public formDataEasingTypes: any = [];
 
 	//
 	@Input() dataContainer!: Container;
@@ -70,23 +70,23 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 	ngOnInit() {
 
-		console.log('EditActiveAnimation:', this.EditActiveAnimation);
+		//console.log('EditActiveAnimation:', this.EditActiveAnimation);
 
 		this.prepareEditFormValues();
 		//this.isAddMode = false;
 
 		this.initialise();
 
-		this.componentAnimationPositionUpdateReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.componentAnimationPositionUpdateReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn('componentAnimationPositionUpdateReceived:', evt);
-			this.updateEditFormValues(evt.posData.val/1000);
+			this.updateEditFormValues(evt.posData.val / 1000);
 		});
 
 		/** /
 		this.EditActiveAnimationReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
 
-			console.log('EditActiveAnimationReceived:', evt);
+			//console.log('EditActiveAnimationReceived:', evt);
 			this.EditActiveAnimationsEdit(evt);
 		});
 		/**/
@@ -103,10 +103,10 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 		this._destroy$.complete();
 	}
 
-	private initialise():void {
+	private initialise(): void {
 
 		/** /
-		console.log('Available Defaults:', {
+		//console.log('Available Defaults:', {
 			'formComponent': this.formComponent,
 			'dataBanner': this.dataBanner,
 			'dataContainer': this.dataContainer,
@@ -121,21 +121,21 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 				this.easingTypeService.getAll()
 			]
 		)
-		.pipe(
-			map(([animations, animationTypes, easingTypes]):any => {
-				// combineLatest returns an array of values, here we map those values to an object
-				return { animations, animationTypes, easingTypes };
-			})
-		);
+			.pipe(
+				map(([animations, animationTypes, easingTypes]): any => {
+					// combineLatest returns an array of values, here we map those values to an object
+					return { animations, animationTypes, easingTypes };
+				})
+			);
 
-		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.pageData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			//console.info('Animation Dialog Component initialise', data);
 
 			this.prepPageData(data);
 		});
 	}
 
-	private prepPageData(data:any):void {
+	private prepPageData(data: any): void {
 
 		this.formDataAnimations = data.animations;
 		this.formDataAnimationTypes = data.animationTypes;
@@ -160,25 +160,25 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 			easingtypeId: [this.EditActiveAnimation.easingtypeId, Validators.required],
 			name: [this.EditActiveAnimation.name, Validators.required],
 			description: [this.EditActiveAnimation.description, Validators.required],
-			timelineorder: [this.EditActiveAnimation.timelineorder, [ Validators.required, Validators.minLength(1) ]],
+			timelineorder: [this.EditActiveAnimation.timelineorder, [Validators.required, Validators.minLength(1)]],
 			animationloop: [this.EditActiveAnimation.animationloop, Validators.required]
 		});
 
 		this.FormGroupAnimationMetaData = this.formBuilder.group({
 			animationId: [this.EditActiveAnimation.id, Validators.required],
-			startTime: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'startTime').value,
-				[ Validators.required, Validators.minLength(0) ]
+			startTime: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'startTime').value,
+			[Validators.required, Validators.minLength(0)]
 			],
-			positionX: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'positionX').value, Validators.required],
-			positionY: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'positionY').value, Validators.required],
-			opacity: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'opacity').value,
-				[ Validators.required, Validators.minLength(0), Validators.maxLength(1) ]
+			positionX: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'positionX').value, Validators.required],
+			positionY: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'positionY').value, Validators.required],
+			opacity: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'opacity').value,
+			[Validators.required, Validators.minLength(0), Validators.maxLength(1)]
 			],
-			scaleX: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'scaleX').value, Validators.nullValidator],
-			scaleY: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'scaleY').value, Validators.nullValidator],
-			rotation: [ this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'rotation').value, Validators.nullValidator],
-			duration: [	this.EditActiveAnimation.animationmeta.find((x:any)=>x.name === 'duration').value,
-				[ Validators.required, Validators.minLength(0), Validators.maxLength(this.dataContainer.duration) ]
+			scaleX: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'scaleX').value, Validators.nullValidator],
+			scaleY: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'scaleY').value, Validators.nullValidator],
+			rotation: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'rotation').value, Validators.nullValidator],
+			duration: [this.EditActiveAnimation.animationmeta.find((x: any) => x.name === 'duration').value,
+			[Validators.required, Validators.minLength(0), Validators.maxLength(this.dataContainer.duration)]
 			]
 		});
 
@@ -186,7 +186,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 	}
 
-	private updateEditFormValues(posValue:number):void {
+	private updateEditFormValues(posValue: number): void {
 
 		this.changesHaveBeenSaved = false;
 		this.FormGroupAnimationMetaData.markAsDirty();
@@ -239,7 +239,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 			//this.broadcastUpdatedAnimationInputChanges(animationMetaData);
 
-			//console.log('positionX:', value, this.EditActiveAnimation, animationMetaData);
+			////console.log('positionX:', value, this.EditActiveAnimation, animationMetaData);
 		});
 		this.fcomponentanimationmeta['positionY'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 			const animationMetaData = this.setupUpdatedAnimationMetaData();
@@ -270,7 +270,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 	}
 
-	private broadcastUpdatedAnimationInputChanges( animationMetaData: any ) {
+	private broadcastUpdatedAnimationInputChanges(animationMetaData: any) {
 
 		this.EditAnimationEvent.emit({
 			name: this.EditActiveAnimation.name,
@@ -290,7 +290,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 		if (!event) return;
 
-		console.log('EditActiveAnimationsEdit', event);
+		//console.log('EditActiveAnimationsEdit', event);
 
 		this.EditActiveAnimation = event;
 
@@ -301,11 +301,11 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 	}
 	/**/
 
-	public closeActiveAnimationEdit():void {
+	public closeActiveAnimationEdit(): void {
 		this.EditAnimationcloseEvent.emit();
 	}
 
-	public saveActiveAnimationsEdit(id:string):void {
+	public saveActiveAnimationsEdit(id: string): void {
 
 		if (this.FormGroupAnimationMetaData.invalid) {
 			this.alertService.error('Please ensure all the Animation Fields are completed correctly.');
@@ -313,11 +313,11 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 			return;
 		}
 
-		//console.log('saveActiveAnimationsEdit', this.EditActiveAnimation, this.FormGroupEditComponentMeta.value);
+		////console.log('saveActiveAnimationsEdit', this.EditActiveAnimation, this.FormGroupEditComponentMeta.value);
 
 		this.EditActiveAnimation.isSaving = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Update Action',
 				message: 'Are you sure you want to update: ' + this.EditActiveAnimation.name + '?.'
@@ -336,7 +336,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 		});
 	}
 
-	private saveUpdatedAnimationToDB(id:string) {
+	private saveUpdatedAnimationToDB(id: string) {
 
 		const newMeta = {
 			//animationId: id,
@@ -348,36 +348,36 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 		//this.EditActiveAnimation.isSaving = false;
 		//return;
 
-		this.animationService.updateAnimationMeta( id, newMeta)
+		this.animationService.updateAnimationMeta(id, newMeta)
 			.pipe(first())
 			.subscribe({
-				next: (updatedAnimation:any) => {
+				next: (updatedAnimation: any) => {
 
-					//console.log('saveUpdatedAnimationToDB complete', this.EditActiveAnimation);
+					////console.log('saveUpdatedAnimationToDB complete', this.EditActiveAnimation);
 
-					this.alertService.success(  this.EditActiveAnimation.name + ' updated successfully.', { keepAfterRouteChange: true });
+					this.alertService.success(this.EditActiveAnimation.name + ' updated successfully.', { keepAfterRouteChange: true });
 
 					this.EditActiveAnimation.isSaving = false;
 
 					this.broadcastUpdatedAnimationInputChanges(newMeta.animationmeta);
 
 				},
-				error: (error:string) => {
+				error: (error: string) => {
 					this.alertService.error(error);
 					this.EditActiveAnimation.isSaving = false;
 				}
 			});
 	}
 
-	public deleteActiveAnimationsEdit(id:string):void {
+	public deleteActiveAnimationsEdit(id: string): void {
 
-		//console.log('deleteActiveAnimationsEdit', this.EditActiveAnimation, this.FormGroupEditComponentMeta.value);
+		////console.log('deleteActiveAnimationsEdit', this.EditActiveAnimation, this.FormGroupEditComponentMeta.value);
 
 		this.EditActiveAnimation.isDeleting = true;
 
 		//return;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + this.EditActiveAnimation.name + '?.'
@@ -404,7 +404,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 		});
 	}
 
-	private deleteAnimationFromDb(id:string) {
+	private deleteAnimationFromDb(id: string) {
 
 		this.EditActiveAnimation.isDeleting = false;
 
@@ -412,12 +412,12 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 		//return;
 
-		this.animationService.delete( id )
+		this.animationService.delete(id)
 			.pipe(first())
 			.subscribe({
-				next: (deletedAnimation:any) => {
+				next: (deletedAnimation: any) => {
 					this.EditActiveAnimation.isDeleting = false;
-					this.alertService.success( this.EditActiveAnimation.name + ' deleted successfully.', { keepAfterRouteChange: false });
+					this.alertService.success(this.EditActiveAnimation.name + ' deleted successfully.', { keepAfterRouteChange: false });
 					this.DeleteAnimationEvent.emit(this.EditActiveAnimation);
 					this.EditAnimationcloseEvent.emit();
 				},
@@ -431,13 +431,13 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 		this.updateStatus(id, {
 			status: event.checked
 		});
 	}
 
-	private updateStatus( id: string, params: any ):void {
+	private updateStatus(id: string, params: any): void {
 
 		this.animationService.updateStatus(id, params)
 			.pipe(first())
@@ -451,7 +451,7 @@ export class TemplateBannerAnimationEditDialogComponent implements OnInit, OnDes
 			});
 	}
 
-	public ListtrackByFn(index:number, item:any) {
+	public ListtrackByFn(index: number, item: any) {
 		return item.id; // or item.id
 	}
 }

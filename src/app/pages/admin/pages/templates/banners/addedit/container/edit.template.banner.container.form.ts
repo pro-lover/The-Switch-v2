@@ -12,7 +12,7 @@ import { first, last } from 'rxjs/operators';
 	providers: [
 		{
 			provide: STEPPER_GLOBAL_OPTIONS,
-			useValue: {showError: true},
+			useValue: { showError: true },
 		},
 	],
 })
@@ -40,7 +40,7 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 		private alertService: AlertService,
 		private componentService: ComponentService,
 		private containerService: ContainerService
-	) {}
+	) { }
 
 	// convenience getter for easy access to form fields
 	get ftemplatecontainer() { return this.FormGroupContainerData.controls; }
@@ -96,9 +96,9 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 	 * passes the updated container to the promise initialised in add.edit.banner.page.ts
 	 *
 	 */
-	private broadcastUpdatedContainer( updatedContainer: any ) {
+	private broadcastUpdatedContainer(updatedContainer: any) {
 
-		console.log('Broadcast Updated Container:', updatedContainer);
+		//console.log('Broadcast Updated Container:', updatedContainer);
 
 		this.FDCEvent.emit(updatedContainer);
 	}
@@ -141,7 +141,7 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 			this.loading = false;
 			return;
 
-		} else if ( [null, undefined, ''].includes(this.formContainer.id) ) {
+		} else if ([null, undefined, ''].includes(this.formContainer.id)) {
 
 			this.alertService.error('Container ID is missing. Please contact the Admin about this error.');
 
@@ -149,16 +149,16 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 			return;
 		}
 
-		this.containerService.update( this.formContainer.id, this.FormGroupContainerData.value )
+		this.containerService.update(this.formContainer.id, this.FormGroupContainerData.value)
 			.pipe(first())
 			.subscribe({
-				next: (updatedContainer:any) => {
+				next: (updatedContainer: any) => {
 
 					this.alertService.success('Container updated Successfully.', { keepAfterRouteChange: true });
 
 					this.loading = false;
 
-					this.broadcastUpdatedContainer( updatedContainer );
+					this.broadcastUpdatedContainer(updatedContainer);
 
 				},
 				error: error => {
@@ -171,12 +171,12 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 
 	private deleteContainer() {
 
-		this.containerService.delete( this.formContainer.id )
+		this.containerService.delete(this.formContainer.id)
 			.pipe(first())
 			.subscribe({
 				next: () => {
 
-					if( this.formContainer.components.length > 0 ) {
+					if (this.formContainer.components.length > 0) {
 
 						const noofcontainerstodelete = this.formContainer.components.length;
 
@@ -186,7 +186,7 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 							const containerComp = this.formContainer.components[index];
 
 							componentsDeletePromises.push(
-								this.componentService.delete( containerComp.id )
+								this.componentService.delete(containerComp.id)
 							);
 						}
 
@@ -208,25 +208,25 @@ export class TemplatesEditContainerFormDialogComponent implements OnInit, OnDest
 								}
 							});
 
-							/** /
-							this.componentService.delete( this.EditActiveComponent.id )
-								.pipe(first())
-								.subscribe({
-									next: () => {
-										this.EditActiveComponent.isDeleting = false;
-										this.alertService.success( this.EditActiveComponent.name + ' deleted successfully.', { keepAfterRouteChange: false });
-										this.DeleteComponentEvent.emit(this.EditActiveComponent);
-										this.EditComponentcloseEvent.emit();
-									},
-									error: error => {
-										this.EditActiveComponent.isDeleting = false;
-										this.alertService.error(error);
+						/** /
+						this.componentService.delete( this.EditActiveComponent.id )
+							.pipe(first())
+							.subscribe({
+								next: () => {
+									this.EditActiveComponent.isDeleting = false;
+									this.alertService.success( this.EditActiveComponent.name + ' deleted successfully.', { keepAfterRouteChange: false });
+									this.DeleteComponentEvent.emit(this.EditActiveComponent);
+									this.EditComponentcloseEvent.emit();
+								},
+								error: error => {
+									this.EditActiveComponent.isDeleting = false;
+									this.alertService.error(error);
 
-									}
-								});
+								}
+							});
 
-							this.broadcastUpdatedContainer( updatedContainer );
-							/**/
+						this.broadcastUpdatedContainer( updatedContainer );
+						/**/
 
 					} else {
 						this.alertService.success('Container deleted Successfully.', { keepAfterRouteChange: true });

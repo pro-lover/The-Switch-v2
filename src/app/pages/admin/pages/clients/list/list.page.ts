@@ -60,17 +60,17 @@ export class ClientsListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.clientService.client
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					//console.log('collection subscription:', clients);
+				(clients: Client[]) => {
+					////console.log('collection subscription:', clients);
 
 					this.allData = clients;
 
-					if( clients !== undefined && clients.length > 0 ) {
+					if (clients !== undefined && clients.length > 0) {
 						this.initialise(clients);
 
 					}
@@ -96,14 +96,14 @@ export class ClientsListPage implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
 		newdata = this.allData;
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -111,7 +111,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 		this.initialise(newdata);
 
 	}
-	private initialise( clients:Client[]):void {
+	private initialise(clients: Client[]): void {
 
 		this.primaryData = clients;
 		this.sortedData = this.primaryData.slice();
@@ -122,7 +122,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -131,27 +131,27 @@ export class ClientsListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
-        this.clientService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
-                    //this.router.navigate(['../../'], { relativeTo: this.route });
+	private updateStatus(id: string, params: any): void {
+		this.clientService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
+					//this.router.navigate(['../../'], { relativeTo: this.route });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public deleteModel(id: string): void {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -166,17 +166,17 @@ export class ClientsListPage implements OnInit, OnDestroy {
 					.subscribe({
 						next: () => {
 							model.isDeleting = false;
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = new Date();
 									x.status = false;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -194,7 +194,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -208,19 +208,19 @@ export class ClientsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = null;
 									x.status = true;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -241,9 +241,9 @@ export class ClientsListPage implements OnInit, OnDestroy {
 	private onboarding(): void {
 
 		this.introJS.setOptions({
-		showStepNumbers: true,
-		showProgress: true,
-			steps : [
+			showStepNumbers: true,
+			showProgress: true,
+			steps: [
 				{
 					intro: 'Click here to create a new client.',
 					title: 'Clients',
@@ -275,7 +275,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 					element: '#btn-delete'
 				}
 			]
-		  });
+		});
 	}
 
 	public help(): void {
@@ -284,24 +284,24 @@ export class ClientsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 			return {
 				'ID': data.id,
 				'Name': data.name,
 				'Description': data.description,
-				'No. of Projects' : data.projects.length,
-				'No. of Templates' : data.templates.length,
+				'No. of Projects': data.projects.length,
+				'No. of Templates': data.templates.length,
 				'Status': (data.status === true) ? 'Active' : 'Inactive',
 				'created': this.datePipe.transform(data.created, 'yyyy-MM-dd HH:mm:ss'),
 				'updated': this.datePipe.transform(data.updated, 'yyyy-MM-dd HH:mm:ss'),
@@ -323,7 +323,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -349,7 +349,7 @@ export class ClientsListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

@@ -8,8 +8,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Account, BannerType, Role,BannerSize ,Client, ComponentModel, Template} from '@app/core/models';
-import { AccountService, AlertService,BannerSizeService, BannerTypeService, ClientService, ComponentService, TemplateService } from '@app/core/services';
+import { Account, BannerType, Role, BannerSize, Client, ComponentModel, Template } from '@app/core/models';
+import { AccountService, AlertService, BannerSizeService, BannerTypeService, ClientService, ComponentService, TemplateService } from '@app/core/services';
 import * as introJs from 'intro.js';
 import { Observable, Subject } from 'rxjs';
 import { first, map, startWith, takeUntil } from 'rxjs/operators';
@@ -97,28 +97,28 @@ export class BannerTypesAddEditPage implements OnInit {
 		this.account = this.accountService.accountValue;
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		//this.accountService.account
 		//	.pipe(takeUntil(this._destroy$))
 		//	.subscribe(
 		//		(bannerType:BannerType[]) =>  {
-					//console.log('collection subscription:', componentModels);
+		////console.log('collection subscription:', componentModels);
 
-			//		this.allData = bannerType;
+		//		this.allData = bannerType;
 
-			//		if( bannerType !== undefined && bannerType.length > 0 ) {
-				//		this.initialise(bannerType);
+		//		if( bannerType !== undefined && bannerType.length > 0 ) {
+		//		this.initialise(bannerType);
 
-				//		this.initialiseTextFilters();
-				//	}
-				//}
-			//);
-			this.templateService.getAll()
+		//		this.initialiseTextFilters();
+		//	}
+		//}
+		//);
+		this.templateService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('templates', templates);
+				(templates: Template[]) => {
+					////console.log('templates', templates);
 					this.filterDataTemplates = templates;
 				}
 			);
@@ -126,8 +126,8 @@ export class BannerTypesAddEditPage implements OnInit {
 		this.bannerTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannertypes:BannerType[]) =>  {
-					//console.log('bannertypes', bannertypes);
+				(bannertypes: BannerType[]) => {
+					////console.log('bannertypes', bannertypes);
 					this.filterDataBannerTypes = bannertypes;
 				}
 			);
@@ -135,8 +135,8 @@ export class BannerTypesAddEditPage implements OnInit {
 		this.bannerSizeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('bannersizes', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('bannersizes', bannersizes);
 					this.filterDataBannerSizes = bannersizes;
 				}
 			);
@@ -144,8 +144,8 @@ export class BannerTypesAddEditPage implements OnInit {
 		this.clientService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					//console.log('Clients', clients);
+				(clients: Client[]) => {
+					////console.log('Clients', clients);
 					this.filterDataClients = clients;
 				}
 			);
@@ -155,7 +155,7 @@ export class BannerTypesAddEditPage implements OnInit {
 	// filters
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -165,18 +165,18 @@ export class BannerTypesAddEditPage implements OnInit {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -203,11 +203,11 @@ export class BannerTypesAddEditPage implements OnInit {
 				break;
 		}
 
-		//console.log('selectedTextFilter['+type+']:', this.sortedData);
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -222,7 +222,7 @@ export class BannerTypesAddEditPage implements OnInit {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -237,32 +237,32 @@ export class BannerTypesAddEditPage implements OnInit {
 
 		newdata = this.allData;
 
-		if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.template.clientId === this.clientFilterValue.value
 			});
 		}
 
-		if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.templateId === this.templateFilterValue.value
 			});
 		}
 
-		if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.bannertypeId === this.bannertypeFilterValue.value
 			});
 		}
 
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.container.banner.bannersizeId === this.bannersizeFilterValue.value
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -352,7 +352,7 @@ export class BannerTypesAddEditPage implements OnInit {
 
 	}
 
-	private initialise( componentModels:ComponentModel[]):void {
+	private initialise(componentModels: ComponentModel[]): void {
 
 		this.primaryData = componentModels;
 		this.sortedData = this.primaryData.slice();
@@ -377,7 +377,7 @@ export class BannerTypesAddEditPage implements OnInit {
 		if (!this.isAddMode) {
 			this.bannerTypeService.getById(this.id)
 				.pipe(first())
-				.subscribe( (x) => {
+				.subscribe((x) => {
 					this.form.patchValue(x);
 				});
 		}
@@ -450,33 +450,33 @@ export class BannerTypesAddEditPage implements OnInit {
 	}
 
 	private createRecord() {
-        this.bannerTypeService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.bannerTypeService.create(this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
+					this.router.navigate(['../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	private updateRecord() {
-        this.bannerTypeService.update(this.id, this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.bannerTypeService.update(this.id, this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Update successful', { keepAfterRouteChange: true });
+					this.router.navigate(['../../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 	private iterator(): void {
 		const end = (this.currentPage + 1) * this.pageSize;

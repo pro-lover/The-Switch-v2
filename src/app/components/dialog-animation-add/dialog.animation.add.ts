@@ -20,12 +20,12 @@ export class DialogBannerContainerAnimationAddComponent {
 		public dialogRef: MatDialogRef<DialogBannerContainerAnimationAddComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
-		console.log('DialogBannerContainerAnimationAddComponent:', this.data);
+		//console.log('DialogBannerContainerAnimationAddComponent:', this.data);
 	}
 
-	public passAnimationFromDialog(component:any) {
+	public passAnimationFromDialog(component: any) {
 
-		//console.log('Adding Animation to Component From Dialog:', component);
+		////console.log('Adding Animation to Component From Dialog:', component);
 
 		this.passAnimation = component;
 

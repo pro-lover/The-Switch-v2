@@ -14,7 +14,7 @@ const ruler = (window as any).ruler;
 const GIF = (window as any).GIF;
 
 @Component({
-    selector: 'app-banner-creator',
+	selector: 'app-banner-creator',
 	templateUrl: './banner.creator.component.html',
 	styleUrls: ['./banner.creator.component.scss']
 })
@@ -41,14 +41,14 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	/**/
 	//
 	public stages: any[] = [];
-    public stage!: createjs.Stage;
-    private stageName!: string;
+	public stage!: createjs.Stage;
+	private stageName!: string;
 	private canvasName!: string;
 	private stageCounter = 0;
 
 	// collection of Templates retrieved from the server.
 
-    // variables for determing banner layout and positioning of elements
+	// variables for determing banner layout and positioning of elements
 	@Input() dataBanner!: any;
 	@Input() dataContainer!: any;
 	private BannerComponents: any[] = [];
@@ -113,54 +113,54 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	@HostListener('mousemove', ['$event']) onMouseMove($event: MouseEvent){
+	@HostListener('mousemove', ['$event']) onMouseMove($event: MouseEvent) {
 
 		const elemOfInterest = this.elementRef.nativeElement.querySelector('#' + this.canvasName);
 
-		const  	x_input:HTMLInputElement = this.document.querySelector('#coordinate-x') as HTMLInputElement,
-				y_input:HTMLInputElement = this.document.querySelector('#coordinate-y') as HTMLInputElement;
+		const x_input: HTMLInputElement = this.document.querySelector('#coordinate-x') as HTMLInputElement,
+			y_input: HTMLInputElement = this.document.querySelector('#coordinate-y') as HTMLInputElement;
 
 		let mouseX = ($event.clientX - elemOfInterest.getBoundingClientRect().left);
 		let mouseY = ($event.clientY - elemOfInterest.getBoundingClientRect().top);
-		if( x_input !== null ){
-			if ( mouseX > this.dataBanner.bannersize.width ) {
+		if (x_input !== null) {
+			if (mouseX > this.dataBanner.bannersize.width) {
 				mouseX = this.dataBanner.bannersize.width;
-			} else if ( mouseX < 0  ){
+			} else if (mouseX < 0) {
 				mouseX = 0;
 			}
 			x_input.value = mouseX.toFixed(1);
 		}
-		if( x_input !== null ){
-			if ( mouseY > this.dataBanner.bannersize.height ) {
+		if (x_input !== null) {
+			if (mouseY > this.dataBanner.bannersize.height) {
 				mouseY = this.dataBanner.bannersize.height;
-			} else if ( mouseY < 0  ){
+			} else if (mouseY < 0) {
 				mouseY = 0;
 			}
 			y_input.value = mouseY.toFixed(1);
 		}
 	}
 
-	@HostListener('dblclick', ['$event']) ondblclick($event: MouseEvent){
+	@HostListener('dblclick', ['$event']) ondblclick($event: MouseEvent) {
 
-		if( this.previewIsActive === true || this.timelineIsPlaying === true ) {
+		if (this.previewIsActive === true || this.timelineIsPlaying === true) {
 			return;
 		}
 
 		const displayObj = this.stage.getObjectUnderPoint(this.stage.mouseX, this.stage.mouseY, 0) as any;
 
 		this.stage.children.forEach((child: any) => {
-			if( child.name === displayObj.name ) {} else {
+			if (child.name === displayObj.name) { } else {
 				child.mouseEnabled = false;
 			}
 		});
 
 		//if( displayObj.positionLock === true ) {
 
-			const relevantComponent = this.BannerComponents.find( (component: any) => component.id === displayObj.componentId);
-			console.log('Clicked on Banner Creator', displayObj, relevantComponent );
-			//console.log('this.BannerComponents:', this.BannerComponents );
+		const relevantComponent = this.BannerComponents.find((component: any) => component.id === displayObj.componentId);
+		//console.log('Clicked on Banner Creator', displayObj, relevantComponent );
+		////console.log('this.BannerComponents:', this.BannerComponents );
 
-			this.componentEditComponentActionsMenuEvent.emit(relevantComponent);
+		this.componentEditComponentActionsMenuEvent.emit(relevantComponent);
 
 		//} else {
 
@@ -170,13 +170,13 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	};
 
 	ngOnInit() {
-
+		console.log("BannerCreatorComponent ________________________________________[ ngOnInit ]");
 		// new components added
-		this.newComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.newComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn(' New File Received:', evt);
 
-			if (this.stage === undefined ) {
+			if (this.stage === undefined) {
 				return;
 			}
 
@@ -186,7 +186,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 				case 'image':
 
-					this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
+					this.stage.removeChild(this.stage.getChildByName(evt.data.name));
 
 					//this.addImage( evt.data );
 					this.populateImage(this.stage, evt.data);
@@ -195,27 +195,27 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 				case 'shape':
 
-					this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
+					this.stage.removeChild(this.stage.getChildByName(evt.data.name));
 
 					//this.addShape( evt.data );
-					this.populateShape( this.stage, evt.data );
+					this.populateShape(this.stage, evt.data);
 
 					break;
 
 				case 'text':
 
-					this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
+					this.stage.removeChild(this.stage.getChildByName(evt.data.name));
 
 					//this.addText(  evt.data );
-					this.populateText( this.stage, evt.data );
+					this.populateText(this.stage, evt.data);
 
 					break;
 
 				case 'button':
 
-					this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
+					this.stage.removeChild(this.stage.getChildByName(evt.data.name));
 
-					this.populateButton( this.stage, evt.data );
+					this.populateButton(this.stage, evt.data);
 
 					break;
 
@@ -225,18 +225,18 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 			this.BannerComponents.push(evt.data);
 
-			console.log('Updated BannerComponents: ', this.BannerComponents);
+			//console.log('Updated BannerComponents: ', this.BannerComponents);
 
 		});
 
 		//
-		this.componentMenuStateReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.componentMenuStateReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn('componentMenuStateReceived Received:', evt);
 
 			//if (!evt) return;
 
-			if( evt === false && this.stage?.children.length > 0 ) {
+			if (evt === false && this.stage?.children.length > 0) {
 
 				//console.warn('componentMenuStateReceived Yo!:');
 
@@ -251,7 +251,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// updating component details based on Dialog Inputs
-		this.updateComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.updateComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn(' Updated Component Received:', evt);
 
@@ -267,33 +267,33 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 				case 'image':
 
-						if( evt.data.componentmeta.dataFile === undefined ) {
+					if (evt.data.componentmeta.dataFile === undefined) {
 
-							//this.updateImageCoordinates( this.stage, evt.data );
+						//this.updateImageCoordinates( this.stage, evt.data );
 
-							child.updatePositioning( evt.data );
-							this.sortStageChildern(this.stage);
+						child.updatePositioning(evt.data);
+						this.sortStageChildern(this.stage);
 
-						} else {
+					} else {
 
-							child.updateImage( evt.data )
+						child.updateImage(evt.data)
 							.then(() => {
 
 								this.stage.update();
 								this.sortStageChildern(this.stage);
 							});
 
-							//this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
-							//this.addImage( this.stage, evt.data );
-							//this.sortStageChildern();
+						//this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
+						//this.addImage( this.stage, evt.data );
+						//this.sortStageChildern();
 
-						}
+					}
 
 					break;
 
 				case 'shape':
 
-					child.update( evt.data );
+					child.update(evt.data);
 					this.sortStageChildern(this.stage);
 
 					//this.stage.removeChild(this.stage.getChildByName(evt.data.name ));
@@ -304,7 +304,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 				case 'text':
 
-					child.update( evt.data );
+					child.update(evt.data);
 					//this.stage.update();
 					this.sortStageChildern(this.stage);
 
@@ -316,7 +316,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 				case 'button':
 
-					child.update( evt.data );
+					child.update(evt.data);
 					//this.stage.update();
 					this.sortStageChildern(this.stage);
 
@@ -329,7 +329,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// lock/unlock component
-		this.unlockComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.unlockComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn(' Unlock Component Received:', evt);
 
@@ -341,7 +341,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 			//console.warn(' Unlock Component Received:', evt, stageComp);
 
-			if( [undefined, null].includes(stageComp) ) {} else {
+			if ([undefined, null].includes(stageComp)) { } else {
 				stageComp.positionLock = evt.data;
 			}
 
@@ -356,7 +356,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// remove component
-		this.deleteComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.deleteComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			//console.warn(' Delete Component Received:', evt);
 
@@ -367,9 +367,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			const stageComp = this.stage.getChildByName(evt.data.name);
 			this.stage.removeChild(stageComp);
 
-			this.BannerComponents = this.BannerComponents.filter( (comp: any) => comp.id !== evt.data.id );
+			this.BannerComponents = this.BannerComponents.filter((comp: any) => comp.id !== evt.data.id);
 
-			console.log('Updated BannerComponents: ', this.BannerComponents);
+			//console.log('Updated BannerComponents: ', this.BannerComponents);
 
 			//this.removeMenuButton(this.stage, evt.data);
 
@@ -378,26 +378,26 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// refresh stage request / switch between active containers
-		this.refreshStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.refreshStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 			// refresh stage request
-			if (this.stage && evt === true ) {
-				//console.log('Refresh Banner Event Received.');
+			if (this.stage && evt === true) {
+				////console.log('Refresh Banner Event Received.');
 				//this.stage.update();
 				this.rebuildBanner(this.stage)
-				.then((stageComponentObj:any) => {
-					this.alertService.info( 'Canvas Refreshed.', { keepAfterRouteChange: true });
+					.then((stageComponentObj: any) => {
+						this.alertService.info('Canvas Refreshed.', { keepAfterRouteChange: true });
 
-					this.setupStageEventListeners(this.stage);
+						this.setupStageEventListeners(this.stage);
 
-					if( this.renderAnimationsActive === true ) {
+						if (this.renderAnimationsActive === true) {
 
-						this.initialiseGSAPAnimations( this.stage, stageComponentObj.tweens.flat() );
+							this.initialiseGSAPAnimations(this.stage, stageComponentObj.tweens.flat());
 
-					}
-				});
+						}
+					});
 
-			// switch between active containers
-			} else if( typeof evt === 'object' ) {
+				// switch between active containers
+			} else if (typeof evt === 'object') {
 
 				//this.emptyActiveComponentsAndAnimations();
 				//this.emptyActiveAnimations();
@@ -407,33 +407,33 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				this.BannerComponents = this.dataContainer.components;
 
 				this.populate(this.stage, this.dataContainer.components)
-				.then((stageComponentObj:any) => {
-					this.alertService.success( evt.name + ' Loaded.', { keepAfterRouteChange: true });
+					.then((stageComponentObj: any) => {
+						this.alertService.success(evt.name + ' Loaded.', { keepAfterRouteChange: true });
 
-					this.setupStageEventListeners(this.stage);
+						this.setupStageEventListeners(this.stage);
 
-					if( this.renderAnimationsActive === true ) {
+						if (this.renderAnimationsActive === true) {
 
-						this.initialiseGSAPAnimations( this.stage, stageComponentObj.tweens.flat() );
+							this.initialiseGSAPAnimations(this.stage, stageComponentObj.tweens.flat());
 
-					}
-				});
+						}
+					});
 
-				//console.log('New Frame Boet!', evt);
+				////console.log('New Frame Boet!', evt);
 			}
 		});
 
 		// play animation request for all frames/containers
-		this.playAnimationGlobalStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.playAnimationGlobalStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			if (this.stage && evt === true ) {
+			if (this.stage && evt === true) {
 
 				//this.playGlobalAnimation( this.stages[this.currentPage].timeline );
-				this.playGSAPGlobalAnimation( this.stages[this.currentPage].timeline );
+				this.playGSAPGlobalAnimation(this.stages[this.currentPage].timeline);
 
 				this.timelineIsPlaying = true;
 
-			} else if (this.stage && evt === false ) {
+			} else if (this.stage && evt === false) {
 
 				//console.warn('Pause Banner Animation Event Received.', evt, this.animationTimelineComplete, this.loopTimeline);
 				//this.stages[this.currentPage].timeline.setPaused(true);
@@ -452,16 +452,16 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// play animation request for active frame/container
-		this.playAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.playAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			if (this.stage && evt === true ) {
+			if (this.stage && evt === true) {
 
 				//this.playGSAPFrameAnimation(this.stages[this.currentPage].timeline);
 				this.playGSAPFrameAnimation(this.containerTimeline);
 
 				this.timelineIsPlaying = true;
 
-			} else if (this.stage && evt === false ) {
+			} else if (this.stage && evt === false) {
 
 				//this.stages[0].timeline.pause();
 				this.containerTimeline.pause();
@@ -482,7 +482,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 		/**/
 
-		this.loopAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.loopAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			if (this.stage) {
 
@@ -494,67 +494,67 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		// preview stage request (send blob back)
-		this.previewCreativeReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.previewCreativeReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			this.CreativeReadyEvent.emit(false);
 
-			if( evt === true ) {
-				//console.log('Preview Creative Event Received.');
+			if (evt === true) {
+				////console.log('Preview Creative Event Received.');
 
 				this.previewIsActive = true;
 
 				this.generateAllFramePages()
-				.then( (results: any) => {
+					.then((results: any) => {
 
-					const allTweens:any = [];
+						const allTweens: any = [];
 
-					results.forEach( (result:any) => {
+						results.forEach((result: any) => {
 
-						this.stages.push({
-							stage: result.stage,
-							components: result.components,
-							timeline: result.timeline,
-							tweens: result.tweens
+							this.stages.push({
+								stage: result.stage,
+								components: result.components,
+								timeline: result.timeline,
+								tweens: result.tweens
+							});
+
+							allTweens.push(this.buildGSAPAnimationTimeline(result.tweens.flat()));
+
 						});
 
-						allTweens.push(this.buildGSAPAnimationTimeline( result.tweens.flat()));
+						Promise.all(allTweens)
+							.then((timelines: any) => {
+
+								timelines.forEach((timeline: any, index: number) => {
+									this.stages[index + 1].timeline = timeline;
+								});
+
+								this.stage = this.stages[0].stage;
+								this.stage.update();
+								this.intialisePagination();
+
+								//console.log('this.stages', this.stages);
+
+								this.alertService.info('Preview active.', { keepAfterRouteChange: true });
+
+								this.CreativeReadyEvent.emit(true);
+
+							});
 
 					});
 
-					Promise.all(allTweens)
-					.then( (timelines: any) => {
-
-						timelines.forEach( (timeline:any, index:number) => {
-							this.stages[index+1].timeline = timeline;
-						});
-
-						this.stage = this.stages[0].stage;
-						this.stage.update();
-						this.intialisePagination();
-
-						console.log('this.stages', this.stages);
-
-						this.alertService.info( 'Preview active.', { keepAfterRouteChange: true });
-
-						this.CreativeReadyEvent.emit(true);
-
-					});
-
-				});
-
-			} else if( evt === false ) {
+			} else if (evt === false) {
 
 				this.previewIsActive = false;
 
 				this.rebuildBanner(this.stages[0].stage)
-					.then((stageComponentObj:any) => {
+					.then((stageComponentObj: any) => {
 
 						this.stage = stageComponentObj.stage;
 						createjs.Ticker.addEventListener("tick", this.stage);
 
 						this.stage.update();
 
-						this.stages.splice( 0, (this.stages.length) );
+						this.stages.splice(0, (this.stages.length));
 
 						this.stages.push({
 							stage: stageComponentObj.stage,
@@ -563,19 +563,19 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 							tweens: stageComponentObj.tweens
 						});
 
-						if( this.renderAnimationsActive === true ) {
+						if (this.renderAnimationsActive === true) {
 
-							this.initialiseGSAPAnimations( this.stage, stageComponentObj.tweens.flat() );
+							this.initialiseGSAPAnimations(this.stage, stageComponentObj.tweens.flat());
 
 						}
 
 						this.resetPagination();
 						this.intialisePagination();
 
-						//console.log('this.stages', this.stages);
-						//console.log('this.stage', this.stage);
+						////console.log('this.stages', this.stages);
+						////console.log('this.stage', this.stage);
 
-						this.alertService.info( 'Preview Disabled.', { keepAfterRouteChange: true });
+						this.alertService.info('Preview Disabled.', { keepAfterRouteChange: true });
 
 						this.CreativeReadyEvent.emit(true);
 					});
@@ -585,19 +585,19 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 		// generate export request
 		// edit component controls
-		this.generateExportReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.generateExportReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			if (!evt) return;
 
-			console.log('Export Creative Event Received.', evt);
+			//console.log('Export Creative Event Received.', evt);
 
 			switch (this.dataBanner.bannertype.name) {
 
 				case 'Static JPG':
 
 					const anchor = document.createElement("a");
-					anchor.setAttribute( "download", 'preview.jpg');
-					anchor.setAttribute( "href", this.stage.toDataURL('#FFFFFF', 'image/jpeg'));
+					anchor.setAttribute("download", 'preview.jpg');
+					anchor.setAttribute("href", this.stage.toDataURL('#FFFFFF', 'image/jpeg'));
 
 					anchor.click();
 
@@ -616,9 +616,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 					//return;
 					this.generateAllFramePages().then((results: any) => {
 
-						//console.log('stage', results, this.stages);
+						////console.log('stage', results, this.stages);
 
-						results.forEach( (result:any) => {
+						results.forEach((result: any) => {
 
 							this.stages.push({
 								stage: result.stage,
@@ -629,65 +629,65 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 						// https://stackoverflow.com/questions/21913673/execute-web-worker-from-different-origin
 						this.urlContentToDataUri(`${environment.apiUrl}/gif.worker.js`)
-						.then(
-							(WorkerScriptResult) =>{
-								//console.log('result', result);
+							.then(
+								(WorkerScriptResult) => {
+									////console.log('result', result);
 
-								// loop through containers.
-								const creativeFrames:any[] = [];
+									// loop through containers.
+									const creativeFrames: any[] = [];
 
-								for (let index = 0; index < this.stages.length; index++) {
-									const stage = this.stages[index].stage;
-									//console.log('stage', stage);
-									creativeFrames.push(this.generateGIFFrame(stage));
-									//this.sleep(5000);
+									for (let index = 0; index < this.stages.length; index++) {
+										const stage = this.stages[index].stage;
+										////console.log('stage', stage);
+										creativeFrames.push(this.generateGIFFrame(stage));
+										//this.sleep(5000);
+									}
+
+									Promise.all(creativeFrames).then((values) => {
+										////console.log('generateGIFFrame results', values);
+
+										// https://github.com/terikon/gif.js.optimized
+										const gif = new GIF({
+											workerScript: WorkerScriptResult,
+											workers: 2,
+											quality: 10
+											//background: '#000'
+										});
+
+										// image element or a canvas element
+										values.forEach((frame: any, index: number) => {
+											gif.addFrame(
+												frame,
+												{
+													delay: (ReceivedContainers[index].duration * 1000)
+												}
+											);
+										});
+
+										gif.on('finished', (blob: Blob) => {
+
+											////console.log('GIF Ready:');
+
+											const UItimeout = setTimeout(() => {
+
+												this.rebuildBanner(this.stage);
+
+												this.alertService.success('GIF Generated Successfully.', { keepAfterRouteChange: true });
+
+												window.open(URL.createObjectURL(blob));
+
+												this.CreativeReadyEvent.emit(true);
+
+												clearTimeout(UItimeout);
+
+											}, 2000);
+										});
+
+										gif.render();
+
+									});
 								}
-
-								Promise.all(creativeFrames).then((values) => {
-									//console.log('generateGIFFrame results', values);
-
-									// https://github.com/terikon/gif.js.optimized
-									const gif = new GIF({
-										workerScript: WorkerScriptResult,
-										workers: 2,
-										quality: 10
-										//background: '#000'
-									});
-
-									// image element or a canvas element
-									values.forEach((frame:any, index:number) => {
-										gif.addFrame(
-											frame,
-											{
-												delay: (ReceivedContainers[index].duration * 1000)
-											}
-										);
-									});
-
-									gif.on('finished', (blob: Blob)=> {
-
-										//console.log('GIF Ready:');
-
-										const UItimeout = setTimeout(() => {
-
-											this.rebuildBanner(this.stage);
-
-											this.alertService.success( 'GIF Generated Successfully.', { keepAfterRouteChange: true });
-
-											window.open(URL.createObjectURL(blob));
-
-											this.CreativeReadyEvent.emit(true);
-
-											clearTimeout(UItimeout);
-
-										}, 2000);
-									});
-
-									gif.render();
-
-								});
-							}
-						);
+							);
 					});
 
 					break;
@@ -699,60 +699,60 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 					this.stages.splice(1, this.stages.length);
 
 					this.generateAllFramePages()
-					.then( (results: any) => {
+						.then((results: any) => {
 
-						const allTweens:any = [];
+							const allTweens: any = [];
 
-						results.forEach( (result:any) => {
+							results.forEach((result: any) => {
 
-							this.stages.push({
-								stage: result.stage,
-								components: result.components,
-								timeline: result.timeline,
-								tweens: result.tweens
+								this.stages.push({
+									stage: result.stage,
+									components: result.components,
+									timeline: result.timeline,
+									tweens: result.tweens
+								});
+
+								allTweens.push(this.buildGSAPAnimationTimeline(result.tweens.flat()));
+
 							});
 
-							allTweens.push(this.buildGSAPAnimationTimeline( result.tweens.flat()));
+							Promise.all(allTweens)
+								.then((timelines: any) => {
 
-						});
-
-						Promise.all(allTweens)
-						.then( (timelines: any) => {
-
-							timelines.forEach( (timeline:any, index:number) => {
-								this.stages[index+1].timeline = timeline;
-							});
-
-							this.bannerCreatorService.buildHTML5ForExport(this.dataBanner, this.stages)
-							.then((result:any) => {
-
-								const UItimeout = setTimeout(() => {
-
-									this.rebuildBanner(this.stage)
-									.then(() => {
-
-										//console.log('HTML5 Ready:', result);
-
-										this.CreativeReadyEvent.emit(true);
-
-										this.alertService.success( 'HTML5 Generated Successfully.', { keepAfterRouteChange: true });
-
-										clearTimeout(UItimeout);
-
+									timelines.forEach((timeline: any, index: number) => {
+										this.stages[index + 1].timeline = timeline;
 									});
 
-								}, 2000);
-							})
-							.catch((err)=> {
+									this.bannerCreatorService.buildHTML5ForExport(this.dataBanner, this.stages)
+										.then((result: any) => {
 
-								this.alertService.error( err, { keepAfterRouteChange: true });
+											const UItimeout = setTimeout(() => {
 
-								this.CreativeReadyEvent.emit(true);
-							});
+												this.rebuildBanner(this.stage)
+													.then(() => {
+
+														////console.log('HTML5 Ready:', result);
+
+														this.CreativeReadyEvent.emit(true);
+
+														this.alertService.success('HTML5 Generated Successfully.', { keepAfterRouteChange: true });
+
+														clearTimeout(UItimeout);
+
+													});
+
+											}, 2000);
+										})
+										.catch((err) => {
+
+											this.alertService.error(err, { keepAfterRouteChange: true });
+
+											this.CreativeReadyEvent.emit(true);
+										});
+
+								});
 
 						});
-
-					});
 
 					break;
 
@@ -777,18 +777,18 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	}
 
 	// scrubber variables
-	private scrubberEl!:HTMLDivElement;
-	private timelineContainer!:HTMLDivElement;
-	private positionInfo:any;
+	private scrubberEl!: HTMLDivElement;
+	private timelineContainer!: HTMLDivElement;
+	private positionInfo: any;
 	private containerWidth!: number;
 	private scrubberPositionBuffer = 29;
 
 	ngAfterViewInit() {
-
-		//console.log('dataBanner', this.dataBanner);
+		console.log("BannerCreatorComponent ________________________________________[ ngAfterViewInit ]");
+		////console.log('dataBanner', this.dataBanner);
 		//this.initialiseBanner();
 
-		if( ['HTML5'].includes(this.dataBanner.bannertype.name) === true ) {
+		if (['HTML5'].includes(this.dataBanner.bannertype.name) === true) {
 			this.scrubberEl = this.document.querySelector(".scrubber") as HTMLDivElement;
 			this.timelineContainer = this.document.querySelector(".timeline-scrubber") as HTMLDivElement;
 			this.positionInfo = this.timelineContainer.getBoundingClientRect();
@@ -814,7 +814,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			enableToolTip: true
 		});
 
-		myRuler.api.setPos({x:0, y:5});
+		myRuler.api.setPos({ x: 0, y: 5 });
 
 		//myRuler.api.setScale(1.5);
 
@@ -861,7 +861,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			]
 		);
 
-		//console.log('myRuler', myRuler);
+		////console.log('myRuler', myRuler);
 		//window.myRuler = myRuler;
 
 		const bannerHolderDom = this.elementRef.nativeElement.querySelector('.banner-holder');
@@ -872,21 +872,21 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 		bannerHolderDom.style.height = (dimne.height + 100) + 'px';
 
-    }
+	}
 
-	private initialiseCreative():void {
-
+	private initialiseCreative(): void {
+		console.log("BannerCreatorComponent ________________________________________[ initialiseCreative ]");
 		this.createCanvas()
-			.then((newcanvas:HTMLCanvasElement) => {
+			.then((newcanvas: HTMLCanvasElement) => {
 				return this.setupStage(newcanvas);
 			})
-			.then((newStage:createjs.Stage) => {
+			.then((newStage: createjs.Stage) => {
 
 				this.BannerComponents = this.dataContainer.components;
 
-				return this.populate( newStage, this.dataContainer.components );
+				return this.populate(newStage, this.dataContainer.components);
 			})
-			.then((stageComponentObj:any) => {
+			.then((stageComponentObj: any) => {
 
 				//return this.generateAllFramePages();
 				this.stage = stageComponentObj.stage;
@@ -898,7 +898,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 					tweens: stageComponentObj.tweens
 				});
 
-				if( this.renderAnimationsActive === true ) {
+				if (this.renderAnimationsActive === true) {
 					//return this.generateAllFramePages();
 					return stageComponentObj;
 				} else {
@@ -906,20 +906,20 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				}
 
 			})
-			.then((stageComponentObj:any) => {
+			.then((stageComponentObj: any) => {
 
 				console.warn('InitialiseCreative complete:', stageComponentObj);
 
 				this.intialisePagination();
 				this.stage.update();
 
-				console.log('this.stages', this.stages);
+				//console.log('this.stages', this.stages);
 
-				this.setupStageEventListeners( this.stage );
+				this.setupStageEventListeners(this.stage);
 
-				if( this.renderAnimationsActive === true ) {
+				if (this.renderAnimationsActive === true) {
 
-					this.initialiseGSAPAnimations( this.stage, stageComponentObj.tweens.flat() );
+					this.initialiseGSAPAnimations(this.stage, stageComponentObj.tweens.flat());
 
 				} else {
 
@@ -928,21 +928,21 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			});
 	}
 
-	private emptyActiveStage( stage:createjs.Stage ):void {
+	private emptyActiveStage(stage: createjs.Stage): void {
 		stage.removeAllEventListeners();
 		stage.removeAllChildren();
 	}
 
 	private generateAllFramePages(): Promise<any> {
-
+		console.log("BannerCreatorComponent ________________________________________[ generateAllFramePages ]");
 		return new Promise<any>((resolve, reject) => {
 
 			let counter = 0;
-			const populationPromises:any[] = [];
+			const populationPromises: any[] = [];
 
-			this.dataBanner.containers.forEach( (container:any) =>{
+			this.dataBanner.containers.forEach((container: any) => {
 
-				if ( this.dataContainer.id === container.id ) { return; }
+				if (this.dataContainer.id === container.id) { return; }
 
 				counter++;
 
@@ -956,13 +956,13 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				stage.enableMouseOver(0);
 
 				populationPromises.push(
-					this.populate( stage, container.components )
+					this.populate(stage, container.components)
 				);
 
 			});
 
 			Promise.all(populationPromises)
-				.then((allStagesComponentsArray:any) => {
+				.then((allStagesComponentsArray: any) => {
 
 					resolve(allStagesComponentsArray);
 
@@ -972,7 +972,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private async generateGIFFrame( stage:createjs.Stage ): Promise<HTMLImageElement> {
+	private async generateGIFFrame(stage: createjs.Stage): Promise<HTMLImageElement> {
 
 		return new Promise(
 			(resolve, reject) => {
@@ -980,7 +980,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				const img = new Image();
 
 				img.addEventListener("load", async () => {
-					console.log('Frame Image Loaded');
+					//console.log('Frame Image Loaded');
 
 					resolve(img);
 
@@ -999,27 +999,27 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	 * @param banner (Object)
 	 *
 	 */
-    private createCanvas(): Promise<HTMLCanvasElement> {
-
-		console.log('createCanvas', this.dataBanner);
+	private createCanvas(): Promise<HTMLCanvasElement> {
+		console.log("BannerCreatorComponent ________________________________________[ createCanvas ]");
+		//console.log('createCanvas', this.dataBanner);
 
 		return new Promise<HTMLCanvasElement>((resolve, reject) => {
 
 			const canvas = document.createElement("canvas");
 			this.canvasName = "bannerCanvas-" + this.dataBanner.bannersize.width + '-' + this.dataBanner.bannersize.height;
 
-			canvas.setAttribute( "id", this.canvasName);
-			canvas.setAttribute( "class", 'canvas-banner');
-			canvas.setAttribute( "width", this.dataBanner.bannersize.width.toString() );
-			canvas.setAttribute( "height", this.dataBanner.bannersize.height.toString() );
+			canvas.setAttribute("id", this.canvasName);
+			canvas.setAttribute("class", 'canvas-banner');
+			canvas.setAttribute("width", this.dataBanner.bannersize.width.toString());
+			canvas.setAttribute("height", this.dataBanner.bannersize.height.toString());
 
 			//canvas.setAttribute( "style", 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);position:relative;top:15px;left:15px;' );
-			canvas.setAttribute( "style", 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);position:relative;top:'+ (this.rulerpadding + 5) +'px;left:'+ (this.rulerpadding + 5) +'px;' );
+			canvas.setAttribute("style", 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);position:relative;top:' + (this.rulerpadding + 5) + 'px;left:' + (this.rulerpadding + 5) + 'px;');
 
 			const bannerHolderDom = this.elementRef.nativeElement.querySelector('.banner-holder');
 			bannerHolderDom.prepend(canvas);
 
-			//console.log('bannerHolderDom:', bannerHolderDom.getBoundingClientRect());
+			////console.log('bannerHolderDom:', bannerHolderDom.getBoundingClientRect());
 
 			//this.addCanvasGuide();
 			//@ViewChild('canvas') canvas!:ElementRef;
@@ -1031,9 +1031,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 		});
 
-    }
+	}
 
-	private setupStage( canvas: HTMLCanvasElement ): Promise<createjs.Stage> {
+	private setupStage(canvas: HTMLCanvasElement): Promise<createjs.Stage> {
 
 		// Add tick method.
 		//createjs.Ticker.addEventListener("tick", (evt)=> {
@@ -1066,11 +1066,11 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 	}
 
-	private setupStageEventListeners( stage:createjs.Stage ):void {
+	private setupStageEventListeners(stage: createjs.Stage): void {
 
-		stage.addEventListener('component.update', (evt:any) => {
+		stage.addEventListener('component.update', (evt: any) => {
 
-			//console.log('component.update', evt);
+			////console.log('component.update', evt);
 
 			this.componentPositionUpdateEvent.emit({
 				component: evt.component,
@@ -1080,14 +1080,14 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		//stage.addEventListener("added", (evt:any)=> {
-		//	console.log('display object added:', evt);
+		//	//console.log('display object added:', evt);
 		//});
 
 	}
 
 	//update canvas while listening to drag and drop
-	private tick(event:any): void {
-		//console.log('this.update:', this.update);
+	private tick(event: any): void {
+		////console.log('this.update:', this.update);
 		// `update` boolean allows us to tick as needed.
 		if (this.update) {
 			this.update = false; // only update once
@@ -1095,9 +1095,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		}
 	}
 
-	private sortStageChildern( stage:any ) {
+	private sortStageChildern(stage: any) {
 
-		const sortFunction = function(obj1:any, obj2:any, options:any) {
+		const sortFunction = function (obj1: any, obj2: any, options: any) {
 			if (obj1.id > obj2.id) { return 1; }
 			if (obj1.id < obj2.id) { return -1; }
 			return 0;
@@ -1111,19 +1111,19 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	 * Populate Banner Components
 	 *
 	 */
-	private populate ( stage:createjs.Stage, components:any[] ): Promise<any> {
+	private populate(stage: createjs.Stage, components: any[]): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
-			//console.log('Populate Creative Based on Active Container:', this.dataContainer);
+			////console.log('Populate Creative Based on Active Container:', this.dataContainer);
 
 			//const components = this.dataContainer.components;
 
 			const Componentpromises = [];
 
-			components.forEach((component:any) => {
+			components.forEach((component: any) => {
 
-				//console.log('component', component);
+				////console.log('component', component);
 
 				switch (component.componenttype.name) {
 
@@ -1165,19 +1165,19 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			Componentpromises.push(this.populateBannerBorder(stage));
 
 			Promise.all(Componentpromises)
-				.then((displayObjects:any[]) => {
+				.then((displayObjects: any[]) => {
 
-					if( this.renderAnimationsActive === true ) {
+					if (this.renderAnimationsActive === true) {
 
-						const animationPromises:any[] = [];
+						const animationPromises: any[] = [];
 
-						displayObjects.forEach( (displayObject:any) => {
-							if( displayObject.component?.animations.length > 0 ) {
+						displayObjects.forEach((displayObject: any) => {
+							if (displayObject.component?.animations.length > 0) {
 								animationPromises.push(this.animateGSAPComponent(stage, displayObject.component));
 							}
 						});
 
-						//console.log('animationPromises');
+						////console.log('animationPromises');
 
 						return Promise.all(animationPromises);
 
@@ -1186,11 +1186,11 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 					}
 
 				})
-				.then((displayObjectsAnimations:any[]) => {
+				.then((displayObjectsAnimations: any[]) => {
 
-					if( this.renderAnimationsActive === true ) {
+					if (this.renderAnimationsActive === true) {
 
-						this.sortStageChildern( stage );
+						this.sortStageChildern(stage);
 
 						resolve({
 							stage: stage,
@@ -1202,9 +1202,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 					} else {
 
-						//console.log('NOT initialiseGSAPAnimations');
+						////console.log('NOT initialiseGSAPAnimations');
 
-						this.sortStageChildern( stage );
+						this.sortStageChildern(stage);
 
 						resolve({
 							stage: stage,
@@ -1217,7 +1217,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private rebuildBanner ( stage:createjs.Stage ): Promise<createjs.Stage> {
+	private rebuildBanner(stage: createjs.Stage): Promise<createjs.Stage> {
 
 		//this.emptyActiveAnimations();
 		this.emptyActiveStage(stage);
@@ -1229,17 +1229,17 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private populateShape( stage:createjs.Stage, component: any): Promise<any> {
+	private populateShape(stage: createjs.Stage, component: any): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
 			//console.warn('populateShape:', component);
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			//const componentShape = new this.BAPP_Shape( component );
-			const componentShape = new this.bannerCreatorService.BAPP_Shape( component );
+			const componentShape = new this.bannerCreatorService.BAPP_Shape(component);
 
 			stage.addChild(componentShape);
-			stage.setChildIndex( componentShape, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(componentShape, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -1254,18 +1254,18 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private populateImage( stage:createjs.Stage, component: any): Promise<any> {
+	private populateImage(stage: createjs.Stage, component: any): Promise<any> {
 
 		//console.warn('populateImage:', component);
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			//const componentImage = new this.BAPP_Image( stage, component, componentMeta );
-			const componentImage = new this.bannerCreatorService.BAPP_Image( stage, component, componentMeta );
+			const componentImage = new this.bannerCreatorService.BAPP_Image(stage, component, componentMeta);
 
 			stage.addChild(componentImage);
-			stage.setChildIndex( componentImage, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(componentImage, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -1279,18 +1279,18 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 	}
 
-	private populateText( stage:createjs.Stage, component: any): Promise<any> {
+	private populateText(stage: createjs.Stage, component: any): Promise<any> {
 
 		//console.warn('populateText:', component);
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			//const canvasText = new this.BAPP_Text( component, componentMeta );
-			const canvasText = new this.bannerCreatorService.BAPP_Text( component, componentMeta );
+			const canvasText = new this.bannerCreatorService.BAPP_Text(component, componentMeta);
 
 			stage.addChild(canvasText);
-			stage.setChildIndex( canvasText, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(canvasText, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -1306,18 +1306,18 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		//this.addMenuButton(component);
 	}
 
-	private populateButton( stage:createjs.Stage, component: any): Promise<any> {
+	private populateButton(stage: createjs.Stage, component: any): Promise<any> {
 
 		//console.warn('populateButton:', component);
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			//const canvasButton = new this.BAPP_Button( component );
-			const canvasButton = new this.bannerCreatorService.BAPP_Button( component );
+			const canvasButton = new this.bannerCreatorService.BAPP_Button(component);
 
 			stage.addChild(canvasButton);
-			stage.setChildIndex( canvasButton, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(canvasButton, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -1332,7 +1332,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private populateBannerBorder( stage:createjs.Stage ): Promise<createjs.DisplayObject> {
+	private populateBannerBorder(stage: createjs.Stage): Promise<createjs.DisplayObject> {
 
 		return new Promise<createjs.DisplayObject>((resolve, reject) => {
 
@@ -1344,9 +1344,9 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			const z_index_border = "99";//component.componentmeta.find((x:any) => x.name === 'zIndex').value;
 
 			const border_obj = new createjs.Graphics()
-											.setStrokeStyle(1)
-											.beginStroke(bgColour)
-											.drawRect(0, 0, width_border, height_border);
+				.setStrokeStyle(1)
+				.beginStroke(bgColour)
+				.drawRect(0, 0, width_border, height_border);
 
 			const component_border = new createjs.Shape(border_obj);
 			component_border.name = 'canvas_border'//component.name.toLowerCase();
@@ -1355,7 +1355,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			component_border.id = parseInt(z_index_border);
 
 			stage.addChild(component_border);
-			stage.setChildIndex( component_border, parseInt(z_index_border) );
+			stage.setChildIndex(component_border, parseInt(z_index_border));
 
 			stage.update();
 
@@ -1369,25 +1369,25 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	 * Stage GSAP Animations for HTML5
 	 *
 	 */
-	private playGSAPFrameAnimation( activeTimeline:GSAPTimeline ) {
+	private playGSAPFrameAnimation(activeTimeline: GSAPTimeline) {
 
-		if( this.stage.hasEventListener('tick') ) {} else {
+		if (this.stage.hasEventListener('tick')) { } else {
 			createjs.Ticker.addEventListener("tick", this.stage);
 			this.stage.update();
 		}
 
-		const onCompletion = (evt:any) => {
+		const onCompletion = (evt: any) => {
 			console.warn('Frame Complete:', evt);
 			this.timelineIsPlaying = false;
 			this.FrameAnimationPlayEventEnd.emit(true);
 		}
 
-		activeTimeline.eventCallback("onComplete", onCompletion, ["param1","param2"]);
+		activeTimeline.eventCallback("onComplete", onCompletion, ["param1", "param2"]);
 
 		//activeTimeline.restart();
 		//activeTimeline.play(0);
 
-		if( activeTimeline['_time'] === activeTimeline.totalDuration() ) {
+		if (activeTimeline['_time'] === activeTimeline.totalDuration()) {
 			activeTimeline.play(0);
 			//activeTimeline.restart();
 		} else {
@@ -1410,30 +1410,30 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private playGSAPGlobalAnimation( activeTimeline:GSAPTimeline ) {
+	private playGSAPGlobalAnimation(activeTimeline: GSAPTimeline) {
 
 		this.playCounter++;
 
-		console.log('playFrameAnimation:', this.playCounter);
+		//console.log('playFrameAnimation:', this.playCounter);
 
-		if( this.stage.hasEventListener('tick') ) {} else {
+		if (this.stage.hasEventListener('tick')) { } else {
 			createjs.Ticker.addEventListener("tick", this.stage);
 			this.stage = this.stages[0].stage;
 			this.stage.update();
 		}
 
-		const onCompletion = (evt:any) => {
+		const onCompletion = (evt: any) => {
 
 			activeTimeline.eventCallback("onComplete", null);
 
-			if( this.stages[this.playCounter]?.timeline ) {
+			if (this.stages[this.playCounter]?.timeline) {
 
 				this.stage.removeAllEventListeners();
 
 				this.stage = this.stages[this.playCounter].stage;
 				this.stage.update();
 
-				this.playGSAPGlobalAnimation( this.stages[this.playCounter].timeline );
+				this.playGSAPGlobalAnimation(this.stages[this.playCounter].timeline);
 
 			} else {
 
@@ -1442,7 +1442,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				this.playCounter = 0;
 				this.currentPage = 0;
 
-				if (this.loopGlobalTimeline === true ) {
+				if (this.loopGlobalTimeline === true) {
 
 					/**/
 					const repeatInterval = setTimeout(() => {
@@ -1459,7 +1459,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 						//this.stage = this.stages[this.playCounter].stage;
 						//createjs.Ticker.addEventListener("tick", this.stage);
 						//this.stage.update();
-						this.playGSAPGlobalAnimation( this.stages[this.playCounter].timeline );
+						this.playGSAPGlobalAnimation(this.stages[this.playCounter].timeline);
 
 						clearTimeout(repeatInterval);
 
@@ -1480,7 +1480,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			}
 		}
 
-		activeTimeline.eventCallback("onComplete", onCompletion, ["param1","param2"]);
+		activeTimeline.eventCallback("onComplete", onCompletion, ["param1", "param2"]);
 
 		activeTimeline.play(0);
 
@@ -1543,20 +1543,20 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		//console.warn('Play Banner Animation Event Received.', evt, this.animationTimelineComplete, this.loopTimeline);
 	}
 
-	private animateGSAPComponent( stage:createjs.Stage, component: any): Promise<any[]> {
+	private animateGSAPComponent(stage: createjs.Stage, component: any): Promise<any[]> {
 
 		return new Promise<any[]>((resolve, reject) => {
 
 			const displayObj = stage.getChildByName(component.name.toLowerCase());
 
 			//const instanceTimeline = gsap.timeline();
-			const tweens:any[] = [];
+			const tweens: any[] = [];
 
-			component.animations.forEach((animation:any, index:number) => {
+			component.animations.forEach((animation: any, index: number) => {
 
-				const animationmeta = animation.animationmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+				const animationmeta = animation.animationmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 
-				if( animationmeta.duration === 0 || animation.animationtype.name === 'Start' ) {
+				if (animationmeta.duration === 0 || animation.animationtype.name === 'Start') {
 
 					const setValues = gsap.set(
 						displayObj,
@@ -1565,7 +1565,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
 							ease: "power3.out",
-							paused:false
+							paused: false
 						},
 					);
 
@@ -1585,7 +1585,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 							x: parseInt(animationmeta.positionX),
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
-							paused:false
+							paused: false
 						}
 					);
 
@@ -1602,37 +1602,37 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 			});
 
-			//console.log('animateGSAPComponent:', instanceTimeline);
+			////console.log('animateGSAPComponent:', instanceTimeline);
 			//resolve(instanceTimeline);
 
-			//console.log('animateGSAPComponent:', tweens);
+			////console.log('animateGSAPComponent:', tweens);
 
 			resolve(tweens);
 
 		});
 	}
 
-	private buildGSAPAnimationTimeline( tweens:GSAPTimeline[] ): Promise<GSAPTimeline> {
+	private buildGSAPAnimationTimeline(tweens: GSAPTimeline[]): Promise<GSAPTimeline> {
 
 		return new Promise<GSAPTimeline>((resolve, reject) => {
 
 			//gsap.globalTimeline.pause();
 
-			const masterTimeline = gsap.timeline({ paused:false });
+			const masterTimeline = gsap.timeline({ paused: false });
 
-			tweens.forEach((tween:GSAPTimeline) => {
+			tweens.forEach((tween: GSAPTimeline) => {
 				masterTimeline.add(tween['tween'], tween['position']);
 			});
 
-			const time_input:HTMLInputElement = this.document.querySelector('#frame-animation-duration') as HTMLInputElement;
-			const progress_input:HTMLInputElement = this.document.querySelector('#frame-animation-progress') as HTMLInputElement;
+			const time_input: HTMLInputElement = this.document.querySelector('#frame-animation-duration') as HTMLInputElement;
+			const progress_input: HTMLInputElement = this.document.querySelector('#frame-animation-progress') as HTMLInputElement;
 			const updateStats = () => {
 
-				if( this.animationsRendered === false ) {
+				if (this.animationsRendered === false) {
 					return;
 				}
 
-				if( time_input ) {
+				if (time_input) {
 					time_input.value = masterTimeline.time().toFixed(2);
 				}
 
@@ -1644,7 +1644,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				//this.animationProgressTicker = parseFloat(masterTimeline.progress().toFixed(2));
 				this.animationProgressTicker = parseFloat(masterTimeline.progress().toFixed(2)) * 100;
 
-				this.updateScrubber(this.animationProgressTicker/100);
+				this.updateScrubber(this.animationProgressTicker / 100);
 
 				//totalTime.innerHTML = masterTimeline.totalTime().toFixed(2);
 				//totalProgress.innerHTML = masterTimeline.totalProgress().toFixed(2);
@@ -1656,7 +1656,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			//}
 
 			// onUpdate, onComplete, onReverseComplete, onInterrupt, onRepeat
-			masterTimeline.eventCallback("onUpdate", updateStats, ["param1","param2"]);
+			masterTimeline.eventCallback("onUpdate", updateStats, ["param1", "param2"]);
 			//masterTimeline.eventCallback("onComplete", onCompletion, ["param1","param2"]);
 
 			//duration = document.getElementById("duration"),
@@ -1686,7 +1686,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			}
 			/**/
 
-			//console.log('buildGSAPAnimationTimeline:', masterTimeline);
+			////console.log('buildGSAPAnimationTimeline:', masterTimeline);
 
 			resolve(masterTimeline);
 
@@ -1694,7 +1694,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 
 	}
 
-	private buildScrubber( stage:createjs.Stage, timeline:GSAPTimeline) {
+	private buildScrubber(stage: createjs.Stage, timeline: GSAPTimeline) {
 
 		const milliseconds = timeline.duration() * 10;
 		const roundedMilliseconds = Math.floor(milliseconds);
@@ -1704,7 +1704,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		// empty the HTML container
 		timeContainer.innerHTML = '';
 
-		for ( let i = 0; i < roundedMilliseconds + 1; i++) {
+		for (let i = 0; i < roundedMilliseconds + 1; i++) {
 			timeContainer.insertAdjacentHTML("beforeend", `<div title="${i / 10}"></div>`);
 		}
 
@@ -1719,7 +1719,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		const dragLeftBoundary = this.positionInfo.left - this.scrubberPositionBuffer;
 		const dragRightBoundary = (this.containerWidth - this.positionInfo.left + this.scrubberPositionBuffer);
 
-		//console.log('positionInfo',this.positionInfo );
+		////console.log('positionInfo',this.positionInfo );
 
 		dragElement(scrubberEl);
 
@@ -1733,7 +1733,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 			// otherwise, move the DIV from anywhere inside the DIV:
 			elmnt.onmousedown = dragMouseDown;
 
-			function dragMouseDown(e:MouseEvent) {
+			function dragMouseDown(e: MouseEvent) {
 				e = e || window.event;
 				e.preventDefault();
 				// get the mouse cursor position at startup:
@@ -1744,7 +1744,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				document.onmousemove = elementDrag;
 			}
 
-			function elementDrag(e:MouseEvent) {
+			function elementDrag(e: MouseEvent) {
 				e = e || window.event;
 				e.preventDefault();
 				// calculate the new cursor position:
@@ -1754,7 +1754,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 				pos4 = e.clientY;
 				// set the element's new position:
 				//elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-				if( (elmnt.offsetLeft - pos1) > dragRightBoundary) {
+				if ((elmnt.offsetLeft - pos1) > dragRightBoundary) {
 					return;
 				}
 
@@ -1783,29 +1783,29 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		}
 	}
 
-	private updateScrubber( positionX:number ) {
+	private updateScrubber(positionX: number) {
 
 		//const scrubberEl = this.document.querySelector(".scrubber") as HTMLDivElement;
 		//const timelineContainer = this.document.querySelector(".timeline-scrubber") as HTMLDivElement;
 		//const positionInfo = timelineContainer.getBoundingClientRect();
 		//const containerWidth = positionInfo.width;
-		if( this.timelineIsPlaying === true ) {
+		if (this.timelineIsPlaying === true) {
 			this.scrubberEl.style.left = ((this.containerWidth * positionX) - this.scrubberPositionBuffer) + "px";
 			//scrubberEl.style.left = positionX + "px";
 		}
 	}
 
-	private initialiseGSAPAnimations( stage:createjs.Stage, tweens:any[] ) {
-		//console.log('initialiseGSAPAnimations:', tweens);
+	private initialiseGSAPAnimations(stage: createjs.Stage, tweens: any[]) {
+		////console.log('initialiseGSAPAnimations:', tweens);
 
 		//return this.buildGSAPAnimationTimeline(tweens.flat());
 
-		this.buildGSAPAnimationTimeline( tweens )
-			.then((timeline:any) => {
+		this.buildGSAPAnimationTimeline(tweens)
+			.then((timeline: any) => {
 
 				//console.warn('Master Timeline Ready:', timeline);
 
-				this.stages[0].timeline  = timeline;
+				this.stages[0].timeline = timeline;
 
 				this.containerTimeline = timeline;
 
@@ -1835,7 +1835,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	public handlePage(e: any) {
 
 		/** /
-		console.log('Paginating:', e, {
+		//console.log('Paginating:', e, {
 			'previousStage': this.stages[e.previousPageIndex],
 			'currentStage': this.stages[e.pageIndex]
 		});
@@ -1859,7 +1859,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		const part = this.stages.slice(start, end);
 		this.sortedData = part;
 
-		//console.log('iterator() this.sortedData', this.sortedData);
+		////console.log('iterator() this.sortedData', this.sortedData);
 	}
 
 	private intialisePagination() {
@@ -1875,39 +1875,39 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	}
 	/**/
 
-	private randomColor () {
-		return Math.floor(Math.random()*16777215).toString(16);
+	private randomColor() {
+		return Math.floor(Math.random() * 16777215).toString(16);
 	}
 
 	private generateUUID() { // Public Domain/MIT
 		let d = new Date().getTime();//Timestamp
-		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 			let r = Math.random() * 16;//random number between 0 and 16
-			if(d > 0){//Use timestamp until depleted
-				r = (d + r)%16 | 0;
-				d = Math.floor(d/16);
+			if (d > 0) {//Use timestamp until depleted
+				r = (d + r) % 16 | 0;
+				d = Math.floor(d / 16);
 			} else {//Use microseconds since page-load if supported
-				r = (d2 + r)%16 | 0;
-				d2 = Math.floor(d2/16);
+				r = (d2 + r) % 16 | 0;
+				d2 = Math.floor(d2 / 16);
 			}
 			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 		});
 	}
 
 	//https://stackoverflow.com/questions/44698967/requesting-blob-images-and-transforming-to-base64-with-fetch-api
-	private urlContentToDataUri(url:string): Promise<string | ArrayBuffer | null>{
-		return  fetch(url)
-				.then( response => response.blob() )
-				.then( blob => new Promise( callback =>{
-					const reader = new FileReader() ;
-					reader.onload = function(){ callback(this.result) } ;
-					reader.readAsDataURL(blob) ;
-				}) ) ;
+	private urlContentToDataUri(url: string): Promise<string | ArrayBuffer | null> {
+		return fetch(url)
+			.then(response => response.blob())
+			.then(blob => new Promise(callback => {
+				const reader = new FileReader();
+				reader.onload = function () { callback(this.result) };
+				reader.readAsDataURL(blob);
+			}));
 	}
 
 	// https://stackoverflow.com/questions/12168909/blob-from-dataurl
-	private dataURItoBlob(dataURI:string): Blob {
+	private dataURItoBlob(dataURI: string): Blob {
 		// convert base64 to raw binary data held in a string
 		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
 		const byteString = atob(dataURI.split(',')[1]);
@@ -1927,17 +1927,17 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		}
 
 		// write the ArrayBuffer to a blob, and you're done
-		const blob = new Blob([ab], {type: mimeString});
+		const blob = new Blob([ab], { type: mimeString });
 		return blob;
 
 	}
 
 	// https://www.sitepoint.com/delay-sleep-pause-wait/
-	private sleep( milliseconds:number) {
+	private sleep(milliseconds: number) {
 		const date = Date.now();
 		let currentDate = null;
 		do {
-		  currentDate = Date.now();
+			currentDate = Date.now();
 		} while (currentDate - date < milliseconds);
 	}
 }

@@ -28,7 +28,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 	private _destroy$ = new Subject<boolean>();
 
 	private allData!: any[];
-	public filterData$!:Observable<any>;
+	public filterData$!: Observable<any>;
 	public uiDataReady = false;
 	public primaryData!: any[];
 	public sortedData!: any[];
@@ -97,18 +97,18 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.animationService.animation
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(animations:Animation[]) =>  {
-					//console.log('collection subscription:', clients);
+				(animations: Animation[]) => {
+					////console.log('collection subscription:', clients);
 
 					this.allData = animations;
-					//console.log("alldata",this.allData);
+					////console.log("alldata",this.allData);
 
-					if( animations !== undefined && animations.length >= 0 ) {
+					if (animations !== undefined && animations.length >= 0) {
 						this.initialise(animations);
 
 						this.initialiseTextFilters();
@@ -135,7 +135,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	private initialise( animations:Animation[]):void {
+	private initialise(animations: Animation[]): void {
 
 		this.primaryData = animations;
 		this.sortedData = this.primaryData.slice();
@@ -145,7 +145,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -154,26 +154,26 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
-        this.animationService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record Status changed successfully.', { keepAfterRouteChange: true });
+	private updateStatus(id: string, params: any): void {
+		this.animationService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record Status changed successfully.', { keepAfterRouteChange: true });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public deleteModel(id: string): void {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -187,9 +187,9 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' deleted successfully.', { keepAfterRouteChange: true });
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -207,7 +207,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -221,11 +221,11 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -289,21 +289,21 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 		//this.introJS.start();
 
-		this.alertService.info( 'Help/Onboarding Feature still in WIP..', { keepAfterRouteChange: true });
+		this.alertService.info('Help/Onboarding Feature still in WIP..', { keepAfterRouteChange: true });
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data) => {
+		const exportArray = this.primaryData.map((data) => {
 
 			return {
 				'ID': data.id,
@@ -334,7 +334,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 	}
 
 	// FILTERS
-	private initialiseFilterData():void {
+	private initialiseFilterData(): void {
 		this.filterData$ = combineLatest(
 			[
 				this.templateService.getAll(),
@@ -345,20 +345,20 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 			]
 		)
-		.pipe(
-			map(([templates, clients,banners,container]):any => {
-				//console.info('combineLatest initialise', [templates, clients, container,banners]);
-				// combineLatest returns an array of values, here we map those values to an object
-				return { templates, clients,banners, container };
-			})
-		);
+			.pipe(
+				map(([templates, clients, banners, container]): any => {
+					//console.info('combineLatest initialise', [templates, clients, container,banners]);
+					// combineLatest returns an array of values, here we map those values to an object
+					return { templates, clients, banners, container };
+				})
+			);
 
-		this.filterData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.filterData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			this.prepFilterData(data);
 		});
 	}
 
-	private prepFilterData(data:any):void {
+	private prepFilterData(data: any): void {
 
 		this.filterDataTemplates = data.templates;
 
@@ -372,7 +372,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -382,19 +382,19 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
 
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -421,11 +421,11 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 				break;
 		}
 
-		//console.log('selectedTextFilter['+type+']:', this.sortedData);
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -440,37 +440,37 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
 		newdata = this.allData;
-		if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.component?.container.banner.template.clientId === this.clientFilterValue.value
 			});
 		}
-		if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.component?.container.banner.template.id === this.templateFilterValue.value
 			});
 		}
-		if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.component?.container.banner.id === this.bannertypeFilterValue.value
 			});
 		}
-		console.log("this.bannersizeFilterValue.value",this.bannersizeFilterValue.value)
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		//console.log("this.bannersizeFilterValue.value",this.bannersizeFilterValue.value)
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 
-				console.log(x.component?.container.id +" === "+ this.bannersizeFilterValue.value)
+				//console.log(x.component?.container.id +" === "+ this.bannersizeFilterValue.value)
 				return x.component?.container.id === this.bannersizeFilterValue.value
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 
 				return x.status === this.statusFilterValue.value
 			});
@@ -481,7 +481,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -509,7 +509,7 @@ export class AnimationsListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

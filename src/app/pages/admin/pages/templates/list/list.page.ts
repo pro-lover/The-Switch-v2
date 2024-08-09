@@ -94,37 +94,37 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.templateService.template
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('collection subscription:', templates);
+				(templates: Template[]) => {
+					////console.log('collection subscription:', templates);
 
 					this.allData = templates;
-					//console.log("allData : ",this.allData);
+					////console.log("allData : ",this.allData);
 
-					if( templates !== undefined && templates.length > 0 ) {
+					if (templates !== undefined && templates.length > 0) {
 						this.initialise(templates);
 
 						this.initialiseTextFilters();
 					}
 				}
 			);
-			this.templateService.getAll()
+		this.templateService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('templates', templates);
+				(templates: Template[]) => {
+					////console.log('templates', templates);
 					this.filterDataTemplates = templates;
 				}
 			);
-			this.bannerTypeService.getAll()
+		this.bannerTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannertypes:BannerType[]) =>  {
-					//console.log('bannertypes', bannertypes);
+				(bannertypes: BannerType[]) => {
+					////console.log('bannertypes', bannertypes);
 					this.filterDataBannerTypes = bannertypes;
 				}
 			);
@@ -132,17 +132,17 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		this.bannerSizeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('bannersizes', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('bannersizes', bannersizes);
 					this.filterDataBannerSizes = bannersizes;
 				}
 			);
 
-			this.clientService.getAll()
+		this.clientService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					//console.log('Clients', clients);
+				(clients: Client[]) => {
+					////console.log('Clients', clients);
 					this.filterDataClients = clients;
 				}
 			);
@@ -163,133 +163,132 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-		// filters
-		private initialiseTextFilters() {
+	// filters
+	private initialiseTextFilters() {
 
-			this.masterReference_names = this.allData.map( (jk: any) => {
-				return {
-					'id': jk.id,
-					'name': jk.name
+		this.masterReference_names = this.allData.map((jk: any) => {
+			return {
+				'id': jk.id,
+				'name': jk.name
+			}
+		});
+		//this.masterReference_locations = _.uniq(this.masterReference_locations, y => y.location);
+
+		this.filteredNames = this.chipCtrl.valueChanges.pipe(
+			startWith(null),
+			map((so: any | null) => {
+				console.warn('this.filteredNames:', so);
+
+				if (Number(so)) {
+					return;
 				}
-			});
-			//this.masterReference_locations = _.uniq(this.masterReference_locations, y => y.location);
 
-			this.filteredNames = this.chipCtrl.valueChanges.pipe(
-				startWith(null),
-				map( (so: any | null) => {
-					console.warn('this.filteredNames:', so);
-
-					if( Number(so) ) {
-						return;
-					}
-
-					return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
+				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
 			}));
 
+	}
+	private myTextFilter(type: string, name: string) {
+		//console.warn(email);
+		switch (type) {
+			case 'name':
+				return this.masterReference_names.filter(so => so.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+			default:
+				return [];
 		}
-		private myTextFilter(type:string, name: string) {
-			//console.warn(email);
-			switch (type) {
-				case 'name':
-					return this.masterReference_names.filter(so => so.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
-				default:
-					return [];
-			}
-		}
+	}
 
-		public selectedTextFilter(event: MatAutocompleteSelectedEvent, type: string): void {
+	public selectedTextFilter(event: MatAutocompleteSelectedEvent, type: string): void {
 
-			this.removeSelectedFiltered(type);
+		this.removeSelectedFiltered(type);
 
-			//this.filterAlphabet = 'all';
+		//this.filterAlphabet = 'all';
 
-			switch (type) {
-				case 'name':
-					this.sortedData = [this.allData.find(x => x.id === event.option.value)];
-					this.length = this.sortedData.length;
-					this.activeNameFilters = this.sortedData;
-					break;
-				default:
-					break;
-			}
-
+		switch (type) {
+			case 'name':
+				this.sortedData = [this.allData.find(x => x.id === event.option.value)];
+				this.length = this.sortedData.length;
+				this.activeNameFilters = this.sortedData;
+				break;
+			default:
+				break;
 		}
 
-		public removeSelectedFiltered(type:string): void {
+	}
 
-			switch (type) {
-				case 'name':
-					this.activeNameFilters.pop();
-					break;
-				default:
-					break;
-			}
+	public removeSelectedFiltered(type: string): void {
 
-			this.sortedData = this.primaryData.slice();
-			this.length = this.sortedData.length;
-			this.iterator();
+		switch (type) {
+			case 'name':
+				this.activeNameFilters.pop();
+				break;
+			default:
+				break;
 		}
 
-		public onFilterChange( filter:string ): void {
-
-			let newdata: any;
-
-			// use form patch value
-			// show meta data table when editing
-			//this.clientFilterValue.value = '';
-			//this.templateFilterValue.value = '';
-			///this.bannersizeFilterValue.value = '';
-			//this.bannertypeFilterValue.value = '';
-
-			//console.warn('onFilterChange:', filter, this.clientFilterValue.value, this.templateFilterValue.value, this.bannersizeFilterValue.value, this.bannertypeFilterValue.value, this.statusFilterValue.value);
-
-			newdata = this.allData;
-
-			if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					if(x.clientId === this.clientFilterValue.value)
-					{
-						console.log(x.clientId === this.clientFilterValue.value)
-					}
-					return x.clientId === this.clientFilterValue.value
-				});
-			}
-
-			if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.container.banner.templateId === this.templateFilterValue.value
-				});
-			}
-
-			if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.bannertypeId === this.bannertypeFilterValue.value
-				});
-			}
-
-			if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.bannersizeId === this.bannersizeFilterValue.value
-				});
-			}
-
-			if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.status === this.statusFilterValue.value
-				});
-			}
-
-			this.initialise(newdata);
-
-		}
-
-
-	private initialise( templates:Template[]):void {
-		//console.log("initialise :");
-		this.primaryData = templates;
-		//console.log("sortedData 4 b 4 :",this.sortedData);
 		this.sortedData = this.primaryData.slice();
-		//console.log("sortedData 4 af :",this.sortedData);
+		this.length = this.sortedData.length;
+		this.iterator();
+	}
+
+	public onFilterChange(filter: string): void {
+
+		let newdata: any;
+
+		// use form patch value
+		// show meta data table when editing
+		//this.clientFilterValue.value = '';
+		//this.templateFilterValue.value = '';
+		///this.bannersizeFilterValue.value = '';
+		//this.bannertypeFilterValue.value = '';
+
+		//console.warn('onFilterChange:', filter, this.clientFilterValue.value, this.templateFilterValue.value, this.bannersizeFilterValue.value, this.bannertypeFilterValue.value, this.statusFilterValue.value);
+
+		newdata = this.allData;
+
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				if (x.clientId === this.clientFilterValue.value) {
+					//console.log(x.clientId === this.clientFilterValue.value)
+				}
+				return x.clientId === this.clientFilterValue.value
+			});
+		}
+
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.container.banner.templateId === this.templateFilterValue.value
+			});
+		}
+
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.bannertypeId === this.bannertypeFilterValue.value
+			});
+		}
+
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.bannersizeId === this.bannersizeFilterValue.value
+			});
+		}
+
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.status === this.statusFilterValue.value
+			});
+		}
+
+		this.initialise(newdata);
+
+	}
+
+
+	private initialise(templates: Template[]): void {
+		////console.log("initialise :");
+		this.primaryData = templates;
+		////console.log("sortedData 4 b 4 :",this.sortedData);
+		this.sortedData = this.primaryData.slice();
+		////console.log("sortedData 4 af :",this.sortedData);
 
 		this.length = this.sortedData.length;
 
@@ -297,7 +296,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -306,7 +305,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
+	private updateStatus(id: string, params: any): void {
 		this.templateService.updateStatus(id, params)
 			.pipe(first())
 			.subscribe({
@@ -325,7 +324,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name + '? This will also delete all associated banners and they\'re  respective components.'
@@ -341,15 +340,15 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 						next: () => {
 							//this.primaryData = this.primaryData.filter(x => x.id !== id);
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = new Date();
 									x.status = false;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 
 							model.isDeleting = false;
 							/** WIP /
@@ -431,7 +430,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 							/**/
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -449,7 +448,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -463,14 +462,14 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = null;
 									x.status = true;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
@@ -552,7 +551,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 								});
 							/**/
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -626,18 +625,18 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		this.introJS.start();
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 			return {
 				'ID': data.id,
 				'Name': data.name,
@@ -666,7 +665,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -693,7 +692,7 @@ export class TemplatesListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

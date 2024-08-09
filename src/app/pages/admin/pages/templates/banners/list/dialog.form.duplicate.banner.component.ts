@@ -37,25 +37,25 @@ export class DialogBannerDuplicateComponent implements OnInit, OnDestroy {
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
 
-		console.log('DialogBannerDuplicateComponent:', this.data);
+		//console.log('DialogBannerDuplicateComponent:', this.data);
 
 		this.bannerSizeService.getAll()
 			.pipe(first())
-			.subscribe( (x: BannerSize[]) => {
+			.subscribe((x: BannerSize[]) => {
 				this.formDataBannerSizes = x;
 			});
 
 		this.bannerTypeService.getAll()
 			.pipe(first())
 			.pipe(takeUntil(this._destroy$))
-			.subscribe( (x: BannerType[]) => {
+			.subscribe((x: BannerType[]) => {
 				this.formDataBannerTypes = x;
 			});
 
 		this.templateService.getAll()
 			.pipe(first())
 			.pipe(takeUntil(this._destroy$))
-			.subscribe( (x: Template[]) => {
+			.subscribe((x: Template[]) => {
 				this.formDataTemplates = x;
 			});
 

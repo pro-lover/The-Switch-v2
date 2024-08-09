@@ -26,7 +26,7 @@ export interface TemplateTemp {
 	providers: [
 		{
 			provide: STEPPER_GLOBAL_OPTIONS,
-			useValue: {showError: true},
+			useValue: { showError: true },
 		},
 	],
 })
@@ -114,14 +114,14 @@ export class TemplatesAddEditPage implements OnInit {
 		});
 
 		this.ftemplatedetails['bannertypeId'].valueChanges.subscribe((value) => {
-			//console.log('Selected Banner Type:', value, this.ftemplatedetails['containerNumber']);
+			////console.log('Selected Banner Type:', value, this.ftemplatedetails['containerNumber']);
 			this.ftemplatedetails['containerNumber'].setValue(1);
 		});
 
 		this.ftemplatedetails['bannerSizeId'].valueChanges.subscribe((value) => {
 			this.activeBannerSizes = [];
-			value.map( (x:any) => {
-				if( this.activeBannerSizes.filter(y => y.id === x).length > 0 ) {
+			value.map((x: any) => {
+				if (this.activeBannerSizes.filter(y => y.id === x).length > 0) {
 					//this.activeBannerSizes = this.activeBannerSizes.filter(y=> y.id !== x);
 				} else {
 					this.activeBannerSizes.push(this.formDataBannerSizes.find(y => y.id === x));
@@ -130,7 +130,7 @@ export class TemplatesAddEditPage implements OnInit {
 		});
 
 		if (!this.isAddMode) {
-			//console.log('Editing Template:', this.id);
+			////console.log('Editing Template:', this.id);
 			this.intialiseEditData();
 
 		}
@@ -139,54 +139,54 @@ export class TemplatesAddEditPage implements OnInit {
 
 	private intialiseAllData() {
 		this.clientService.getAll()
-				.pipe(first())
-				.subscribe( (x: Client[]) => {
-					this.formDataClients = x;
-				});
+			.pipe(first())
+			.subscribe((x: Client[]) => {
+				this.formDataClients = x;
+			});
 
 		this.bannerTypeService.getAll()
-				.pipe(first())
-				.subscribe( (x: BannerType[]) => {
-					this.formDataBannerTypes = x;
-				});
+			.pipe(first())
+			.subscribe((x: BannerType[]) => {
+				this.formDataBannerTypes = x;
+			});
 
 		this.bannerSizeService.getAll()
-				.pipe(first())
-				.subscribe( (x: BannerSize[]) => {
-					this.formDataBannerSizes = x;
-				});
+			.pipe(first())
+			.subscribe((x: BannerSize[]) => {
+				this.formDataBannerSizes = x;
+			});
 
 		this.componentTypeService.getAll()
-				.pipe(first())
-				.subscribe( (x: ComponentType[]) => {
-					this.formDataComponentType = x;
-				});
+			.pipe(first())
+			.subscribe((x: ComponentType[]) => {
+				this.formDataComponentType = x;
+			});
 	}
 
 	private intialiseEditData() {
 
 		this.templateService.getById(this.id)
-				.pipe(first())
-				.subscribe( (x:any) => {
+			.pipe(first())
+			.subscribe((x: any) => {
 
 
-					//console.log('Editing Template:', x);
-					this.template = x;
+				////console.log('Editing Template:', x);
+				this.template = x;
 
-					this.FormGroupTemplateDetails.patchValue(x);
-					x.banners.map( (x:any) => {
-						this.activeBannerSizes.push(this.formDataBannerSizes.find(y => y.id === x.bannersizeId));
-					});
-					this.ftemplatedetails['bannerSizeId'].setValue(this.activeBannerSizes.map((x:any) => x.id));
-					this.ftemplatedetails['containerNumber'].setValue(1);
+				this.FormGroupTemplateDetails.patchValue(x);
+				x.banners.map((x: any) => {
+					this.activeBannerSizes.push(this.formDataBannerSizes.find(y => y.id === x.bannersizeId));
 				});
+				this.ftemplatedetails['bannerSizeId'].setValue(this.activeBannerSizes.map((x: any) => x.id));
+				this.ftemplatedetails['containerNumber'].setValue(1);
+			});
 	}
 
 	private prepTemplatedb() {
 
 		// config all activeBannersizes
 		/**/
-		this.activeBannerSizes.map( (x:any) => {
+		this.activeBannerSizes.map((x: any) => {
 			x.status = true;
 			x.bannertypeId = this.FormGroupTemplateDetails.value['bannertypeId'];
 			x.containers = []; //Array(this.FormGroupTemplateBanners.value['containerNumber']);
@@ -214,7 +214,7 @@ export class TemplatesAddEditPage implements OnInit {
 			description: this.FormGroupTemplateDetails.value['description'],
 			name: this.FormGroupTemplateDetails.value['name'],
 			status: true,
-			banners:  this.activeBannerSizes
+			banners: this.activeBannerSizes
 		}
 	}
 
@@ -253,10 +253,10 @@ export class TemplatesAddEditPage implements OnInit {
 
 		//return;
 
-        this.templateService.create(this.TemplateSave)
-            .pipe(first())
-            .subscribe({
-                next: ( templateObj:any ) => {
+		this.templateService.create(this.TemplateSave)
+			.pipe(first())
+			.subscribe({
+				next: (templateObj: any) => {
 
 					//this.alertService.success('Template created successfully', { keepAfterRouteChange: true });
 
@@ -282,7 +282,7 @@ export class TemplatesAddEditPage implements OnInit {
 					forkJoin(bannerCreatePromises)
 						.pipe(last())
 						.subscribe({
-							next: ( bannersObj:any[] ) => {
+							next: (bannersObj: any[]) => {
 
 								//this.alertService.success('Template Banners Created Successfully', { keepAfterRouteChange: true });
 
@@ -298,8 +298,8 @@ export class TemplatesAddEditPage implements OnInit {
 
 										containerCreatePromises.push(
 											this.containerService.create({
-												name: savedBanner.name + ' Frame ' + (index+1),
-												description: savedBanner.description + ' Frame ' + (index+1),
+												name: savedBanner.name + ' Frame ' + (index + 1),
+												description: savedBanner.description + ' Frame ' + (index + 1),
 												bannerId: savedBanner.id
 											})
 										);
@@ -310,7 +310,7 @@ export class TemplatesAddEditPage implements OnInit {
 								forkJoin(containerCreatePromises)
 									.pipe(last())
 									.subscribe({
-										next: ( containersObj:any[] ) => {
+										next: (containersObj: any[]) => {
 
 											this.alertService.success('Template Created Successfully', { keepAfterRouteChange: true });
 
@@ -332,34 +332,34 @@ export class TemplatesAddEditPage implements OnInit {
 							}
 						});
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	private updateRecord() {
 		this.loading = true;
 
-		//console.log('Updating Record:', this.TemplateSave, this.template );
+		////console.log('Updating Record:', this.TemplateSave, this.template );
 
-		const newBanners = this.getDifference( this.TemplateSave.banners, this.template.banners);
-		const removedBanners = this.getDifference( this.template.banners, this.TemplateSave.banners);
+		const newBanners = this.getDifference(this.TemplateSave.banners, this.template.banners);
+		const removedBanners = this.getDifference(this.template.banners, this.TemplateSave.banners);
 
-		console.warn('New Banners:', newBanners );
-		console.warn('Removed Banners:', removedBanners );
+		console.warn('New Banners:', newBanners);
+		console.warn('Removed Banners:', removedBanners);
 
 		//return;
 
-        this.templateService.update(this.id, this.TemplateSave)
-            .pipe(first())
-            .subscribe({
-                next: ( templateObj:any ) => {
+		this.templateService.update(this.id, this.TemplateSave)
+			.pipe(first())
+			.subscribe({
+				next: (templateObj: any) => {
 
 					// create banners
-					if( newBanners.length > 0 ) {
+					if (newBanners.length > 0) {
 						const bannerCreatePromises = [];
 						for (let index = 0; index < newBanners.length; index++) {
 							const element = newBanners[index];
@@ -379,7 +379,7 @@ export class TemplatesAddEditPage implements OnInit {
 						forkJoin(bannerCreatePromises)
 							.pipe(last())
 							.subscribe({
-								next: ( bannersObj:any[] ) => {
+								next: (bannersObj: any[]) => {
 
 									//this.alertService.success('Template Banners Created Successfully', { keepAfterRouteChange: true });
 
@@ -394,8 +394,8 @@ export class TemplatesAddEditPage implements OnInit {
 
 											containerCreatePromises.push(
 												this.containerService.create({
-													name: savedBanner.name + ' Frame ' + (index+1),
-													description: savedBanner.description + ' Frame ' + (index+1),
+													name: savedBanner.name + ' Frame ' + (index + 1),
+													description: savedBanner.description + ' Frame ' + (index + 1),
 													bannerId: savedBanner.id
 												})
 											);
@@ -406,7 +406,7 @@ export class TemplatesAddEditPage implements OnInit {
 									forkJoin(containerCreatePromises)
 										.pipe(last())
 										.subscribe({
-											next: ( containersObj:any[] ) => {
+											next: (containersObj: any[]) => {
 
 												this.alertService.success('Template Created Successfully', { keepAfterRouteChange: true });
 
@@ -432,18 +432,18 @@ export class TemplatesAddEditPage implements OnInit {
 
 					} else {
 						this.alertService.success('Update successful', { keepAfterRouteChange: true });
-    	                //this.router.navigate(['../../'], { relativeTo: this.route });
+						//this.router.navigate(['../../'], { relativeTo: this.route });
 						this.loading = false;
 					}
 
 					// delete removed banners
-					if( removedBanners.length > 0 ) {
+					if (removedBanners.length > 0) {
 						const bannerDeletePromises = [];
 						for (let index = 0; index < removedBanners.length; index++) {
 							const element = removedBanners[index];
 
 							bannerDeletePromises.push(
-								this.bannerService.delete( element.id )
+								this.bannerService.delete(element.id)
 							);
 
 						}
@@ -451,7 +451,7 @@ export class TemplatesAddEditPage implements OnInit {
 						forkJoin(bannerDeletePromises)
 							.pipe(last())
 							.subscribe({
-								next: ( bannersObj:any[] ) => {
+								next: (bannersObj: any[]) => {
 
 									this.alertService.success('Template Banners Removed Successfully', { keepAfterRouteChange: true });
 
@@ -466,15 +466,15 @@ export class TemplatesAddEditPage implements OnInit {
 					}
 
 					//
-                    //this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    //this.router.navigate(['../../'], { relativeTo: this.route });
+					//this.alertService.success('Update successful', { keepAfterRouteChange: true });
+					//this.router.navigate(['../../'], { relativeTo: this.route });
 					//this.loading = false;
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	public back(): void {
@@ -544,11 +544,11 @@ export class TemplatesAddEditPage implements OnInit {
 
 
 	// Get Difference between two Arrays of Objects
-	private getDifference(array1:any, array2:any) {
-		return array1.filter((object1:any) => {
-		  return !array2.some((object2:any) => {
-			return object1.name === object2.name;
-		  });
+	private getDifference(array1: any, array2: any) {
+		return array1.filter((object1: any) => {
+			return !array2.some((object2: any) => {
+				return object1.name === object2.name;
+			});
 		});
 	}
 

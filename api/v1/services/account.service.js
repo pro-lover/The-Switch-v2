@@ -130,15 +130,15 @@ async function verifyRecaptchaToken({ token, secret }) {
 		}
 	});
 
-	//console.log(response.data);
+	////console.log(response.data);
 
 
 	/** /
 	  .then(function (response) {
-		console.log(response);
+		//console.log(response);
 	  })
 	  .catch(function (error) {
-		console.log(error);
+		//console.log(error);
 	  });
 	/**/
 

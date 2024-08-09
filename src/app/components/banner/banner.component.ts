@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 //const GIF = (window as any).GIF;
 
 @Component({
-    selector: 'app-banner',
+	selector: 'app-banner',
 	templateUrl: './banner.component.html',
 	styleUrls: ['./banner.component.scss']
 })
@@ -37,8 +37,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	//
 	public stages: any[] = [];
-    public stage: any | undefined;
-    private stageName!: string;
+	public stage: any | undefined;
+	private stageName!: string;
 	private canvasName!: string;
 	private stageCounter = 0;
 
@@ -102,8 +102,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 		private bannerCreatorService: BannerCreatorService
 	) {
 
-		this.templateService.template.pipe(takeUntil(this._destroy$)).subscribe((x:any) => {
-			//console.log('TemplateService Subscription:', x);
+		this.templateService.template.pipe(takeUntil(this._destroy$)).subscribe((x: any) => {
+			console.log('TemplateService Subscription:', x);
 			this.Templates = x;
 		});
 	}
@@ -116,47 +116,48 @@ export class BannerComponent implements OnInit, OnDestroy {
 		this.initialiseCreative();
 
 		//dropping item
-		this.newDropReceive.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.newDropReceive.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			//console.warn( 'New File Received:', evt);
+			console.warn('New File Received:', evt);
 
-            if (!evt || !evt.data) return;
+			if (!evt || !evt.data) return;
 
 			if (this.stage.name === evt.stage && this.dataContainer.id === evt.containerId) {
 
-				//console.warn( 'Container:', this.dataContainer.id);
-				//console.warn( this.stage.name + ' New File Received:', evt);
+				console.warn('Container:', this.dataContainer.id);
+				console.warn(this.stage.name + ' New File Received:', evt);
 
 				evt.data.uid = this.generateUUID();
 
-				evt.data.forEach( (x:any)=>{
+				evt.data.forEach((x: any) => {
 					x.id = this.generateUUID();
 
-					this.populateVariationsArray( evt.type, evt.componentName, x );
+					this.populateVariationsArray(evt.type, evt.componentName, x);
 					// dont update original template
 					//this.updateStageContents( evt.type, evt.componentName, x );
 				});
 
-            }
+			}
 
 		});
 
-		this.removeDrop.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.removeDrop.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
+			console.warn('New File Received:', evt);
 
 			if (!evt || !evt.stage || !evt.data) return;
 
 			//if (this.stage.name === evt.stage) {
 			if (this.stage.name === evt.stage && this.dataContainer.id === evt.containerId) {
 
-				console.warn( this.stage.name + ' Remove Variation:', evt);
+				console.warn(this.stage.name + ' Remove Variation:', evt);
 
 				switch (evt.type) {
 
 					case 'Image':
 
-						this.variationsArray = this.variationsArray.filter( (x:any)=> x.id !== evt.data[0].id );
+						this.variationsArray = this.variationsArray.filter((x: any) => x.id !== evt.data[0].id);
 
-						console.log('this.variationsArray:', this.variationsArray);
+						//console.log('this.variationsArray:', this.variationsArray);
 
 						break;
 
@@ -166,7 +167,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 						this.copyVariationsArray = [];
 
-						console.log('this.copyVariationsArray:', this.copyVariationsArray);
+						//console.log('this.copyVariationsArray:', this.copyVariationsArray);
 
 						break;
 				}
@@ -184,37 +185,42 @@ export class BannerComponent implements OnInit, OnDestroy {
 		});
 
 		//Listen to Request to generate variations
-		this.populateVariations.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.populateVariations.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			if (!evt || !evt.bannersize.width || !evt.bannersize.height) return;
+			console.warn('New File Received:', evt);
 
-			if( this.stage.name === ('bannerCanvas-' + evt.bannersize.width + '-' + evt.bannersize.height) ) {
 
-				console.warn( 'Banner Directive Populate Variations::', evt);
-				console.warn( 'Banner Directive Populate Variations Container::', this.dataContainer.id);
 
-				const allVariations = this.prepareVariationsarray();
 
-				console.warn( 'Banner Directive Populate Variations::', allVariations);
+			if (!evt.bannerComponent || !evt.bannerComponent.bannersize.width || !evt.bannerComponent.bannersize.height) return;
+
+			if (this.stage.name === ('bannerCanvas-' + evt.bannerComponent.bannersize.width + '-' + evt.bannerComponent.bannersize.height)) {
+
+				console.warn('Banner Directive Populate Variations::', evt);
+				console.warn('Banner Directive Populate Variations Container::', this.dataContainer.id);
+
+				const allVariations = this.prepareVariationsarray(evt);
+
+				console.warn('Banner Directive Populate Variations::', allVariations);
 
 				// Get Difference between two Arrays of Objects
-				function getDifference(array1:any, array2:any) {
-					return array1.filter((object1:any) => {
-					  return !array2.some((object2:any) => {
-						return object1.name === object2.name;
-					  });
+				function getDifference(array1: any, array2: any) {
+					return array1.filter((object1: any) => {
+						return !array2.some((object2: any) => {
+							return object1.name === object2.name;
+						});
 					});
 				}
 
 				let counter = 0;
 
-				const allNewComponentSet:any[] = [];
+				const allNewComponentSet: any[] = [];
 
-				allVariations.forEach((variatation:any) => {
+				allVariations.forEach((variatation: any) => {
 
 					counter++;
 					// pass active banner to canvas
-					console.warn( 'Variations1::', allVariations);
+					console.warn('Variations1::', allVariations);
 					const stage = new createjs.Stage(this.elementRef.nativeElement.querySelector('canvas#' + this.canvasName));
 					stage.set({
 						mastername: this.canvasName, // for HTML5
@@ -230,24 +236,34 @@ export class BannerComponent implements OnInit, OnDestroy {
 					let stageVariationComponents = this.stages[0].components;
 
 					// find the children relevant to the current stage variation and update their values
-					variatation.forEach((y:any) => {
-						console.warn( 'Variations2::', allVariations);
-						if( y.type === 'Text' || y.type === 'Button' ) {
+					variatation.forEach((y: any) => {
+						console.warn('Variations2::', y.type);
+						if (y.type === 'Text' || y.type === 'Button') {
 
 							const keeyys = Object.keys(y.value);
+							console.warn('y.value: ', y.value);
+							console.warn('keeyys: ', keeyys);
 
-							keeyys.forEach( (zKey:string) => {
-								//child from original stage
-								const updateThisText = this.stage.getChildByName(zKey.toLowerCase());
-								if( updateThisText ) {
+							keeyys.forEach((zKey: string) => {
+								console.warn('zKey: ', zKey);
+								//const updateThisText = this.stage.getChildByName(zKey.toLowerCase());
+								const updateThisText = this.stage.children[1];
+								//const updateThisText = "NISSAN NP200";
+								console.warn('updateThisText: ', updateThisText);
+								console.warn('updateThisText: ', this.stage.getChildByName("Stage"));
+								console.log('this.stage', this.stage)
+								if (updateThisText) {
+									console.warn('in : ', updateThisText);
 									const cloneText = updateThisText.clone(true);
+									console.warn('cloneText : ', cloneText);
+									console.log('typeof updateThisText: 1 ', typeof updateThisText);
+									console.log('typeof updateThisText: 2 ', updateThisText);
+									console.log('typeof updateThisText: 3 ', updateThisText instanceof this.bannerCreatorService.BAPP_Button);
+									console.warn('typeof cloneText:', typeof cloneText, cloneText);
 
-									//console.log('typeof updateThisText:',typeof updateThisText, updateThisText, updateThisText instanceof this.bannerCreatorService.BAPP_Button);
-									//console.warn('typeof cloneText:',typeof cloneText, cloneText);
-
-									//console.log('Cloning Text:', cloneText, updateThisText, typeof cloneText);
+									////console.log('Cloning Text:', cloneText, updateThisText, typeof cloneText);
 									/**/
-									if(  updateThisText instanceof this.bannerCreatorService.BAPP_Button ) {
+									if (updateThisText instanceof this.bannerCreatorService.BAPP_Button) {
 
 										cloneText.text = y.value[zKey];
 										//Shape is always at a lower index for buttons
@@ -259,26 +275,30 @@ export class BannerComponent implements OnInit, OnDestroy {
 									} else {
 
 										cloneText.text = y.value[zKey];
+										console.log('Cloning Button Text:', cloneText);
 									}
 									//remove og child in new stage
 									//stage.removeChild(stage.getChildByName(zKey.toLowerCase()));
+									console.log('Cloning Button Text:', cloneText);
 									cloneText.id = parseInt(updateThisText.id);
+									console.log('Cloning Button Text:', cloneText);
 
-									cloneText.set({componentId: parseInt(updateThisText.componentId)});
-									cloneText.set({smart: updateThisText.smart});
-									cloneText.set({componentMetaId: parseInt(updateThisText.componentMetaId)});
+									cloneText.set({ componentId: parseInt(updateThisText.componentId) });
+									cloneText.set({ smart: updateThisText.smart });
+									cloneText.set({ componentMetaId: parseInt(updateThisText.componentMetaId) });
 
 									//add updated og child to new stage
 									stage.addChild(cloneText);
 									//set index for updated og child in new stage
-									stage.setChildIndex( cloneText, this.stage.getChildIndex(updateThisText) );
+									stage.setChildIndex(cloneText, this.stage.getChildIndex(updateThisText));
+									console.log('Cloning Button Text:', cloneText);
 								}
 							});
 
-						} else if( y.type === 'Image' ) {
-							console.warn( 'Variations3::', allVariations);
+						} else if (y.type === 'Image') {
+							console.warn('Variations3::', allVariations);
 							const stage_image_child = this.stage.getChildByName(y.name);
-							if ( stage_image_child ) {
+							if (stage_image_child) {
 								const cloneImage = stage_image_child.clone();
 								cloneImage.image = y.value;
 
@@ -286,39 +306,39 @@ export class BannerComponent implements OnInit, OnDestroy {
 								//stage.removeChild(stage.getChildByName(y.name));
 								cloneImage.id = parseInt(stage_image_child.id);
 
-								cloneImage.set({componentId: parseInt(stage_image_child.componentId)});
-								cloneImage.set({smart: stage_image_child.smart});
-								cloneImage.set({componentMetaId: parseInt(stage_image_child.componentMetaId)});
+								cloneImage.set({ componentId: parseInt(stage_image_child.componentId) });
+								cloneImage.set({ smart: stage_image_child.smart });
+								cloneImage.set({ componentMetaId: parseInt(stage_image_child.componentMetaId) });
 
 								//add updated og child to new stage
 								stage.addChild(cloneImage);
 								//set index for updated og child in new stage
-								stage.setChildIndex( cloneImage, this.stage.getChildIndex(stage_image_child) );
+								stage.setChildIndex(cloneImage, this.stage.getChildIndex(stage_image_child));
 							}
 						}
 					});
 
 					// add "hard" or not smart components missing in the variation
 					const missingcomponents = getDifference(this.stage.children, stage.children);
-					console.warn( 'Variations4::', allVariations);
-					missingcomponents.forEach((misscomp:any) => {
+					console.warn('Variations4::', allVariations);
+					missingcomponents.forEach((misscomp: any) => {
 						const missingComponent = this.stage.getChildByName(misscomp.name);
-						if ( missingComponent ) {
+						if (missingComponent) {
 							const cloneComponent = missingComponent.clone();
 
 							cloneComponent.id = parseInt(missingComponent.id);
 
-							cloneComponent.set({componentId: parseInt(missingComponent.componentId)});
-							cloneComponent.set({smart: missingComponent.smart});
-							cloneComponent.set({componentMetaId: parseInt(missingComponent.componentMetaId)});
+							cloneComponent.set({ componentId: parseInt(missingComponent.componentId) });
+							cloneComponent.set({ smart: missingComponent.smart });
+							cloneComponent.set({ componentMetaId: parseInt(missingComponent.componentMetaId) });
 
 							stage.addChild(cloneComponent);
 							//set index for updated og child in new stage
-							stage.setChildIndex( cloneComponent, this.stage.getChildIndex(missingComponent) );
+							stage.setChildIndex(cloneComponent, this.stage.getChildIndex(missingComponent));
 						}
 					});
 
-					console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
+					//console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
 
 					this.sortStageChildern(stage);
 					//stage.update();
@@ -327,21 +347,21 @@ export class BannerComponent implements OnInit, OnDestroy {
 					//stage.children.forEach( (child:any) => {
 
 					/**/
-					const componentUpdates:any[] = [];
-					console.warn( 'Variations5::', allVariations);
-					stageVariationComponents.forEach( (b:any, index:number, ogArray:any) => {
+					const componentUpdates: any[] = [];
+					console.warn('Variations5::', allVariations);
+					stageVariationComponents.forEach((b: any, index: number, ogArray: any) => {
 
-						if( b.smart === true ) {
+						if (b.smart === true) {
 
 							const child = stage.getChildByName(b.name.toLowerCase()) as any;
 
-							if( b.id === child.componentId && b.name.toLowerCase() === child.name.toLowerCase() ) {
-								//console.log('Text Component Found:', cloneText.text);
-								b.componentmeta.forEach( (c:any, index2:number, ogMeta:any) => {
-									//console.log('Text componentmeta:', c, updateThisText.componentMetaId);
-									if( c.name === 'fontValue' && c.id === child.componentMetaId ) {
+							if (b.id === child.componentId && b.name.toLowerCase() === child.name.toLowerCase()) {
+								////console.log('Text Component Found:', cloneText.text);
+								b.componentmeta.forEach((c: any, index2: number, ogMeta: any) => {
+									////console.log('Text componentmeta:', c, updateThisText.componentMetaId);
+									if (c.name === 'fontValue' && c.id === child.componentMetaId) {
 
-										if( c.value !== child.text ) {
+										if (c.value !== child.text) {
 
 											//c.value = child.text;
 											componentUpdates.push({
@@ -367,8 +387,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 										/**/
 
 									}
-									if( c.name === 'path' && c.id === child.componentMetaId ) {
-										//console.log('Image Component Found:', c);
+									if (c.name === 'path' && c.id === child.componentMetaId) {
+										////console.log('Image Component Found:', c);
 										//c.variationImage = child.image;
 
 										componentUpdates.push({
@@ -394,7 +414,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 					//allNewComponentSet.push(stageVariationComponents);
 
 					//this.stages.push(stage);
-					console.warn( 'Variations6::', allVariations);
+					console.warn('Variations6::', allVariations);
 					this.stages.push({
 						stage: stage,
 						components: stageVariationComponents,
@@ -406,51 +426,51 @@ export class BannerComponent implements OnInit, OnDestroy {
 				});
 				/**/
 
-				if( this.renderAnimationsActive === true ) {
+				if (this.renderAnimationsActive === true) {
 
-					this.stages.forEach( (stagevariation:any, index:number) => {
-						if( index === 0 ) {} else {
+					this.stages.forEach((stagevariation: any, index: number) => {
+						if (index === 0) { } else {
 
-							const animationPromises:any[] = [];
-							stagevariation.components.forEach( (displayObject:any) => {
-								if( displayObject.animations.length > 0 ) {
+							const animationPromises: any[] = [];
+							stagevariation.components.forEach((displayObject: any) => {
+								if (displayObject.animations.length > 0) {
 									animationPromises.push(this.animateGSAPComponent(stagevariation.stage, displayObject));
 								}
 							});
 
 							Promise.all(animationPromises)
-							.then((displayObjectsAnimations:any[]) => {
+								.then((displayObjectsAnimations: any[]) => {
 
-								//console.log('displayObjectsAnimations:', displayObjectsAnimations);
+									////console.log('displayObjectsAnimations:', displayObjectsAnimations);
 
-								stagevariation.tweens = displayObjectsAnimations;
-								//this.stages[index].tweens = displayObjectsAnimations;
+									stagevariation.tweens = displayObjectsAnimations;
+									//this.stages[index].tweens = displayObjectsAnimations;
 
-								this.buildGSAPAnimationTimeline( displayObjectsAnimations.flat() )
-									.then((timeline:any) => {
+									this.buildGSAPAnimationTimeline(displayObjectsAnimations.flat())
+										.then((timeline: any) => {
 
-										stagevariation.timeline = timeline;
-										//this.stages[index].timeline = timeline;
+											stagevariation.timeline = timeline;
+											//this.stages[index].timeline = timeline;
 
-										console.warn( 'this.stages:', this.stages );
+											console.warn('this.stages:', this.stages);
 
-										stagevariation.componentUpdates.forEach( (update:any) => {
-											if( this.dataContainer.id === update.containerId && update.counter === index) {
-												/** /
-												console.warn(
-													'update:',
-													stagevariation.components[update.componentIndex].componentmeta[update.componentMetaIndex].value,
-													' | ',
-													update.value
-												);
-												/**/
-												stagevariation.components[update.componentIndex].componentmeta[update.componentMetaIndex].value = update.value;
-											}
+											stagevariation.componentUpdates.forEach((update: any) => {
+												if (this.dataContainer.id === update.containerId && update.counter === index) {
+													/** /
+													console.warn(
+														'update:',
+														stagevariation.components[update.componentIndex].componentmeta[update.componentMetaIndex].value,
+														' | ',
+														update.value
+													);
+													/**/
+													stagevariation.components[update.componentIndex].componentmeta[update.componentMetaIndex].value = update.value;
+												}
+											});
+
 										});
 
-									});
-
-							});
+								});
 
 						}
 					});
@@ -459,7 +479,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					this.BannerVariations = allVariations;
 
-					console.warn( 'this.stages:', this.stages );
+					console.warn('this.stages:', this.stages);
 
 				} else {
 
@@ -467,16 +487,16 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					this.BannerVariations = allVariations;
 
-					console.warn( 'this.stages:', this.stages );
+					console.warn('this.stages:', this.stages);
 				}
 				/**/
 
-				console.warn( 'allNewComponentSet:', allNewComponentSet );
+				console.warn('allNewComponentSet:', allNewComponentSet);
 
-				console.warn( 'allVariations:', allVariations, this.stages );
-				console.warn( 'copyVariationsArray:', this.copyVariationsArray );
-				console.warn( 'variationsArray:', this.variationsArray );
-				console.warn( 'allVariations:', allVariations );
+				console.warn('allVariations:', allVariations, this.stages);
+				console.warn('copyVariationsArray:', this.copyVariationsArray);
+				console.warn('variationsArray:', this.variationsArray);
+				console.warn('allVariations:', allVariations);
 
 				/** WIP * /
 				const offscreenCanvas: any = document.createElement('canvas');
@@ -494,28 +514,30 @@ export class BannerComponent implements OnInit, OnDestroy {
 				/**/
 
 			}
-			console.warn( 'Variations7 i think problem is here::');
+			console.warn('Variations7 i think problem is here::');
 		});
 
 		//Listen to Request to export variations
-		this.downloadVariations.pipe(takeUntil(this._destroy$)).subscribe(async (evt:any) => {
+		this.downloadVariations.pipe(takeUntil(this._destroy$)).subscribe(async (evt: any) => {
+
+			console.warn('New File Received:', evt);
 
 			if (!evt || !evt.bannersize.width || !evt.bannersize.height) return;
 
-			console.warn( 'Export Variations Event Received::', evt,);
-			console.warn( 'Stage Name::',  this.stage.name);
-			console.warn( 'Container ID::',  this.dataContainer.id);
+			console.warn('Export Variations Event Received::', evt,);
+			console.warn('Stage Name::', this.stage.name);
+			console.warn('Container ID::', this.dataContainer.id);
 
 			// RESET STAGE TO FIRST ONE
 			this.stage = this.stages[0].stage;
 
-			if( this.stage.name === ('bannerCanvas-' + evt.bannersize.width + '-' + evt.bannersize.height) ) {
+			if (this.stage.name === ('bannerCanvas-' + evt.bannersize.width + '-' + evt.bannersize.height)) {
 
-				console.warn( 'Export Variations Stages::',  this.stage.name, this.stages.length, evt);
+				console.warn('Export Variations Stages::', this.stage.name, this.stages.length, evt);
 
-				console.warn( 'Export Variations Event Received::', evt,);
-				console.warn( 'Stage Name::',  this.stage.name, this.stages.length);
-				console.warn( 'Container ID::',  this.dataContainer.id);
+				console.warn('Export Variations Event Received::', evt,);
+				console.warn('Stage Name::', this.stage.name, this.stages.length);
+				console.warn('Container ID::', this.dataContainer.id);
 
 				const variationsForExport = [];
 
@@ -532,8 +554,8 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					counter++;
 
-					this.percentage = (counter/totalCount *100)
-					 console.log(this.percentage);
+					this.percentage = (counter / totalCount * 100)
+					//console.log(this.percentage);
 
 					variationsForExport.push({
 						uid: this.generateUUID(),
@@ -557,7 +579,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				}
 
-				console.warn( 'EMIT Export Variations::', variationsForExport);
+				console.warn('EMIT Export Variations::', variationsForExport);
 
 				this.variationCollectionForDownloadEvent.emit({
 					bannerComponent: evt,
@@ -571,16 +593,16 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		});
 
-		this.resetVariations.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.resetVariations.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			console.warn( 'New File Received:', evt);
+			console.warn('New File Received:', evt);
 
 			if (!evt || !evt.stage) return;
 
 			//if (this.stage.name === evt.stage) {
 			if (this.stage.name === evt.stage && this.dataContainer.id === evt.containerId) {
 
-				console.warn( this.stage.name + ' Reset Variations:', evt);
+				console.warn(this.stage.name + ' Reset Variations:', evt);
 
 				this.variationsArray = [];
 				this.copyVariationsArray = [];
@@ -592,11 +614,11 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		//animations
 		// play animation request for active frame/container
-		this.playAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.playAnimationStageReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			console.log('Playing animation for stage:', this.stage, evt );
+			//console.log('Playing animation for stage:', this.stage, evt );
 
-			if(
+			if (
 				this.stage &&
 				evt.state === true &&
 				evt.container.id === this.dataContainer.id &&
@@ -606,10 +628,10 @@ export class BannerComponent implements OnInit, OnDestroy {
 				)
 			) {
 
-				if( this.stage.mastername !== undefined ) {
+				if (this.stage.mastername !== undefined) {
 
-					//console.log('Playing variation for stage:', this.currentPage );
-					//console.log('Playing variation for container:', evt.container.id );
+					////console.log('Playing variation for stage:', this.currentPage );
+					////console.log('Playing variation for container:', evt.container.id );
 
 					this.containerTimeline = this.stages[this.currentPage].timeline;
 
@@ -617,9 +639,9 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				} else {
 
-					//console.log('Playing animation for stage:', this.stage.name );
-					//console.log('Playing animation for container:', evt.container.id );
-					//console.log('timeline:', this.containerTimeline );
+					////console.log('Playing animation for stage:', this.stage.name );
+					////console.log('Playing animation for container:', evt.container.id );
+					////console.log('timeline:', this.containerTimeline );
 
 					//this.playGSAPFrameAnimation(this.stages[this.currentPage].timeline);
 					this.playGSAPFrameAnimation(this.containerTimeline);
@@ -628,7 +650,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				this.timelineIsPlaying = true;
 
-			} else if(
+			} else if (
 				this.stage &&
 				evt.state === false &&
 				evt.container.id === this.dataContainer.id &&
@@ -643,7 +665,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		console.warn( 'Variations8::');
+		console.warn('Variations8::');
 		this.renderAnimationsActive = (['HTML5'].includes(this.dataBanner.bannertype.name) === true ? true : false);
 
 	}
@@ -659,19 +681,20 @@ export class BannerComponent implements OnInit, OnDestroy {
 	/* ------------------------------------------
 	 * START: NEW BUILD FUNCTIONS
 	 -------------------------------------------*/
-	private initialiseCreative():void {
-
+	private initialiseCreative(): void {
+		console.log('bannerComponent__ initialiseCreative');
 		this._createCanvas()
-			.then((newcanvas:HTMLCanvasElement) => {
+
+			.then((newcanvas: HTMLCanvasElement) => {
 				return this._setupStage(newcanvas);
 			})
-			.then((newStage:createjs.Stage) => {
+			.then((newStage: createjs.Stage) => {
 
 				//this.BannerComponents = this.dataContainer.components;
 
-				return this._populate( newStage, this.dataContainer.components );
+				return this._populate(newStage, this.dataContainer.components);
 			})
-			.then((stageComponentObj:any) => {
+			.then((stageComponentObj: any) => {
 
 				this.stage = stageComponentObj.stage;
 
@@ -682,27 +705,27 @@ export class BannerComponent implements OnInit, OnDestroy {
 					tweens: stageComponentObj.tweens
 				});
 
-				if( this.renderAnimationsActive === true ) {
+				if (this.renderAnimationsActive === true) {
 					return stageComponentObj;
 				} else {
 					return stageComponentObj;
 				}
 
 			})
-			.then((stageComponentObj:any) => {
+			.then((stageComponentObj: any) => {
 
 				console.warn('InitialiseCreative complete:', stageComponentObj);
 
 				this.intialisePagination();
 				this.stage.update();
 
-				console.log('this.stages', this.stages);
+				//console.log('this.stages', this.stages);
 
 				//this.setupStageEventListeners( this.stage );
 
-				if( this.renderAnimationsActive === true ) {
+				if (this.renderAnimationsActive === true) {
 
-					this.initialiseGSAPAnimations( this.stage, stageComponentObj.tweens.flat() );
+					this.initialiseGSAPAnimations(this.stage, stageComponentObj.tweens.flat());
 
 				} else {
 
@@ -716,18 +739,18 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	private _createCanvas(): Promise<HTMLCanvasElement> {
 
-		//console.log('createCanvas', this.dataBanner);
+		console.log('createCanvas', this.dataBanner);
 
 		return new Promise<HTMLCanvasElement>((resolve, reject) => {
 
 			const canvas = document.createElement("canvas");
 			this.canvasName = "bannerCanvas-" + this.dataBanner.bannersize.width + '-' + this.dataBanner.bannersize.height; //+ '-' + this.dataContainer.id;
 
-			canvas.setAttribute( "id", this.canvasName);
-			canvas.setAttribute( "class", 'canvas-banner');
-			canvas.setAttribute( "data-container-id", this.dataContainer.id);
-			canvas.setAttribute( "width", this.dataBanner.bannersize.width.toString() );
-			canvas.setAttribute( "height", this.dataBanner.bannersize.height.toString() );
+			canvas.setAttribute("id", this.canvasName);
+			canvas.setAttribute("class", 'canvas-banner');
+			canvas.setAttribute("data-container-id", this.dataContainer.id);
+			canvas.setAttribute("width", this.dataBanner.bannersize.width.toString());
+			canvas.setAttribute("height", this.dataBanner.bannersize.height.toString());
 
 			this.elementRef.nativeElement.querySelector('.banner-holder').prepend(canvas);
 
@@ -735,10 +758,10 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		});
 
-    }
+	}
 
-	private _setupStage( canvas: HTMLCanvasElement ): Promise<createjs.Stage> {
-
+	private _setupStage(canvas: HTMLCanvasElement): Promise<createjs.Stage> {
+		console.log('bannerComponent__ _setupStage');
 		// Add tick method.
 		//createjs.Ticker.addEventListener("tick", (evt)=> {
 		//	this.tick(evt);
@@ -766,7 +789,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			//this.stages.push(stage);
 
 			//this.stage.addEventListener("added", (evt:any)=> {
-			//	console.log('display object added:', evt);
+			//	//console.log('display object added:', evt);
 			//});
 
 			resolve(stage);
@@ -774,15 +797,15 @@ export class BannerComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private _populate ( stage:createjs.Stage, components:any[] ): Promise<any> {
-
+	private _populate(stage: createjs.Stage, components: any[]): Promise<any> {
+		console.log('bannerComponent__ _populate');
 		return new Promise<any>((resolve, reject) => {
 
 			const Componentpromises = [];
 
-			components.forEach((component:any) => {
+			components.forEach((component: any) => {
 
-				//console.log('component', component);
+				////console.log('component', component);
 
 				switch (component.componenttype.name) {
 
@@ -823,19 +846,19 @@ export class BannerComponent implements OnInit, OnDestroy {
 			Componentpromises.push(this._populateBannerBorder(stage));
 
 			Promise.all(Componentpromises)
-				.then((displayObjects:any[]) => {
+				.then((displayObjects: any[]) => {
 
-					if( this.renderAnimationsActive === true ) {
+					if (this.renderAnimationsActive === true) {
 
-						const animationPromises:any[] = [];
+						const animationPromises: any[] = [];
 
-						displayObjects.forEach( (displayObject:any) => {
-							if( displayObject.component?.animations.length > 0 ) {
+						displayObjects.forEach((displayObject: any) => {
+							if (displayObject.component?.animations.length > 0) {
 								animationPromises.push(this.animateGSAPComponent(stage, displayObject.component));
 							}
 						});
 
-						//console.log('animationPromises');
+						////console.log('animationPromises');
 
 						return Promise.all(animationPromises);
 
@@ -844,11 +867,11 @@ export class BannerComponent implements OnInit, OnDestroy {
 					}
 
 				})
-				.then((displayObjectsAnimations:any[]) => {
+				.then((displayObjectsAnimations: any[]) => {
 
-					if( this.renderAnimationsActive === true ) {
+					if (this.renderAnimationsActive === true) {
 
-						this.sortStageChildern( stage );
+						this.sortStageChildern(stage);
 
 						resolve({
 							stage: stage,
@@ -860,9 +883,9 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 					} else {
 
-						//console.log('NOT initialiseGSAPAnimations');
+						////console.log('NOT initialiseGSAPAnimations');
 
-						this.sortStageChildern( stage );
+						this.sortStageChildern(stage);
 
 						resolve({
 							stage: stage,
@@ -877,17 +900,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
-	private _populateShape( stage:createjs.Stage, component: any): Promise<any> {
+	private _populateShape(stage: createjs.Stage, component: any): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
 			//console.warn('populateShape:', component);
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
-			const componentShape = new this.bannerCreatorService.BAPP_Shape( component );
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
+			const componentShape = new this.bannerCreatorService.BAPP_Shape(component);
 
 			stage.addChild(componentShape);
-			stage.setChildIndex( componentShape, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(componentShape, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -902,17 +925,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
-	private _populateImage( stage:createjs.Stage, component: any): Promise<any> {
+	private _populateImage(stage: createjs.Stage, component: any): Promise<any> {
 
 		//console.warn('populateImage:', component);
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
-			const componentImage = new this.bannerCreatorService.BAPP_Image( stage, component, componentMeta );
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
+			const componentImage = new this.bannerCreatorService.BAPP_Image(stage, component, componentMeta);
 
 			stage.addChild(componentImage);
-			stage.setChildIndex( componentImage, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(componentImage, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -927,17 +950,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private _populateText( stage:createjs.Stage, component: any): Promise<any> {
+	private _populateText(stage: createjs.Stage, component: any): Promise<any> {
 
-		//console.warn('populateText:', component);
+		console.warn('_populateText:_______________________1', component);
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
-			const canvasText = new this.bannerCreatorService.BAPP_Text( component, componentMeta );
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
+			const canvasText = new this.bannerCreatorService.BAPP_Text(component, componentMeta);
 
 			stage.addChild(canvasText);
-			stage.setChildIndex( canvasText, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(canvasText, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -951,15 +974,15 @@ export class BannerComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private _populateButton( stage:createjs.Stage, component: any): Promise<any> {
+	private _populateButton(stage: createjs.Stage, component: any): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
-			const componentMeta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
-			const canvasButton = new this.bannerCreatorService.BAPP_Button( component );
+			const componentMeta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
+			const canvasButton = new this.bannerCreatorService.BAPP_Button(component);
 
 			stage.addChild(canvasButton);
-			stage.setChildIndex( canvasButton, parseInt(componentMeta.zIndex) );
+			stage.setChildIndex(canvasButton, parseInt(componentMeta.zIndex));
 
 			stage.update();
 
@@ -970,13 +993,13 @@ export class BannerComponent implements OnInit, OnDestroy {
 				'displayobject': canvasButton
 			});
 
-			//console.warn('populateButton:', canvasButton);
+			console.warn('populateButton:', canvasButton);
 
 		});
 
 	}
 
-	private _populateBannerBorder( stage:createjs.Stage ): Promise<createjs.DisplayObject> {
+	private _populateBannerBorder(stage: createjs.Stage): Promise<createjs.DisplayObject> {
 
 		return new Promise<createjs.DisplayObject>((resolve, reject) => {
 
@@ -988,9 +1011,9 @@ export class BannerComponent implements OnInit, OnDestroy {
 			const z_index_border = "99";//component.componentmeta.find((x:any) => x.name === 'zIndex').value;
 
 			const border_obj = new createjs.Graphics()
-											.setStrokeStyle(1)
-											.beginStroke(bgColour)
-											.drawRect(0, 0, width_border, height_border);
+				.setStrokeStyle(1)
+				.beginStroke(bgColour)
+				.drawRect(0, 0, width_border, height_border);
 
 			const component_border = new createjs.Shape(border_obj);
 			component_border.name = 'canvas_border'//component.name.toLowerCase();
@@ -999,7 +1022,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 			component_border.id = parseInt(z_index_border);
 
 			stage.addChild(component_border);
-			stage.setChildIndex( component_border, parseInt(z_index_border) );
+			stage.setChildIndex(component_border, parseInt(z_index_border));
 
 			stage.update();
 
@@ -1009,25 +1032,27 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
-	private emptyActiveStage( stage:createjs.Stage ):void {
+	private emptyActiveStage(stage: createjs.Stage): void {
 		stage.removeAllEventListeners();
 		stage.removeAllChildren();
 	}
 
-	private prepareVariationsarray(): any[] {
+	private prepareVariationsarray(evt: any): any[] {
 
 		console.log('prepareVariationsarray');
 
-		const variationsHolder:any[] = [];
+		const variationsHolder: any[] = [];
+		this.copyVariationsArray.push(evt.dta[0])
 
-		console.log(this.copyVariationsArray.length +" > 0 && "+this.variationsArray.length);
+		console.log(this.copyVariationsArray.length + " > 0 && " + this.variationsArray.length);
 
-		if( this.copyVariationsArray.length > 0 && this.variationsArray.length > 0 ) {
+		if (this.copyVariationsArray.length > 0 && this.variationsArray.length > 0) {
 			console.log("in if copy n1");
-			this.copyVariationsArray.forEach( (copy) =>{
+			this.copyVariationsArray.forEach((copy) => {
 				// issue #141 - This is a temporary fix until it's properly resolved.
-				if( (copy.type === 'Text' && typeof copy.value === 'object') || (copy.type === 'Button' && typeof copy.value === 'object') ) {
-					this.variationsArray.forEach( (background) => {
+				if ((copy.type === 'Text' && typeof copy.value === 'object') || (copy.type === 'Button' && typeof copy.value === 'object')) {
+					this.variationsArray.forEach((background) => {
+						console.log("test if push 1");
 						variationsHolder.push([copy, background])
 					});
 				}
@@ -1035,20 +1060,22 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		} else if (this.variationsArray.length > 0) {
 			console.log("in if image");
-			this.variationsArray.forEach( (image) => {
+			this.variationsArray.forEach((image) => {
 				variationsHolder.push([image])
 			});
 
 		} else if (this.copyVariationsArray.length > 0) {
 			console.log("in if copy");
-			this.copyVariationsArray.forEach( (copy) =>{
-				if( (copy.type === 'Text' && typeof copy.value === 'object') || copy.type === 'Button' && typeof copy.value === 'object' ) {
+			this.copyVariationsArray.forEach((copy) => {
+				console.log("test if before push 2", copy.type);
+				if ((copy.type === 'Text' && typeof copy.value === 'object') || copy.type === 'Button' && typeof copy.value === 'object') {
+					console.log("test if push 2");
 					variationsHolder.push([copy])
 				}
 			});
 
 		}
-		console.log("variationsHolder ",variationsHolder);
+		console.log("variationsHolder ", variationsHolder);
 		return variationsHolder;
 
 	}
@@ -1059,39 +1086,39 @@ export class BannerComponent implements OnInit, OnDestroy {
 	 * @param componentData (Object)
 	 *
 	 */
-	private doesReceivedFilePassComponentRules( type:string, componentName: string, componentData:any ) : any {
+	private doesReceivedFilePassComponentRules(type: string, componentName: string, componentData: any): any {
 
 		let validationResult = {
 			error: true,
 			result: false,
 			message: ''
 		}
-		let rulecheck = this.BannerComponentTemplateRules.find((x:any) => x.bannersizeId === this.dataBanner.bannersizeId).templaterules;
+		let rulecheck = this.BannerComponentTemplateRules.find((x: any) => x.bannersizeId === this.dataBanner.bannersizeId).templaterules;
 		// get rules for specific container
-		rulecheck = rulecheck.filter((x:any) => x.containerId === this.dataContainer.id);
+		rulecheck = rulecheck.filter((x: any) => x.containerId === this.dataContainer.id);
 		switch (type) {
 			case 'Text':
 			case 'Button':
 
-				console.log('rulecheck:', rulecheck, componentData);
+				//console.log('rulecheck:', rulecheck, componentData);
 
-				const ruleHeadings:any = [];
-				const spreadsheetHeadings = Object.keys(componentData[0]).map((x:any) => x.toLowerCase());
+				const ruleHeadings: any = [];
+				const spreadsheetHeadings = Object.keys(componentData[0]).map((x: any) => x.toLowerCase());
 
-				rulecheck.forEach((rule:any) => {
-					if( rule.type === 'Text' || rule.type === 'Button' ) {
+				rulecheck.forEach((rule: any) => {
+					if (rule.type === 'Text' || rule.type === 'Button') {
 						ruleHeadings.push(rule.name);
 					}
 				});
 
 				// https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
-				const difference = spreadsheetHeadings.filter((x:any) => !ruleHeadings.includes(x));
+				const difference = spreadsheetHeadings.filter((x: any) => !ruleHeadings.includes(x));
 
-				//console.log('rulesHeadings:', ruleHeadings);
-				//console.log('spreadsheetHeadings:', spreadsheetHeadings);
+				////console.log('rulesHeadings:', ruleHeadings);
+				////console.log('spreadsheetHeadings:', spreadsheetHeadings);
 				//console.warn('DifferenceColumns:', difference );
 
-				if( difference.length > 0 ) {
+				if (difference.length > 0) {
 
 					validationResult = {
 						error: true,
@@ -1108,10 +1135,10 @@ export class BannerComponent implements OnInit, OnDestroy {
 					for (let index = 0; index < componentData.length; index++) {
 
 						// https://bobbyhadz.com/blog/javascript-lowercase-object-keys
-						function toLowerKeys(obj:any) {
-							return Object.keys(obj).reduce((accumulator:any, key:string) => {
-							  accumulator[key.toLowerCase()] = obj[key];
-							  return accumulator;
+						function toLowerKeys(obj: any) {
+							return Object.keys(obj).reduce((accumulator: any, key: string) => {
+								accumulator[key.toLowerCase()] = obj[key];
+								return accumulator;
 							}, {});
 						}
 
@@ -1121,15 +1148,15 @@ export class BannerComponent implements OnInit, OnDestroy {
 						for (let index2 = 0; index2 < ruleHeadings.length; index2++) {
 							const ruleHeading = ruleHeadings[index2];
 
-							const rule = rulecheck.find((x:any) => x.name === ruleHeading).rules[0].maximumcharacters;
+							const rule = rulecheck.find((x: any) => x.name === ruleHeading).rules[0].maximumcharacters;
 
-							if( row[ruleHeading] ) {
-								if( row[ruleHeading].length > rule ) {
+							if (row[ruleHeading]) {
+								if (row[ruleHeading].length > rule) {
 
 									validationResult = {
 										error: true,
 										result: false,
-										message: `ROW: ${(index+1)}\nCOLUMN: ${ruleHeading}\nCOPY: ${row[ruleHeading]}\nISSUE: ${(row[ruleHeading].length - rule)} characters too long.`,
+										message: `ROW: ${(index + 1)}\nCOLUMN: ${ruleHeading}\nCOPY: ${row[ruleHeading]}\nISSUE: ${(row[ruleHeading].length - rule)} characters too long.`,
 									}
 
 									//console.error('doesReceivedFilePassComponentRules:', 'Copy to long', row[ruleHeading], row[ruleHeading].length, rule);
@@ -1149,7 +1176,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 								validationResult = {
 									error: true,
 									result: false,
-									message: `ROW: ${(index+1)}\nCOLUMN: ${ruleHeading}\nCOPY: ${row[ruleHeading]}\nISSUE: Not valid for the selected component.`,
+									message: `ROW: ${(index + 1)}\nCOLUMN: ${ruleHeading}\nCOPY: ${row[ruleHeading]}\nISSUE: Not valid for the selected component.`,
 									//message: `ROW  ${index} (${row[ruleHeading]}): is not valid for the selected component.`
 								}
 							}
@@ -1162,29 +1189,29 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 			case 'Image':
 
-				rulecheck = rulecheck.find((x:any) => x.name === componentName);
+				rulecheck = rulecheck.find((x: any) => x.name === componentName);
 
-				//console.log('componentData', componentData)
+				////console.log('componentData', componentData)
 
 				// check image dimensions
 				for (let index = 0; index < rulecheck.rules.length; index++) {
 					const rule = rulecheck.rules[index];
-					if( parseInt(rule.width) === componentData.width && parseInt(rule.height) === componentData.height ) {
+					if (parseInt(rule.width) === componentData.width && parseInt(rule.height) === componentData.height) {
 						validationResult = {
 							error: false,
 							result: true,
 							message: `${componentName.toUpperCase()} added successfully.`
 						}
 
-					} else if( parseInt(rule.width) < componentData.width && parseInt(rule.height) < componentData.height ) {
+					} else if (parseInt(rule.width) < componentData.width && parseInt(rule.height) < componentData.height) {
 
 						const ruleRatio = (parseInt(rule.width) / parseInt(rule.height)).toFixed(1);
 						const componentDataRatio = (parseInt(componentData.width) / parseInt(componentData.height)).toFixed(1);
 
-						console.log('ruleRatio:', ruleRatio);
-						console.log('componentDataRatio:', componentDataRatio);
+						//console.log('ruleRatio:', ruleRatio);
+						//console.log('componentDataRatio:', componentDataRatio);
 
-						if( ruleRatio === componentDataRatio ) {
+						if (ruleRatio === componentDataRatio) {
 
 							validationResult = {
 								error: false,
@@ -1241,15 +1268,15 @@ export class BannerComponent implements OnInit, OnDestroy {
 	 * Update Existing Banner Componenets
 	 *
 	 */
-	private populateVariationsArray( type:string, componentName: string, data:any) {
-		console.log('populateVariationsArray	',type);
+	private populateVariationsArray(type: string, componentName: string, data: any) {
+		//console.log('populateVariationsArray	',type);
 
 		switch (type) {
 
-            case 'Text':
+			case 'Text':
 			case 'Button':
 
-                //this.stage.removeChild(this.stage.getChildByName('copy'));
+				//this.stage.removeChild(this.stage.getChildByName('copy'));
 				//this.stage.update();
 
 				const FR1 = new FileReader();
@@ -1266,49 +1293,45 @@ export class BannerComponent implements OnInit, OnDestroy {
 					// validate data before continuing:
 					const validationPassed = this.doesReceivedFilePassComponentRules(type, componentName, datax);
 
-					if( validationPassed.result === true ) {
+					if (validationPassed.result === true) {
 
 						//const copy_variations:any[] = [];
 
-						const options:any = {};
-						datax.forEach(function (item:any)
-							{
-							for (const prop in item)
-								{
-									if (options[prop])
-									{
-										options[prop].push(item[prop]);
-									} else
-									{
-										options[prop] = [item[prop]];
-									}
+						const options: any = {};
+						datax.forEach(function (item: any) {
+							for (const prop in item) {
+								if (options[prop]) {
+									options[prop].push(item[prop]);
+								} else {
+									options[prop] = [item[prop]];
 								}
 							}
+						}
 						);
 
-						console.log('getCartesianProduct options:', options);
+						//console.log('getCartesianProduct options:', options);
 
-						const c:any = this.getCartesianProduct(options);
+						const c: any = this.getCartesianProduct(options);
 
 						console.warn('getCartesianProduct:', c);
 
 						// https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects
-						const uniqueArray = c.filter((value:any, index:number) => {
+						const uniqueArray = c.filter((value: any, index: number) => {
 							const _value = JSON.stringify(value);
-							return index === c.findIndex((obj:any) => {
+							return index === c.findIndex((obj: any) => {
 								return JSON.stringify(obj) === _value;
 							});
 						});
 
-						uniqueArray.forEach((x:any) => {
+						uniqueArray.forEach((x: any) => {
 							this.copyVariationsArray.push({
 								id: this.generateUUID(),
 								type: type,
 								name: componentName,
 								value: x
 							});
-							console.log('cvArr')
-							console.log(this.copyVariationsArray)
+							//console.log('cvArr')
+							//console.log(this.copyVariationsArray)
 						});
 
 						this.alertService.success(validationPassed.message, { keepAfterRouteChange: true });
@@ -1325,7 +1348,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				});
 
-                break;
+				break;
 
 			case 'Image':
 
@@ -1337,7 +1360,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 						// validate data before continuing:
 						const validationPassed = this.doesReceivedFilePassComponentRules(type, componentName, img);
 
-						if( validationPassed.result === true ) {
+						if (validationPassed.result === true) {
 
 							this.variationsArray.push({
 								id: data.id,
@@ -1372,7 +1395,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 				// validate data before continuing:
 				const validationPassed = this.doesReceivedFilePassComponentRules(type, componentName, data);
 
-				if( validationPassed.result === true ) {
+				if (validationPassed.result === true) {
 
 					this.variationsArray.push({
 						id: this.generateUUID(),
@@ -1391,30 +1414,30 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				break;
 
-            default:
-                break;
+			default:
+				break;
 		}
 	}
 
 	/* ------------------------------------------
 	 * ANIMATIONS
 	 -------------------------------------------*/
-	private playGSAPFrameAnimation( activeTimeline:GSAPTimeline ) {
+	private playGSAPFrameAnimation(activeTimeline: GSAPTimeline) {
 
-		if( this.stage.hasEventListener('tick') ) {} else {
+		if (this.stage.hasEventListener('tick')) { } else {
 			createjs.Ticker.addEventListener("tick", this.stage);
 			this.stage.update();
 		}
 
-		const onCompletion = (evt:any) => {
+		const onCompletion = (evt: any) => {
 			console.warn('Frame Complete:', evt);
 			this.timelineIsPlaying = false;
 			this.FrameAnimationPlayEventEnd.emit(this.dataContainer.id);
 		}
 
-		activeTimeline.eventCallback("onComplete", onCompletion, ["param1","param2"]);
+		activeTimeline.eventCallback("onComplete", onCompletion, ["param1", "param2"]);
 
-		if( activeTimeline['_time'] === activeTimeline.totalDuration() ) {
+		if (activeTimeline['_time'] === activeTimeline.totalDuration()) {
 			activeTimeline.play(0);
 		} else {
 			activeTimeline.play();
@@ -1422,20 +1445,20 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
-	private animateGSAPComponent( stage:createjs.Stage, component: any): Promise<any[]> {
+	private animateGSAPComponent(stage: createjs.Stage, component: any): Promise<any[]> {
 
 		return new Promise<any[]>((resolve, reject) => {
 
 			const displayObj = stage.getChildByName(component.name.toLowerCase());
 
 			//const instanceTimeline = gsap.timeline();
-			const tweens:any[] = [];
+			const tweens: any[] = [];
 
-			component.animations.forEach((animation:any, index:number) => {
+			component.animations.forEach((animation: any, index: number) => {
 
-				const animationmeta = animation.animationmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+				const animationmeta = animation.animationmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 
-				if( animationmeta.duration === 0 || animation.animationtype.name === 'Start' ) {
+				if (animationmeta.duration === 0 || animation.animationtype.name === 'Start') {
 
 					const setValues = gsap.set(
 						displayObj,
@@ -1444,7 +1467,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
 							ease: "power3.out",
-							paused:false
+							paused: false
 						},
 					);
 
@@ -1464,7 +1487,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 							x: parseInt(animationmeta.positionX),
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
-							paused:false
+							paused: false
 						}
 					);
 
@@ -1486,15 +1509,15 @@ export class BannerComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private buildGSAPAnimationTimeline( tweens:GSAPTimeline[] ): Promise<GSAPTimeline> {
+	private buildGSAPAnimationTimeline(tweens: GSAPTimeline[]): Promise<GSAPTimeline> {
 
 		return new Promise<GSAPTimeline>((resolve, reject) => {
 
 			//gsap.globalTimeline.pause();
 
-			const masterTimeline = gsap.timeline({ paused:false });
+			const masterTimeline = gsap.timeline({ paused: false });
 
-			tweens.forEach((tween:GSAPTimeline) => {
+			tweens.forEach((tween: GSAPTimeline) => {
 				masterTimeline.add(tween['tween'], tween['position']);
 			});
 
@@ -1504,17 +1527,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
-	private initialiseGSAPAnimations( stage:createjs.Stage, tweens:any[] ) {
-		//console.log('initialiseGSAPAnimations:', tweens);
+	private initialiseGSAPAnimations(stage: createjs.Stage, tweens: any[]) {
+		////console.log('initialiseGSAPAnimations:', tweens);
 
 		//return this.buildGSAPAnimationTimeline(tweens.flat());
 
-		this.buildGSAPAnimationTimeline( tweens )
-			.then((timeline:any) => {
+		this.buildGSAPAnimationTimeline(tweens)
+			.then((timeline: any) => {
 
 				//console.warn('Master Timeline Ready:', timeline);
 
-				this.stages[0].timeline  = timeline;
+				this.stages[0].timeline = timeline;
 
 				this.containerTimeline = timeline;
 
@@ -1550,7 +1573,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		//}
 
 		/** /
-		console.log('Paginating:', e, {
+		//console.log('Paginating:', e, {
 			'previousStage': this.stages[e.previousPageIndex],
 			'currentStage': this.stages[e.pageIndex]
 		});
@@ -1563,7 +1586,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		this.stage = this.stages[e.pageIndex].stage;
 		this.stage.sortChildren(this.sortStageChildren);
 
-		if( this.renderAnimationsActive === true && this.stages[e.pageIndex].timeline !== undefined ) {
+		if (this.renderAnimationsActive === true && this.stages[e.pageIndex].timeline !== undefined) {
 			this.stage.update();
 			this.containerTimeline = this.stages[e.pageIndex].timeline;
 			this.playGSAPFrameAnimation(this.stages[e.pageIndex].timeline);
@@ -1603,16 +1626,16 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	public downloadTemplateRulesCopyExample(): void {
 
-		let rules = this.BannerComponentTemplateRules.find((x:any) => x.bannersizeId === this.dataBanner.bannersizeId).templaterules;
+		let rules = this.BannerComponentTemplateRules.find((x: any) => x.bannersizeId === this.dataBanner.bannersizeId).templaterules;
 		// get rules for specific container
-		rules = rules.filter((x:any) => x.containerId === this.dataContainer.id);
+		rules = rules.filter((x: any) => x.containerId === this.dataContainer.id);
 		return rules;
 
 	}
 
-	private sortStageChildern( stage:any ) {
+	private sortStageChildern(stage: any) {
 
-		const sortFunction = function(obj1:any, obj2:any, options:any) {
+		const sortFunction = function (obj1: any, obj2: any, options: any) {
 			if (obj1.id > obj2.id) { return 1; }
 			if (obj1.id < obj2.id) { return -1; }
 			return 0;
@@ -1622,72 +1645,71 @@ export class BannerComponent implements OnInit, OnDestroy {
 		stage.update();
 	}
 
-	private sortStageChildren (obj1:any, obj2:any, options:any) {
+	private sortStageChildren(obj1: any, obj2: any, options: any) {
 		if (obj1.id > obj2.id) { return 1; }
 		if (obj1.id < obj2.id) { return -1; }
 		return 0;
 	}
 
-	private getCartesianProduct(a:any) {
+	private getCartesianProduct(a: any) {
 
-		const cartesian:any = (objXarr:any) => {
-				const 	names 		= Object.keys( objXarr ),
-						len   		= names.length -1,
-						resp:any  	= [];
+		const cartesian: any = (objXarr: any) => {
+			const names = Object.keys(objXarr),
+				len = names.length - 1,
+				resp: any = [];
 
-				buildIn( {}, 0)
+			buildIn({}, 0)
 
-				return resp;
+			return resp;
 
-				function buildIn(obj:any, indx:any) {
-					const key = names[indx];
-					for (const val of objXarr[ key ] )
-					{
-						const oo = {...obj,[key]:val}
-						if (indx < len )  buildIn(oo, indx +1)
-						else resp.push( oo )
-					}
+			function buildIn(obj: any, indx: any) {
+				const key = names[indx];
+				for (const val of objXarr[key]) {
+					const oo = { ...obj, [key]: val }
+					if (indx < len) buildIn(oo, indx + 1)
+					else resp.push(oo)
 				}
+			}
 		}
 
-		const c:any = cartesian(a);
+		const c: any = cartesian(a);
 		return c;
 
 	}
 
-	private randomColor () {
-		return Math.floor(Math.random()*16777215).toString(16);
+	private randomColor() {
+		return Math.floor(Math.random() * 16777215).toString(16);
 	}
 
 	private generateUUID() { // Public Domain/MIT
 		let d = new Date().getTime();//Timestamp
-		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 			let r = Math.random() * 16;//random number between 0 and 16
-			if(d > 0){//Use timestamp until depleted
-				r = (d + r)%16 | 0;
-				d = Math.floor(d/16);
+			if (d > 0) {//Use timestamp until depleted
+				r = (d + r) % 16 | 0;
+				d = Math.floor(d / 16);
 			} else {//Use microseconds since page-load if supported
-				r = (d2 + r)%16 | 0;
-				d2 = Math.floor(d2/16);
+				r = (d2 + r) % 16 | 0;
+				d2 = Math.floor(d2 / 16);
 			}
 			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 		});
 	}
 
 	//https://stackoverflow.com/questions/44698967/requesting-blob-images-and-transforming-to-base64-with-fetch-api
-	private urlContentToDataUri(url:string): Promise<string | ArrayBuffer | null>{
-		return  fetch(url)
-				.then( response => response.blob() )
-				.then( blob => new Promise( callback =>{
-					const reader = new FileReader() ;
-					reader.onload = function(){ callback(this.result) } ;
-					reader.readAsDataURL(blob) ;
-				}) ) ;
+	private urlContentToDataUri(url: string): Promise<string | ArrayBuffer | null> {
+		return fetch(url)
+			.then(response => response.blob())
+			.then(blob => new Promise(callback => {
+				const reader = new FileReader();
+				reader.onload = function () { callback(this.result) };
+				reader.readAsDataURL(blob);
+			}));
 	}
 
 	// https://stackoverflow.com/questions/12168909/blob-from-dataurl
-	private dataURItoBlob(dataURI:string): Blob {
+	private dataURItoBlob(dataURI: string): Blob {
 		// convert base64 to raw binary data held in a string
 		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
 		const byteString = atob(dataURI.split(',')[1]);
@@ -1707,17 +1729,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 		}
 
 		// write the ArrayBuffer to a blob, and you're done
-		const blob = new Blob([ab], {type: mimeString});
+		const blob = new Blob([ab], { type: mimeString });
 		return blob;
 
 	}
 
 	// https://www.sitepoint.com/delay-sleep-pause-wait/
-	private sleep( milliseconds:number) {
+	private sleep(milliseconds: number) {
 		const date = Date.now();
 		let currentDate = null;
 		do {
-		  currentDate = Date.now();
+			currentDate = Date.now();
 		} while (currentDate - date < milliseconds);
 	}
 
@@ -1733,11 +1755,11 @@ export class BottomSheetBannerTemplateRulesComponent {
 		private _bottomSheetRef: MatBottomSheetRef<BottomSheetBannerTemplateRulesComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any[]
 	) {
-		console.log('BottomSheetBannerTemplateRulesComponent', data);
+		//console.log('BottomSheetBannerTemplateRulesComponent', data);
 	}
 
 	//generate characters based on rule Maximumcharacters
-	private generateRandomWords(characterCount:number) {
+	private generateRandomWords(characterCount: number) {
 		let text = "";
 		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		const chaactersLength = characters.length;
@@ -1750,14 +1772,12 @@ export class BottomSheetBannerTemplateRulesComponent {
 
 	public openLink(event: MouseEvent): void {
 
-		const dataSheet:any = [];
-		const columnames:any = [];
+		const dataSheet: any = [];
+		const columnames: any = [];
 
-		for (let i = 0; i < this.data.length;i++)
-		{
+		for (let i = 0; i < this.data.length; i++) {
 
-			if(this.data[i].type === "Text" || this.data[i].type === "Button")
-			{
+			if (this.data[i].type === "Text" || this.data[i].type === "Button") {
 				// https://www.samanthaming.com/tidbits/37-dynamic-property-name-with-es6/
 				dataSheet.push(
 					{
@@ -1775,15 +1795,15 @@ export class BottomSheetBannerTemplateRulesComponent {
 
 		// making sure all the objects in DataSheet have the same heading/properties so that our spreadsheet
 		// is properly populated
-		dataSheet.forEach((x:any) => {
-			columnames.forEach((y:any) => {
-				if( !x.hasOwnProperty(y.name) ) {
+		dataSheet.forEach((x: any) => {
+			columnames.forEach((y: any) => {
+				if (!x.hasOwnProperty(y.name)) {
 					x[y.name] = `Maximum Characters: ${y.maxChar}` //this.generateRandomWords( y.maxChar )
 				}
 			});
 		});
 
-		//console.log("generate worksheet", dataSheet);
+		////console.log("generate worksheet", dataSheet);
 		// https://www.npmjs.com/package/xlsx#utility-functions
 		/* generate worksheet */
 		const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataSheet);

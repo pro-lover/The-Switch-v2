@@ -91,17 +91,17 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.projectService.project
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(projects:Project[]) =>  {
-					//console.log('collection subscription:', projects);
+				(projects: Project[]) => {
+					////console.log('collection subscription:', projects);
 
 					this.allData = projects;
 
-					if( projects !== undefined && projects.length > 0 ) {
+					if (projects !== undefined && projects.length > 0) {
 						this.initialise(projects);
 
 						this.initialiseTextFilters();
@@ -109,20 +109,20 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 				}
 			);
 
-			this.templateService.getAll()
+		this.templateService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(templates:Template[]) =>  {
-					//console.log('templates', templates);
+				(templates: Template[]) => {
+					////console.log('templates', templates);
 					this.filterDataTemplates = templates;
 				}
 			);
 
-			this.bannerTypeService.getAll()
+		this.bannerTypeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannertypes:BannerType[]) =>  {
-					//console.log('bannertypes', bannertypes);
+				(bannertypes: BannerType[]) => {
+					////console.log('bannertypes', bannertypes);
 					this.filterDataBannerTypes = bannertypes;
 				}
 			);
@@ -130,8 +130,8 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		this.bannerSizeService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(bannersizes:BannerSize[]) =>  {
-					//console.log('bannersizes', bannersizes);
+				(bannersizes: BannerSize[]) => {
+					////console.log('bannersizes', bannersizes);
 					this.filterDataBannerSizes = bannersizes;
 				}
 			);
@@ -139,8 +139,8 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		this.clientService.getAll()
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(clients:Client[]) =>  {
-					console.log('Clients', clients);
+				(clients: Client[]) => {
+					//console.log('Clients', clients);
 					this.filterDataClients = clients;
 				}
 			);
@@ -161,105 +161,105 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		this._destroy$.next(false);
 		this._destroy$.complete();
 	}
-		// filters
-		private initialiseTextFilters() {
+	// filters
+	private initialiseTextFilters() {
 
-			this.masterReference_names = this.allData.map( (jk: any) => {
-				return {
-					'id': jk.id,
-					'name': jk.name
+		this.masterReference_names = this.allData.map((jk: any) => {
+			return {
+				'id': jk.id,
+				'name': jk.name
+			}
+		});
+		//this.masterReference_locations = _.uniq(this.masterReference_locations, y => y.location);
+
+		this.filteredNames = this.chipCtrl.valueChanges.pipe(
+			startWith(null),
+			map((so: any | null) => {
+				//console.warn('this.filteredNames:', so);
+
+				if (Number(so)) {
+					return;
 				}
-			});
-			//this.masterReference_locations = _.uniq(this.masterReference_locations, y => y.location);
 
-			this.filteredNames = this.chipCtrl.valueChanges.pipe(
-				startWith(null),
-				map( (so: any | null) => {
-					//console.warn('this.filteredNames:', so);
-
-					if( Number(so) ) {
-						return;
-					}
-
-					return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
+				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
 			}));
 
+	}
+	private myTextFilter(type: string, name: string) {
+		//console.warn(email);
+		switch (type) {
+			case 'name':
+				return this.masterReference_names.filter(so => so.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+			default:
+				return [];
 		}
-		private myTextFilter(type:string, name: string) {
-			//console.warn(email);
-			switch (type) {
-				case 'name':
-					return this.masterReference_names.filter(so => so.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
-				default:
-					return [];
-			}
-		}
+	}
 
-		public selectedTextFilter(event: MatAutocompleteSelectedEvent, type: string): void {
+	public selectedTextFilter(event: MatAutocompleteSelectedEvent, type: string): void {
 
-			this.removeSelectedFiltered(type);
+		this.removeSelectedFiltered(type);
 
-			//this.filterAlphabet = 'all';
+		//this.filterAlphabet = 'all';
 
-			switch (type) {
-				case 'name':
+		switch (type) {
+			case 'name':
 
-					this.sortedData = [this.allData.find(x => x.id === event.option.value)];
-					this.length = this.sortedData.length;
-					this.activeNameFilters = this.sortedData;
-					break;
-				default:
-					break;
-			}
-
-			//console.log('selectedTextFilter['+type+']:', this.sortedData);
-
+				this.sortedData = [this.allData.find(x => x.id === event.option.value)];
+				this.length = this.sortedData.length;
+				this.activeNameFilters = this.sortedData;
+				break;
+			default:
+				break;
 		}
 
-		public removeSelectedFiltered(type:string): void {
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
-			switch (type) {
-				case 'name':
-					this.activeNameFilters.pop();
-					break;
-				default:
-					break;
-			}
+	}
 
-			this.sortedData = this.primaryData.slice();
-			this.length = this.sortedData.length;
-			this.iterator();
+	public removeSelectedFiltered(type: string): void {
+
+		switch (type) {
+			case 'name':
+				this.activeNameFilters.pop();
+				break;
+			default:
+				break;
 		}
 
-		public onFilterChange( filter:string ): void {
+		this.sortedData = this.primaryData.slice();
+		this.length = this.sortedData.length;
+		this.iterator();
+	}
 
-			let newdata: any;
+	public onFilterChange(filter: string): void {
 
-			newdata = this.allData;
+		let newdata: any;
 
-			if( this.clientFilterValue.value && this.clientFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
+		newdata = this.allData;
 
-					return x.clientId === this.clientFilterValue.value
-				});
-			}
+		if (this.clientFilterValue.value && this.clientFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 
-			if( this.templateFilterValue.value && this.templateFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.container.banner.templateId === this.templateFilterValue.value
-				});
-			}
-
-			if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-				newdata = newdata.filter((x:any) => {
-					return x.status === this.statusFilterValue.value
-				});
-			}
-
-			this.initialise(newdata);
+				return x.clientId === this.clientFilterValue.value
+			});
 		}
 
-	private initialise( projects:Project[]):void {
+		if (this.templateFilterValue.value && this.templateFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.container.banner.templateId === this.templateFilterValue.value
+			});
+		}
+
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
+				return x.status === this.statusFilterValue.value
+			});
+		}
+
+		this.initialise(newdata);
+	}
+
+	private initialise(projects: Project[]): void {
 
 		this.primaryData = projects;
 		this.sortedData = this.primaryData.slice();
@@ -270,7 +270,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -279,7 +279,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
+	private updateStatus(id: string, params: any): void {
 		this.projectService.updateStatus(id, params)
 			.pipe(first())
 			.subscribe({
@@ -297,7 +297,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -312,17 +312,17 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 					.subscribe({
 						next: () => {
 							model.isDeleting = false;
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = new Date();
 									x.status = false;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -340,7 +340,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -354,19 +354,19 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = null;
 									x.status = true;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.iterator();
 								}
 							});
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -436,18 +436,18 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		this.introJS.start();
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 
 			return {
 				'ID': data.id,
@@ -475,7 +475,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 	}
 
 	// PAGINATION FUNCS
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -499,7 +499,7 @@ export class ProjectsListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

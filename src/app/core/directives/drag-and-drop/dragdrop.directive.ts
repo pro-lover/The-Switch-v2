@@ -13,25 +13,25 @@ export class DragAndDropDirective {
 	@Output() fileDropped = new EventEmitter<any>();
 
 	constructor(private elementRef: ElementRef) {
-		//console.log('Drag and Drop Scope: ', this.contextScope);
+		////console.log('Drag and Drop Scope: ', this.contextScope);
 	}
 
 	// Dragover listener
-	@HostListener('dragover', ['$event']) onDragOver(evt:any) {
+	@HostListener('dragover', ['$event']) onDragOver(evt: any) {
 		evt.preventDefault();
 		evt.stopPropagation();
 		this.fileOver = true;
 	}
 
 	// Dragleave listener
-	@HostListener('dragleave', ['$event']) public onDragLeave(evt:any) {
+	@HostListener('dragleave', ['$event']) public onDragLeave(evt: any) {
 		evt.preventDefault();
 		evt.stopPropagation();
 		this.fileOver = false;
 	}
 
 	// Drop listener
-	@HostListener('drop', ['$event']) public ondrop(evt:any) {
+	@HostListener('drop', ['$event']) public ondrop(evt: any) {
 		evt.preventDefault();
 		evt.stopPropagation();
 		this.fileOver = false;
@@ -43,8 +43,8 @@ export class DragAndDropDirective {
 
 
 	}
-	@HostListener('change', ['$event.target']) onChange(evt:any) {
+	@HostListener('change', ['$event.target']) onChange(evt: any) {
 		evt.preventDefault();
 		evt.stopPropagation();
-}
+	}
 }

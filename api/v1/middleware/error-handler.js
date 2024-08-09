@@ -17,7 +17,7 @@ function errorHandler(err, req, res, next) {
 			return res.status(401).json({ message: 'Unauthorized' });
 		case err.name === 'ForbiddenError':
 			//logger.color('red').bold().log( 'ForbiddenError', req.headers);
-			//console.log('ForbiddenError', JSON.stringify(req.headers));
+			////console.log('ForbiddenError', JSON.stringify(req.headers));
 			return res.status(403).json({ message: err.message });
 		default:
 			//logger.color('red').bold().log( 'ERR', err);

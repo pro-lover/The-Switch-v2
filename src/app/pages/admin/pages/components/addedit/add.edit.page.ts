@@ -64,8 +64,8 @@ export class ComponentsAddEditPage implements OnInit {
 		if (!this.isAddMode) {
 			this.componentService.getById(this.id)
 				.pipe(first())
-				.subscribe( (x) => {
-					console.log('Component: ', x);
+				.subscribe((x) => {
+					//console.log('Component: ', x);
 					this.componentModel = x;
 					this.form.patchValue(x);
 					this.f['componentId'].patchValue(x.id);
@@ -141,33 +141,33 @@ export class ComponentsAddEditPage implements OnInit {
 	}
 
 	private createRecord() {
-        this.componentService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.componentService.create(this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record created successfully', { keepAfterRouteChange: true });
+					this.router.navigate(['../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 	private updateRecord() {
-        this.componentService.update(this.id, this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+		this.componentService.update(this.id, this.form.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Update successful', { keepAfterRouteChange: true });
+					this.router.navigate(['../../'], { relativeTo: this.route });
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 	}
 
 }

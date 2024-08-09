@@ -27,7 +27,7 @@ export class BannerService {
 	}
 
 	public getAll() {
-		if( this.bannerValue !== null && this.bannerValue.length > 0 ) {
+		if (this.bannerValue !== null && this.bannerValue.length > 0) {
 
 			//console.warn('Collection initialised in service:', this.bannerValue);
 			return this.bannerSubject;
@@ -35,10 +35,10 @@ export class BannerService {
 		} else {
 			return this.http.get<Banner[]>(baseUrl)
 				.pipe(map((modelCollection: Banner[]) => {
-						// publish updated collection to subscribers
-						this.bannerSubject.next(modelCollection);
-						return modelCollection;
-					})
+					// publish updated collection to subscribers
+					this.bannerSubject.next(modelCollection);
+					return modelCollection;
+				})
 				);
 		}
 
@@ -63,7 +63,7 @@ export class BannerService {
 			}));
 	}
 
-    public update(id:string, params: any) {
+	public update(id: string, params: any) {
 		return this.http.put<Banner>(`${baseUrl}/${id}`, params)
 			.pipe(map((model: Banner) => {
 
@@ -107,15 +107,14 @@ export class BannerService {
 			}));
 	}
 
-    // helper methods
-	private refreshCollection( type: string, model: Banner, deleteId?:string ) : void {
+	// helper methods
+	private refreshCollection(type: string, model: Banner, deleteId?: string): void {
 
-		switch (type)
-		{
+		switch (type) {
 			case 'create':
 
-				if( this.bannerValue !== null ) {
-					const updatedObjs:Banner[] = [];
+				if (this.bannerValue !== null) {
+					const updatedObjs: Banner[] = [];
 					this.bannerValue.map((x: Banner) => {
 						updatedObjs.push(x);
 					});
@@ -129,11 +128,11 @@ export class BannerService {
 
 			case 'update':
 
-				if( this.bannerValue !== null ) {
+				if (this.bannerValue !== null) {
 
-					const updatedObjs:Banner[] = [];
-					this.bannerValue.map((x:Banner) => {
-						if( x.id === model.id ) {
+					const updatedObjs: Banner[] = [];
+					this.bannerValue.map((x: Banner) => {
+						if (x.id === model.id) {
 							updatedObjs.push(model);
 						} else {
 							updatedObjs.push(x);
@@ -149,11 +148,11 @@ export class BannerService {
 
 			case 'delete':
 
-				if( this.bannerValue !== null && deleteId !== undefined ) {
+				if (this.bannerValue !== null && deleteId !== undefined) {
 
-					const updatedObjs:Banner[] = [];
-					this.bannerValue.map((x:Banner) => {
-						if( parseInt(x.id) === parseInt(deleteId) ) {
+					const updatedObjs: Banner[] = [];
+					this.bannerValue.map((x: Banner) => {
+						if (parseInt(x.id) === parseInt(deleteId)) {
 							updatedObjs.push(model);
 						} else {
 							updatedObjs.push(x);
@@ -173,16 +172,16 @@ export class BannerService {
 
 	}
 
-	public generateBannerComponentRules(dynamicComponents:any): any[] {
+	public generateBannerComponentRules(dynamicComponents: any): any[] {
 
-		const TemplateRules:any[] = [];
+		const TemplateRules: any[] = [];
 
-		//console.log('dynamicComponents:', dynamicComponents);
+		////console.log('dynamicComponents:', dynamicComponents);
 
-		dynamicComponents.forEach( (component:any) => {
+		dynamicComponents.forEach((component: any) => {
 
-			if( component.componenttype.name === 'Text' ) {
-				const textLength:number = (component.componentmeta.find((x:any) => x.name === 'fontValue').value).length;
+			if (component.componenttype.name === 'Text') {
+				const textLength: number = (component.componentmeta.find((x: any) => x.name === 'fontValue').value).length;
 
 				TemplateRules.push({
 					'componentId': component.id,
@@ -192,14 +191,14 @@ export class BannerService {
 					'type': component.componenttype.name,
 					'rules': [
 						{
-							'maximumcharacters' : textLength
+							'maximumcharacters': textLength
 						}
 					]
 				});
 
-			} else if( component.componenttype.name === 'Image' ) {
+			} else if (component.componenttype.name === 'Image') {
 
-				//console.log('template rules:', component.componentmeta);
+				////console.log('template rules:', component.componentmeta);
 
 				TemplateRules.push({
 					'componentId': component.id,
@@ -209,8 +208,8 @@ export class BannerService {
 					'type': component.componenttype.name,
 					'rules': [
 						{
-							'width' : component.componentmeta.find((x:any) => x.name === 'width').value,
-							'height': component.componentmeta.find((x:any) => x.name === 'height').value
+							'width': component.componentmeta.find((x: any) => x.name === 'width').value,
+							'height': component.componentmeta.find((x: any) => x.name === 'height').value
 						}
 					]
 				});

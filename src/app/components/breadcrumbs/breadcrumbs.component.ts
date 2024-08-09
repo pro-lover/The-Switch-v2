@@ -9,7 +9,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 
-export interface IBreadCrumb  {
+export interface IBreadCrumb {
 	label: string;
 	url: string;
 }
@@ -51,26 +51,26 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 	ngOnInit(): void {
 
 		//let projectId = this.activatedRoute.snapshot.params['projectId'];
-	    //this.routeParams(this.activatedRoute).subscribe(params => console.log(params));
+		//this.routeParams(this.activatedRoute).subscribe(params => //console.log(params));
 
 		this.router.events.pipe(
-				filter((event: Event ) => event instanceof NavigationEnd),
-				distinctUntilChanged(),
-			)
+			filter((event: Event) => event instanceof NavigationEnd),
+			distinctUntilChanged(),
+		)
 			.subscribe((event: Event) => {
-				//this.routeParams(this.activatedRoute).subscribe(params => console.log(params));
-				//console.log('projectId', this.activatedRoute.snapshot.params['projectId'], this.routeParams(this.activatedRoute));
+				//this.routeParams(this.activatedRoute).subscribe(params => //console.log(params));
+				////console.log('projectId', this.activatedRoute.snapshot.params['projectId'], this.routeParams(this.activatedRoute));
 				this.breadcrumbs = this.buildBreadCrumb(this.activatedRoute.root);
 
 			});
 
-			//console.log('this.activatedRoute.parent', this.activatedRoute);
+		////console.log('this.activatedRoute.parent', this.activatedRoute);
 	}
 
 	ngOnChanges() {
 		//if( this.prjId ) {
-			console.warn('PARENT-prjId:', this.childPrjId);
-			//console.warn('prjIdLay:', this.prjIdLay);
+		console.warn('PARENT-prjId:', this.childPrjId);
+		//console.warn('prjIdLay:', this.prjIdLay);
 		//}
 	}
 
@@ -85,7 +85,7 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 	 * @param url
 	 * @param breadcrumbs
 	*/
-	private buildBreadCrumb( route: ActivatedRoute, url = '', breadcrumbs: IBreadCrumb[] = []): IBreadCrumb[] {
+	private buildBreadCrumb(route: ActivatedRoute, url = '', breadcrumbs: IBreadCrumb[] = []): IBreadCrumb[] {
 		//If no routeConfig is avalailable we are on the root path
 		let label = route.routeConfig && route.routeConfig.data ? route.routeConfig.data['breadcrumb'] : '';
 		let path = route.routeConfig && route.routeConfig.data ? route.routeConfig.path : '';
@@ -104,32 +104,32 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 			return string;
 		}
 
-		if(isDynamicRoute && !!route.snapshot) {
+		if (isDynamicRoute && !!route.snapshot) {
 			const paramName = lastRoutePart.split(':')[1];
 			path = path.replace(lastRoutePart, route.snapshot.params[paramName]);
-			if( route.routeConfig.data['breadcrumb'] === 'Edit Project' ) {
+			if (route.routeConfig.data['breadcrumb'] === 'Edit Project') {
 				path = path.replace('edit/', '');
 			}
 			label = route.snapshot.params[paramName];
 
-			if( route.routeConfig.data['breadcrumb'] === 'Project Detail' ) {
+			if (route.routeConfig.data['breadcrumb'] === 'Project Detail') {
 				this.lastPrjId = label;
 			}
 			//console.warn('Dynamic breadcrumb:', path.replace('edit/', ''), route.routeConfig.data.breadcrumb, lastRoutePart );
 		}
-		if( label === 'Project Detail' ) {
+		if (label === 'Project Detail') {
 			//this.lastPrjId = label;
 			//path = path.replace(':projectId', this.lastPrjId).replace('/budgets', '');
 
-			if( this.lastPrjId === undefined ) {
+			if (this.lastPrjId === undefined) {
 				const urll = window.location.pathname;
-				urll.replace(/(projects\/)+(\d{1,3})(\/)(\w)+(\/)/, replacer );
+				urll.replace(/(projects\/)+(\d{1,3})(\/)(\w)+(\/)/, replacer);
 			}
-			path = path.replace(':projectId', this.lastPrjId).replace(/(\/\w+)/g, '' );
+			path = path.replace(':projectId', this.lastPrjId).replace(/(\/\w+)/g, '');
 
 		}
-		//console.log('breadcrumb['+label+']:', path);
-		//console.log('this.lastPrjId:', this.lastPrjId);
+		////console.log('breadcrumb['+label+']:', path);
+		////console.log('this.lastPrjId:', this.lastPrjId);
 
 		/**/
 
@@ -143,7 +143,7 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 		};
 
 		// Only adding route with non-empty label
-		const newBreadcrumbs = breadcrumb.label ? [ ...breadcrumbs, breadcrumb ] : [ ...breadcrumbs];
+		const newBreadcrumbs = breadcrumb.label ? [...breadcrumbs, breadcrumb] : [...breadcrumbs];
 		if (route.firstChild) {
 			//If we are not on our current path yet,
 			//there will be more children to look after, to build our breadcumb

@@ -76,8 +76,8 @@ function uploadSchema(req, res, next) {
 
 function uploadAsset(req, res, next) {
 
-	//console.log('req.body.filepath:', req.body.filepath);
-	//console.log('req.file:', req.file);
+	////console.log('req.body.filepath:', req.body.filepath);
+	////console.log('req.file:', req.file);
 
 	const dir = path.join(__dirname, '../../assets/public/templates/' + req.body.filepath);
 	if (!fs.existsSync(dir)){

@@ -1,4 +1,4 @@
-<mat-card class="drag-drop-component-edit-box"  cdkDrag [cdkDragFreeDragPosition]="(dragPosition)">
+<mat-card class="drag-drop-component-edit-box" cdkDrag [cdkDragFreeDragPosition]="(dragPosition)">
 
 	<!-- cdkDragBoundary=".banner-variation-option" -->
 	<!--
@@ -13,50 +13,50 @@
 		<mat-stepper class="bapp-dialog-stepper" orientation="vertical" [linear]="false" #stepper>
 
 			<div *ngFor="let component of dataComponents;trackBy: ListtrackByFn">
-				<mat-step
-					label="{{component.name}} {{component.componenttype.name}}"
-					state="image"
-					*ngIf="component.componenttype.name === 'Image' && component.smart === true"
-					[editable]="true" >
+				<mat-step label="{{component.name}} {{component.componenttype.name}}" state="image"
+					*ngIf="component.componenttype.name === 'Image' && component.smart === true" [editable]="true">
 					<br />
-					<div class="form-row row" >
-						<app-draganddrop
-							*ngIf="component.componenttype.name === 'Image'"
-							(DDEvent)="DragAndDropEventItem($event)"
-							(removeUpload)="removeAsset($event)"
-							[resetUploads]="resetVariationsObs"
-							[dataType]="component.componenttype.name"
-							[componentName]="component.name"
-							[dataContainerId]="dataContainer.id"
+					<div class="form-row row">
+						<app-draganddrop *ngIf="component.componenttype.name === 'Image'"
+							(DDEvent)="DragAndDropEventItem($event)" (removeUpload)="removeAsset($event)"
+							[resetUploads]="resetVariationsObs" [dataType]="component.componenttype.name"
+							[componentName]="component.name" [dataContainerId]="dataContainer.id"
 							[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
-								<h3>
-									Drag and Drop<br />{{component.name}}(s) Here
-								</h3>
+							<h3>
+								Drag and Drop<br />{{component.name}}(s) Here
+							</h3>
 						</app-draganddrop>
 					</div>
 				</mat-step>
 			</div>
-			<mat-step
-				label="Copy"
-				state="copy"
-				[editable]="true"
-				*ngIf="copyContainerNeeded === true" >
-					<br />
-					<div class="form-row row" >
-						<app-draganddrop
-							(DDEvent)="DragAndDropEventItem($event)"
-							(removeUpload)="removeAsset($event)"
-							[resetUploads]="resetVariationsObs"
-							[dataType]="'Text'"
-							[componentName]="'Copy'"
-							[dataContainerId]="dataContainer.id"
-							[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
-								<h3>
-									Drag and Drop<br />CSV/XLSX File here
-								</h3>
-						</app-draganddrop>
-						<input matInput placeholder="test" formControlName="fontFamily" />
-					</div>
+			<mat-step label="Copy" state="copy" [editable]="true" *ngIf="copyContainerNeeded === true">
+				<br />
+				<div class="form-row row">
+					<app-draganddrop 
+						(DDEvent)="DragAndDropEventItem($event)" 
+						(removeUpload)="removeAsset($event)"
+						[resetUploads]="resetVariationsObs" 
+						[dataType]="'Text'" 
+						[componentName]="'Copy'"
+						[dataContainerId]="dataContainer.id"
+						[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						<h3>
+							Drag and Drop<br />CSV/XLSX File here TBC
+						</h3>
+					</app-draganddrop>
+
+					<app-inputText 
+					(inputEvent)="onTextChange($event)"
+					[dataInputValue] = "dataInputValue" 
+					[dataType]="'Text'" 
+					[componentName]="'Copy'"
+					[dataContainerId]="dataContainer.id"
+					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						
+					>
+						
+					</app-inputText>
+				</div>
 			</mat-step>
 
 			<ng-template matStepperIcon="image">
@@ -83,9 +83,15 @@
 				close
 			</mat-icon>
 		</button>
-		<button [disabled]="uploadedFiles.length <= 0" mat-button mat-flat-button (click)="resetAssets(dataBanner)" color="accent">
+		<button [disabled]="uploadedFiles.length <= 0" mat-button mat-flat-button (click)="resetAssets(dataBanner)"
+			color="accent">
 			<mat-icon>
 				restart_alt
+			</mat-icon>
+		</button>
+		<button mat-button mat-flat-button (click)="saveDataOut($event)">
+			<mat-icon>
+				save
 			</mat-icon>
 		</button>
 

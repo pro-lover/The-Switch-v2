@@ -19,7 +19,7 @@ export class BannerCreatorService implements OnDestroy {
 	private dataSubject: BehaviorSubject<string>;
 	public data: Observable<string>;
 
-	public serviceData$!:Observable<any>;
+	public serviceData$!: Observable<any>;
 	public serviceDataFonts!: FontType[];
 
 	private lib: any = {};
@@ -57,25 +57,25 @@ export class BannerCreatorService implements OnDestroy {
 				this.fontTypeService.getAll()
 			]
 		)
-		.pipe(
-			map(([fonttypes]):any => {
-				// combineLatest returns an array of values, here we map those values to an object
-				return { fonttypes };
-			})
-		);
+			.pipe(
+				map(([fonttypes]): any => {
+					// combineLatest returns an array of values, here we map those values to an object
+					return { fonttypes };
+				})
+			);
 
-		this.serviceData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.serviceData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			//console.info('Page Data initialise', data);
 
 			this.prepPageData(data);
 		});
 	}
 
-	private prepPageData(data:any):void {
+	private prepPageData(data: any): void {
 		this.serviceDataFonts = data.fonttypes;
 	}
 
-	private resetData():void {
+	private resetData(): void {
 		this.lib = {};
 		this.manifest.splice(0, this.manifest.length);
 		this.assets_css.splice(0, this.assets_css.length);
@@ -98,9 +98,9 @@ export class BannerCreatorService implements OnDestroy {
 							const fileNameRegex = /(?:.+\/)(.+)/g;
 							//const fileNameRegex = new RegExp(/(?:.+\/)(.+)/g);
 							const na = fileNameRegex.exec(meta.value);
-							//console.log('path:', na?.[1], meta.value);
+							////console.log('path:', na?.[1], meta.value);
 							if( na !== null ) {
-								//console.log('path:', na?[1]);
+								////console.log('path:', na?[1]);
 								meta.value = na?.[1];
 							}
 						}
@@ -115,88 +115,88 @@ export class BannerCreatorService implements OnDestroy {
 		return new Promise<any>((resolve, reject) => {
 
 			Promise.all([
-				this.getHTML5Fonts( stages ),
-				this.getHTML5ImageAssets( stages ),
+				this.getHTML5Fonts(stages),
+				this.getHTML5ImageAssets(stages),
 				this.prepLibraryProperties(dataBanner)
 			])
-			.then((results) => {
+				.then((results) => {
 
-				//console.log('buildHTML5ForExport:', results);
+					////console.log('buildHTML5ForExport:', results);
 
-				results[0].forEach((font:any) => {
-					this.manifest.push({
-						'id': this.generateUUID(),
-						'src': font
-					})
-				});
-
-				results[1].forEach((assetPath:any) => {
-
-					/**/
-					// rewrite image paths and to reference local directory
-
-					const fileNameRegex = /(?:.+\/)(.+)/g;
-					const na = fileNameRegex.exec(assetPath);
-
-					let localPath:string;
-
-					if( na !== null ) {
-						//console.log('path:', na?[1]);
-						localPath= na?.[1];
-					} else {
-						localPath = assetPath;
-					}
-					/**/
-
-					this.manifest.push({
-						'id': this.generateUUID(),
-						'src': localPath
+					results[0].forEach((font: any) => {
+						this.manifest.push({
+							'id': this.generateUUID(),
+							'src': font
+						})
 					});
-				});
 
-				this.lib.properties = results[2];
-				this.lib.properties.manifest = this.manifest;
+					results[1].forEach((assetPath: any) => {
 
-				return this.generateHTML5script(dataBanner, stages);
+						/**/
+						// rewrite image paths and to reference local directory
 
-			})
-			.then((scriptsFile) => {
+						const fileNameRegex = /(?:.+\/)(.+)/g;
+						const na = fileNameRegex.exec(assetPath);
 
-				this._script = scriptsFile;
-				//this._script = stages;
+						let localPath: string;
 
-				return this.generateHTML5Index(dataBanner);
-			})
-			.then((htmlIndex:any) => {
+						if (na !== null) {
+							////console.log('path:', na?[1]);
+							localPath = na?.[1];
+						} else {
+							localPath = assetPath;
+						}
+						/**/
 
-				this._index = htmlIndex;
-
-				this.generateZIPpackage(dataBanner)
-					.then((zip:any) => {
-
-						//console.log('ZIP PACKAGE:', zip);
-
-						resolve({
-							'lib': this.lib,
-							'html': this._index,
-							'script': this._script
+						this.manifest.push({
+							'id': this.generateUUID(),
+							'src': localPath
 						});
-
-						this.resetData();
-					})
-					.catch((err) => {
-
-						console.error('generateZIPpackage Error:', err);
-
-						reject('An error occured preparing the HTML5 Package. Please try again.');
-
 					});
-			})
-			.catch((err:any) => {
-				console.error('buildHTML5ForExport:', err);
 
-				reject('An error occured preparing the HTML5 Package. Please try again.');
-			});
+					this.lib.properties = results[2];
+					this.lib.properties.manifest = this.manifest;
+
+					return this.generateHTML5script(dataBanner, stages);
+
+				})
+				.then((scriptsFile) => {
+
+					this._script = scriptsFile;
+					//this._script = stages;
+
+					return this.generateHTML5Index(dataBanner);
+				})
+				.then((htmlIndex: any) => {
+
+					this._index = htmlIndex;
+
+					this.generateZIPpackage(dataBanner)
+						.then((zip: any) => {
+
+							////console.log('ZIP PACKAGE:', zip);
+
+							resolve({
+								'lib': this.lib,
+								'html': this._index,
+								'script': this._script
+							});
+
+							this.resetData();
+						})
+						.catch((err) => {
+
+							console.error('generateZIPpackage Error:', err);
+
+							reject('An error occured preparing the HTML5 Package. Please try again.');
+
+						});
+				})
+				.catch((err: any) => {
+					console.error('buildHTML5ForExport:', err);
+
+					reject('An error occured preparing the HTML5 Package. Please try again.');
+				});
 
 			// write script first and then write HTML
 		});
@@ -207,23 +207,23 @@ export class BannerCreatorService implements OnDestroy {
 
 		//console.warn('batchHTML5ForExportGetPrepData:', dataBanner, stages);
 
-		const newcomponents:any[] = [];
+		const newcomponents: any[] = [];
 
 		// Get Difference between two Arrays of Objects
-		function getDifference(array1:any, array2:any) {
-			return array1.filter((object1:any) => {
-			  return !array2.some((object2:any) => {
-				return object1.name === object2.name;
-			  });
+		function getDifference(array1: any, array2: any) {
+			return array1.filter((object1: any) => {
+				return !array2.some((object2: any) => {
+					return object1.name === object2.name;
+				});
 			});
 		}
 
-		stages.forEach((stage:any) => {
+		stages.forEach((stage: any) => {
 
 			stage.variationComponents = [];
 
-			if( stage.componentsUpdate !== undefined ) {
-				stage.componentsUpdate.forEach((componentUpdate:any) => {
+			if (stage.componentsUpdate !== undefined) {
+				stage.componentsUpdate.forEach((componentUpdate: any) => {
 
 					//https://stackoverflow.com/questions/46329213/angular4-copy-object-without-reference
 
@@ -254,7 +254,7 @@ export class BannerCreatorService implements OnDestroy {
 
 			//console.warn('missingcomponents:', missingcomponents);
 
-			missingcomponents.forEach((missingcomponent:any) => {
+			missingcomponents.forEach((missingcomponent: any) => {
 				stage.variationComponents.push(missingcomponent);
 			});
 
@@ -268,35 +268,35 @@ export class BannerCreatorService implements OnDestroy {
 
 			this.resetData();
 
-			let _script ='';
+			let _script = '';
 			//let _index = '';
-			let localCSSImages:any[] = [];
-			let localAssetImages:any[] = [];
-			const localManifest:any[] = [];
-			const localLib:any = {};
+			let localCSSImages: any[] = [];
+			let localAssetImages: any[] = [];
+			const localManifest: any[] = [];
+			const localLib: any = {};
 
-				Promise.all([
-					this.getHTML5Fonts( stages ),
-					this.getHTML5ImageAssets( stages ),
-					this.prepLibraryProperties( dataBanner )
-				])
+			Promise.all([
+				this.getHTML5Fonts(stages),
+				this.getHTML5ImageAssets(stages),
+				this.prepLibraryProperties(dataBanner)
+			])
 				.then((results) => {
 
 					//const localManifest:any[] = [];
 					//const localLib:any = {};
-					//console.log('buildHTML5ForExport:', results);
+					////console.log('buildHTML5ForExport:', results);
 
 					localCSSImages = results[0];
 					localAssetImages = results[1];
 
-					results[0].forEach((font:any) => {
+					results[0].forEach((font: any) => {
 						localManifest.push({
 							'id': this.generateUUID(),
 							'src': font
 						})
 					});
 
-					results[1].forEach((assetPath:any) => {
+					results[1].forEach((assetPath: any) => {
 
 						/**/
 						// rewrite image paths and to reference local directory
@@ -304,11 +304,11 @@ export class BannerCreatorService implements OnDestroy {
 						const fileNameRegex = /(?:.+\/)(.+)/g;
 						const na = fileNameRegex.exec(assetPath);
 
-						let localPath:string;
+						let localPath: string;
 
-						if( na !== null ) {
-							//console.log('path:', na?[1]);
-							localPath= na?.[1];
+						if (na !== null) {
+							////console.log('path:', na?[1]);
+							localPath = na?.[1];
 						} else {
 							localPath = assetPath;
 						}
@@ -332,7 +332,7 @@ export class BannerCreatorService implements OnDestroy {
 
 					return this.generateHTML5Index(dataBanner);
 				})
-				.then((htmlIndex:any) => {
+				.then((htmlIndex: any) => {
 
 					//_index = htmlIndex;
 
@@ -346,7 +346,7 @@ export class BannerCreatorService implements OnDestroy {
 					});
 
 				})
-				.catch((err:any) => {
+				.catch((err: any) => {
 					console.error('batchHTML5ForExport1:', err);
 
 					reject('An error occurred preparing the HTML5 Package. Please try again.');
@@ -356,7 +356,7 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private prepLibraryProperties(dataBanner:any): Promise<any> {
+	private prepLibraryProperties(dataBanner: any): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
@@ -370,29 +370,29 @@ export class BannerCreatorService implements OnDestroy {
 		});
 	}
 
-	private getHTML5Fonts( stages: any[]): Promise<any> {
+	private getHTML5Fonts(stages: any[]): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
-			const components = stages.map((stage:any) => { return (stage.components.filter((component:any) => { return component.componenttype.name === 'Text' })); })
+			const components = stages.map((stage: any) => { return (stage.components.filter((component: any) => { return component.componenttype.name === 'Text' })); })
 
-			const fontIds:any[] = [];
-			components.flat().forEach((component:any) => {
-				const meta = component?.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
-				const fontFamily = this.serviceDataFonts.find((font:FontType) => { return parseInt(font.id) === parseInt(meta.fontFamilyId); })?.styleSheet;
+			const fontIds: any[] = [];
+			components.flat().forEach((component: any) => {
+				const meta = component?.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
+				const fontFamily = this.serviceDataFonts.find((font: FontType) => { return parseInt(font.id) === parseInt(meta.fontFamilyId); })?.styleSheet;
 
-				//console.log('getHTML5Fonts component meta:', meta);
+				////console.log('getHTML5Fonts component meta:', meta);
 
-				if( fontFamily !== undefined && !fontIds.includes( fontFamily ) ) {
+				if (fontFamily !== undefined && !fontIds.includes(fontFamily)) {
 					fontIds.push(fontFamily);
 					this.assets_css.push(fontFamily);
 				}
 			});
 
-			if( fontIds.length > 0 ) {
+			if (fontIds.length > 0) {
 				resolve(fontIds);
 			} else {
-				//console.log('No fonts found', fontIds);
+				////console.log('No fonts found', fontIds);
 				reject('Fonts Not Found');
 			}
 
@@ -403,19 +403,19 @@ export class BannerCreatorService implements OnDestroy {
 
 		return new Promise<any>((resolve, reject) => {
 
-			const components = stages.map((stage:any) => { return (stage.components.filter((component:any) => { return component.componenttype.name === 'Image' })); })
+			const components = stages.map((stage: any) => { return (stage.components.filter((component: any) => { return component.componenttype.name === 'Image' })); })
 
-			const assets:any[] = [];
-			components.flat().forEach((component:any) => {
-				const meta = component?.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			const assets: any[] = [];
+			components.flat().forEach((component: any) => {
+				const meta = component?.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 
-				if( !assets.includes( meta.path ) ) {
+				if (!assets.includes(meta.path)) {
 
 					const fileNameRegex = /data:([-\w]+\/[-+\w.]+)?(;?\w+=[-\w]+)*(;base64)?,.*/gu;
 					/**/
 					const dataURIPath = fileNameRegex.exec(meta.path);
-					if( dataURIPath !== null ) {
-						//console.log('dont add dataURIPath');
+					if (dataURIPath !== null) {
+						////console.log('dont add dataURIPath');
 					} else {
 						assets.push(meta.path);
 						this.assets_images.push(meta.path);
@@ -426,10 +426,10 @@ export class BannerCreatorService implements OnDestroy {
 				}
 			});
 
-			if( assets.length > 0 ) {
+			if (assets.length > 0) {
 				resolve(assets);
 			} else {
-				//console.log('No fonts found', assets);
+				////console.log('No fonts found', assets);
 				reject('Image assets Not Found');
 			}
 
@@ -437,15 +437,15 @@ export class BannerCreatorService implements OnDestroy {
 	}
 
 	// HTTP Request to Gulp function
-	private generateHTML5Index(dataBanner:any): Promise<any> {
+	private generateHTML5Index(dataBanner: any): Promise<any> {
 
-		return new Promise<any>( async (resolve, reject) => {
+		return new Promise<any>(async (resolve, reject) => {
 
 			const response = await fetch(`${environment.apiUrl}/html5-canvas/index.html`);
 			const data = await response.blob();
 			const metadata = {
-					//type: 'text/html',
-					type: 'text/html; charset=utf-8'
+				//type: 'text/html',
+				type: 'text/html; charset=utf-8'
 			};
 			const file = new File([data], "index.html", metadata);
 			const FR2 = new FileReader();
@@ -465,15 +465,15 @@ export class BannerCreatorService implements OnDestroy {
 					.replaceAll(widthReplace, dataBanner.bannersize.width)
 					.replaceAll(heightReplace, dataBanner.bannersize.height)
 					.replaceAll(creativeNameReplace, dataBanner.name)
-					.replaceAll(creativeLinkReplace, (dataBanner.containers[(dataBanner.containers.length -1)]?.clickThroughURL === null ? 'https://google.com' : dataBanner.containers[(dataBanner.containers.length -1)]?.clickThroughURL) )
-					.replaceAll(creativeExitName, (dataBanner.containers[(dataBanner.containers.length -1)]?.clickThroughName === null ? 'EXIT' : dataBanner.containers[(dataBanner.containers.length -1)]?.clickThroughName) )
+					.replaceAll(creativeLinkReplace, (dataBanner.containers[(dataBanner.containers.length - 1)]?.clickThroughURL === null ? 'https://google.com' : dataBanner.containers[(dataBanner.containers.length - 1)]?.clickThroughURL))
+					.replaceAll(creativeExitName, (dataBanner.containers[(dataBanner.containers.length - 1)]?.clickThroughName === null ? 'EXIT' : dataBanner.containers[(dataBanner.containers.length - 1)]?.clickThroughName))
 					.replaceAll(creativeFallbackImageReplace, '')
 					.replaceAll(creativeAdPlatformReplace, 'https://s0.2mdn.net/ads/studio/Enabler.js');
-					//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
+				//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
 
 				//fileLoadEvt.target.result = fileLoadEvt.target.result.replaceAll(heightReplace, dataBanner.bannersize.height)
 
-				//console.log('generateHTML5Index: ', result);
+				////console.log('generateHTML5Index: ', result);
 
 				resolve(result);
 
@@ -484,15 +484,15 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private generateHTML5script(dataBanner:any, stages:any ): Promise<any> {
+	private generateHTML5script(dataBanner: any, stages: any): Promise<any> {
 
-		return new Promise<any>( async (resolve, reject) => {
+		return new Promise<any>(async (resolve, reject) => {
 
 			const response = await fetch(`${environment.apiUrl}/html5-canvas/cmdcreative.template.js`);
 			const data = await response.blob();
 			const metadata = {
-					//type: 'text/html',
-					type: 'application/javascript; charset=utf-8'
+				//type: 'text/html',
+				type: 'application/javascript; charset=utf-8'
 			};
 			const file = new File([data], "cmdcreative.js", metadata);
 			const FR2 = new FileReader();
@@ -506,7 +506,7 @@ export class BannerCreatorService implements OnDestroy {
 				let result = fileLoadEvt.target.result;
 				let componentStr = '';
 
-				stages.forEach((stage:any, index:number) => {
+				stages.forEach((stage: any, index: number) => {
 
 					componentStr += `components.components_${index} = ${JSON.stringify(stage.components)};`;
 					//componentStr += `\n\t${JSON.stringify(stage.components)}`;
@@ -517,7 +517,7 @@ export class BannerCreatorService implements OnDestroy {
 					.replaceAll(heightReplace, dataBanner.bannersize.height)
 					.replaceAll(libReplace, JSON.stringify(this.manifest))
 					.replaceAll(stageReplace, componentStr);
-					//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
+				//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
 				/**/
 				resolve(result);
 
@@ -528,15 +528,15 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private generateHTML5scriptForBatch(dataBanner:any, stages:any, manifest:any ): Promise<any> {
+	private generateHTML5scriptForBatch(dataBanner: any, stages: any, manifest: any): Promise<any> {
 
-		return new Promise<any>( async (resolve, reject) => {
+		return new Promise<any>(async (resolve, reject) => {
 
 			const response = await fetch(`${environment.apiUrl}/html5-canvas/cmdcreative.template.js`);
 			const data = await response.blob();
 			const metadata = {
-					//type: 'text/html',
-					type: 'application/javascript; charset=utf-8'
+				//type: 'text/html',
+				type: 'application/javascript; charset=utf-8'
 			};
 			const file = new File([data], "cmdcreative.js", metadata);
 			const FR2 = new FileReader();
@@ -550,7 +550,7 @@ export class BannerCreatorService implements OnDestroy {
 				let result = fileLoadEvt.target.result;
 				let componentStr = '';
 
-				stages.forEach((stage:any, index:number) => {
+				stages.forEach((stage: any, index: number) => {
 
 					//console.warn('component string for stage: ', stage);
 
@@ -563,7 +563,7 @@ export class BannerCreatorService implements OnDestroy {
 					.replaceAll(heightReplace, dataBanner.bannersize.height)
 					.replaceAll(libReplace, JSON.stringify(manifest))
 					.replaceAll(stageReplace, componentStr);
-					//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
+				//.replaceAll(creativeAdPlatformReplace, '//secure-ds.serving-sys.com/BurstingScript/EBLoader.js');
 				/**/
 				resolve(result);
 
@@ -574,7 +574,7 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private generateZIPpackage(dataBanner:any): Promise<any> {
+	private generateZIPpackage(dataBanner: any): Promise<any> {
 
 		const zip = new JSZip();
 
@@ -584,12 +584,12 @@ export class BannerCreatorService implements OnDestroy {
 			//const zip_assets = zip.folder('assets');
 			//const css_assets = zip.folder('assets/css');
 
-			const blobs_css:any[] = [];
-			const blobs_images:any[] = [];
+			const blobs_css: any[] = [];
+			const blobs_images: any[] = [];
 
 			//console.warn('this_assets_images: ', this.assets_images);
 
-			this.assets_images.forEach((path_image:string) => {
+			this.assets_images.forEach((path_image: string) => {
 
 				blobs_images.push(
 					this.readImageFilePath(path_image)
@@ -605,20 +605,20 @@ export class BannerCreatorService implements OnDestroy {
 			/**/
 
 			Promise.all(blobs_images)
-				.then( (blobs_images:any[]) => {
-					blobs_images.forEach((blob:any, index:number) => {
-						zip.file( blob.name, blob.blob);
+				.then((blobs_images: any[]) => {
+					blobs_images.forEach((blob: any, index: number) => {
+						zip.file(blob.name, blob.blob);
 						//zip_assets?.file( blob.name, blob.blob);
 					});
 
-					//console.log('this._script', JSON.stringify(this._script[0].components));
+					////console.log('this._script', JSON.stringify(this._script[0].components));
 					zip.file("index.html", this._index);
 					zip.file("cmdcreative.js", this._script);
 					//zip.file("cmdcreative.js", objToString(this._script, 5));
 					//zip.file("cmdcreative.js", btoa(JSON.stringify(this._script[0])));
 
-					zip.generateAsync({type:"blob"})
-						.then((blobs:any) => {
+					zip.generateAsync({ type: "blob" })
+						.then((blobs: any) => {
 							resolve(blobs)
 							saveAs(blobs, `HTML_Preview_${dataBanner.name}.zip`)
 						});
@@ -629,18 +629,18 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	public generateBatchZIPpackage(batchFileContents:any): Promise<any> {
+	public generateBatchZIPpackage(batchFileContents: any): Promise<any> {
 
 		return new Promise<any>((resolve, reject) => {
 
 			const zip = new JSZip();
 
-			const blobs_css:any[] = [];
-			const blobs_images:any[] = [];
+			const blobs_css: any[] = [];
+			const blobs_images: any[] = [];
 
 			//console.warn('this_assets_images: ', this.assets_images);
 
-			batchFileContents.images.forEach((path_image:string) => {
+			batchFileContents.images.forEach((path_image: string) => {
 
 				blobs_images.push(
 					this.readImageFilePath(path_image)
@@ -648,17 +648,17 @@ export class BannerCreatorService implements OnDestroy {
 			});
 
 			Promise.all(blobs_images)
-				.then( (blobs_images:any[]) => {
-					blobs_images.forEach((blob:any, index:number) => {
-						zip.file( blob.name, blob.blob);
+				.then((blobs_images: any[]) => {
+					blobs_images.forEach((blob: any, index: number) => {
+						zip.file(blob.name, blob.blob);
 					});
 
 					zip.file("index.html", batchFileContents.index);
 					zip.file("cmdcreative.js", batchFileContents.script);
 
-					zip.generateAsync({type:"blob"})
-						.then((blobs:any) => {
-							//console.log('generateBatchZIPpackage complete:', blobs);
+					zip.generateAsync({ type: "blob" })
+						.then((blobs: any) => {
+							////console.log('generateBatchZIPpackage complete:', blobs);
 							resolve({
 								name: batchFileContents.banner.bannersize.name,
 								blob: blobs
@@ -672,9 +672,9 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private readImageFilePath(path:string): Promise<Blob> {
+	private readImageFilePath(path: string): Promise<Blob> {
 
-		return new Promise<any>( async (resolve, reject) => {
+		return new Promise<any>(async (resolve, reject) => {
 
 			const response = await fetch(path);
 			const data = await response.blob();
@@ -694,9 +694,9 @@ export class BannerCreatorService implements OnDestroy {
 
 	}
 
-	private readStylesheetFilePath(path:string): Promise<Blob> {
+	private readStylesheetFilePath(path: string): Promise<Blob> {
 
-		return new Promise<any>( async (resolve, reject) => {
+		return new Promise<any>(async (resolve, reject) => {
 
 			const response = await fetch(path);
 			const data = await response.blob();
@@ -704,7 +704,7 @@ export class BannerCreatorService implements OnDestroy {
 				type: 'text/css'
 			};
 
-			console.log('readStylesheetFilePath: ', data);
+			//console.log('readStylesheetFilePath: ', data);
 
 			const file = new File([data], "test.css", metadata);
 
@@ -722,20 +722,20 @@ export class BannerCreatorService implements OnDestroy {
 	}
 
 	// CLASSES FOR CREATIVE COMPONENTS
-	public animateGSAPComponent( stage:createjs.Stage, component: any): Promise<any[]> {
+	public animateGSAPComponent(stage: createjs.Stage, component: any): Promise<any[]> {
 
 		return new Promise<any[]>((resolve, reject) => {
 
 			const displayObj = stage.getChildByName(component.name.toLowerCase());
 
 			//const instanceTimeline = gsap.timeline();
-			const tweens:any[] = [];
+			const tweens: any[] = [];
 
-			component.animations.forEach((animation:any, index:number) => {
+			component.animations.forEach((animation: any, index: number) => {
 
-				const animationmeta = animation.animationmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+				const animationmeta = animation.animationmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 
-				if( animationmeta.duration === 0 ) {
+				if (animationmeta.duration === 0) {
 
 					const setValues = gsap.set(
 						displayObj,
@@ -744,7 +744,7 @@ export class BannerCreatorService implements OnDestroy {
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
 							ease: "power3.out",
-							paused:false
+							paused: false
 						},
 					);
 
@@ -764,7 +764,7 @@ export class BannerCreatorService implements OnDestroy {
 							x: parseInt(animationmeta.positionX),
 							y: parseInt(animationmeta.positionY),
 							alpha: parseInt(animationmeta.opacity),
-							paused:false
+							paused: false
 						}
 					);
 
@@ -781,10 +781,10 @@ export class BannerCreatorService implements OnDestroy {
 
 			});
 
-			//console.log('animateGSAPComponent:', instanceTimeline);
+			////console.log('animateGSAPComponent:', instanceTimeline);
 			//resolve(instanceTimeline);
 
-			//console.log('animateGSAPComponent:', tweens);
+			////console.log('animateGSAPComponent:', tweens);
 
 			resolve(tweens);
 
@@ -793,7 +793,7 @@ export class BannerCreatorService implements OnDestroy {
 
 	public BAPP_Image = class BAPP_Image extends createjs.Bitmap {
 
-		override name:string;
+		override name: string;
 		public meta: any;
 		public sortid: any;
 		public positionLock = true;
@@ -802,7 +802,7 @@ export class BannerCreatorService implements OnDestroy {
 
 		//private img: HTMLImageElement = new Image();
 
-		constructor( stage:createjs.Stage, component:any, componentMeta:any ) {
+		constructor(stage: createjs.Stage, component: any, componentMeta: any) {
 			super(
 				new Image()
 				//componentMeta.path
@@ -811,35 +811,35 @@ export class BannerCreatorService implements OnDestroy {
 			this.name = component.name.toLowerCase();
 			this.meta = componentMeta;
 
-			this.setup( stage, component );
-			this.configIDData( component );
+			this.setup(stage, component);
+			this.configIDData(component);
 		}
 
-		private setup = ( stage:createjs.Stage, component:any )=> {
+		private setup = (stage: createjs.Stage, component: any) => {
 
-			const width 	= this.meta.width,
-				height 		= this.meta.height,
-				positionX 	= this.meta.positionX,
-				positionY 	= this.meta.positionY,
-				zIndex 		= this.meta.zIndex,
-				id			= this.meta.zIndex;
+			const width = this.meta.width,
+				height = this.meta.height,
+				positionX = this.meta.positionX,
+				positionY = this.meta.positionY,
+				zIndex = this.meta.zIndex,
+				id = this.meta.zIndex;
 
 			const path_image = this.meta.path;
 
 			//const loadedImage = this.readImageFilePath( path_image );
 			//this.image = loadedImage;
 
-			this.readImageFilePath( path_image )
-				.then( (imgLoaded:HTMLImageElement) => {
+			this.readImageFilePath(path_image)
+				.then((imgLoaded: HTMLImageElement) => {
 
 					this.image = imgLoaded;
-					this.scaleX = width/this.image.width;
-					this.scaleY = height/this.image.height;
+					this.scaleX = width / this.image.width;
+					this.scaleY = height / this.image.height;
 
 					this.x = positionX;
 					this.y = positionY;
 
-					if ( this.getBounds() !== null ) {
+					if (this.getBounds() !== null) {
 						this.bounds = this.getBounds();
 					}
 
@@ -859,16 +859,16 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		private configIDData = ( component:any ):void => {
+		private configIDData = (component: any): void => {
 
-			this.set({componentId: parseInt(component.id)});
-			this.set({smart: component.smart});
-			this.set({componentMetaId: parseInt(component.componentmeta.find((x:any) => x.name === 'path').id)});
+			this.set({ componentId: parseInt(component.id) });
+			this.set({ smart: component.smart });
+			this.set({ componentMetaId: parseInt(component.componentmeta.find((x: any) => x.name === 'path').id) });
 
 		}
 
-		private readImageFilePath = async (path_image:string) => <HTMLImageElement> await new Promise( async (resolve, reject) => {
-		//private readImageFilePath = async (path_image:string) =>  {
+		private readImageFilePath = async (path_image: string) => <HTMLImageElement>await new Promise(async (resolve, reject) => {
+			//private readImageFilePath = async (path_image:string) =>  {
 
 			const response = await fetch(path_image);
 			const data = await response.blob();
@@ -894,19 +894,19 @@ export class BannerCreatorService implements OnDestroy {
 
 		});
 
-		public updatePositioning = ( component:any ) => {
+		public updatePositioning = (component: any) => {
 
 			this.meta = component.componentmeta;
 
-			const width 	= this.meta.width,
-				height 		= this.meta.height,
-				positionX 	= this.meta.positionX,
-				positionY 	= this.meta.positionY,
-				zIndex 		= this.meta.zIndex,
-				id			= this.meta.zIndex;
+			const width = this.meta.width,
+				height = this.meta.height,
+				positionX = this.meta.positionX,
+				positionY = this.meta.positionY,
+				zIndex = this.meta.zIndex,
+				id = this.meta.zIndex;
 
-			this.scaleX = width/this.image.width;
-			this.scaleY = height/this.image.height;
+			this.scaleX = width / this.image.width;
+			this.scaleY = height / this.image.height;
 
 			this.x = positionX;
 			this.y = positionY;
@@ -916,7 +916,7 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		public updateImage = ( component:any ):Promise<any> => {
+		public updateImage = (component: any): Promise<any> => {
 
 			return new Promise<any>((resolve, reject) => {
 
@@ -931,8 +931,8 @@ export class BannerCreatorService implements OnDestroy {
 
 						this.image = img;
 
-						this.scaleX = this.meta.width/this.image.width;
-						this.scaleY = this.meta.height/this.image.height;
+						this.scaleX = this.meta.width / this.image.width;
+						this.scaleY = this.meta.height / this.image.height;
 
 						this.x = this.meta.positionX;
 						this.y = this.meta.positionY;
@@ -955,7 +955,7 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		public center = ( stage:createjs.Stage ) => {
+		public center = (stage: createjs.Stage) => {
 			const bounds = this.getBounds();
 			const currCanvas = stage.canvas as any;
 
@@ -965,9 +965,9 @@ export class BannerCreatorService implements OnDestroy {
 			stage.update();
 		}
 
-		public interact = ( stage:createjs.Stage ) => {
+		public interact = (stage: createjs.Stage) => {
 
-			this.on("mouseover", (evt:any) => {
+			this.on("mouseover", (evt: any) => {
 
 				this.mousePointerInteraction();
 
@@ -990,16 +990,16 @@ export class BannerCreatorService implements OnDestroy {
 				stage.update();
 			});
 
-			this.on("mousedown", (evt:any) => {
+			this.on("mousedown", (evt: any) => {
 
 				// keep a record on the offset between the mouse position and the container
 				// position. currentTarget will be the container that the event listener was added to:
-				evt.currentTarget.offset = {x: this.x - evt.stageX, y: this.y - evt.stageY};
+				evt.currentTarget.offset = { x: this.x - evt.stageX, y: this.y - evt.stageY };
 			});
 
-			this.on("pressmove", (evt:any) => {
+			this.on("pressmove", (evt: any) => {
 
-				if( this.positionLock === false ) {
+				if (this.positionLock === false) {
 
 					this.cursor = 'grabbing';
 
@@ -1025,7 +1025,7 @@ export class BannerCreatorService implements OnDestroy {
 
 				} else {
 
-					console.log('Image is locked');
+					//console.log('Image is locked');
 				}
 
 			});
@@ -1033,8 +1033,8 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		private mousePointerInteraction = ():void => {
-			if( this.positionLock === false ) {
+		private mousePointerInteraction = (): void => {
+			if (this.positionLock === false) {
 				this.cursor = 'grab';
 			} else {
 				this.cursor = 'pointer';
@@ -1044,7 +1044,7 @@ export class BannerCreatorService implements OnDestroy {
 
 	public BAPP_Text = class BAPP_Text extends createjs.Text {
 
-		override name:string;
+		override name: string;
 		override cursor: string;
 		public meta: any;
 		public sortid: any;
@@ -1052,18 +1052,18 @@ export class BannerCreatorService implements OnDestroy {
 
 		private bounds: any;
 
-		constructor( component:any, componentMeta:any ) {
+		constructor(component: any, componentMeta: any) {
 			super(
 				componentMeta.fontValue,
-				componentMeta.fontStyle + " " + componentMeta.fontWeight + " " + componentMeta.fontSize +"px " + componentMeta.fontFamily + "",
+				componentMeta.fontStyle + " " + componentMeta.fontWeight + " " + componentMeta.fontSize + "px " + componentMeta.fontFamily + "",
 				componentMeta.fontColour
 			);
 			this.name = component.name.toLowerCase();
 			this.meta = componentMeta;
 			this.cursor = 'pointer';
 
-			this.setup( component );
-			this.configIDData( component );
+			this.setup(component);
+			this.configIDData(component);
 		}
 
 		override getMeasuredHeight(): number {
@@ -1073,28 +1073,28 @@ export class BannerCreatorService implements OnDestroy {
 
 		override getMeasuredWidth(): number {
 			const bounds = this.getBounds();
-			//console.log('getMeasuredWidth['+this.name+']:', bounds);
+			////console.log('getMeasuredWidth['+this.name+']:', bounds);
 			return bounds.width;
 		}
 
-		private setup = ( component:any )=> {
+		private setup = (component: any) => {
 
-			const width 	= this.meta.width,
-				height 		= this.meta.height,
-				positionX 	= this.meta.positionX,
-				positionY 	= this.meta.positionY,
-				zIndex 		= this.meta.zIndex,
-				id			= this.meta.zIndex;
+			const width = this.meta.width,
+				height = this.meta.height,
+				positionX = this.meta.positionX,
+				positionY = this.meta.positionY,
+				zIndex = this.meta.zIndex,
+				id = this.meta.zIndex;
 
 			const
 				//text_size 			= this.meta.fontSize,
-				text_LineHeight 	= this.meta.fontLineHeight,
+				text_LineHeight = this.meta.fontLineHeight,
 				//text_colour 		= this.meta.fontColour,
 				//text_family 		= this.meta.fontFamily,
 				//text_weight 		= this.meta.fontWeight,
 				//text_style			= this.meta.fontStyle,
-				text_align 			= this.meta.textAlign,
-				text_value 			= this.meta.fontValue;
+				text_align = this.meta.textAlign,
+				text_value = this.meta.fontValue;
 
 			this.maxWidth = parseInt(width);
 			this.lineWidth = parseInt(width);
@@ -1110,13 +1110,13 @@ export class BannerCreatorService implements OnDestroy {
 			this.id = parseInt(zIndex);
 			this.sortid = parseInt(id);
 
-			if ( this.getBounds() !== null ) {
+			if (this.getBounds() !== null) {
 				this.bounds = this.getBounds();
 			}
 
 			const bounds = this.bounds;
 
-			//console.log('setting up text:', component, bounds, this);
+			////console.log('setting up text:', component, bounds, this);
 
 			// create a rectangle shape the same size as the text, and assign it as the hitArea
 			// note that it is never added to the display list.
@@ -1130,23 +1130,23 @@ export class BannerCreatorService implements OnDestroy {
 			this.hitArea = hit;
 		}
 
-		private configIDData = ( component:any ):void => {
+		private configIDData = (component: any): void => {
 
-			this.set({componentId: parseInt(component.id)});
-			this.set({smart: component.smart});
-			this.set({componentMetaId: parseInt(component.componentmeta.find((x:any) => x.name === 'fontValue').id)});
+			this.set({ componentId: parseInt(component.id) });
+			this.set({ smart: component.smart });
+			this.set({ componentMetaId: parseInt(component.componentmeta.find((x: any) => x.name === 'fontValue').id) });
 
 		}
 
-		public update = ( component:any ) => {
+		public update = (component: any) => {
 
 			this.meta = component.componentmeta;
-			this.font = this.meta.fontStyle + " " + this.meta.fontWeight + " " + this.meta.fontSize +"px " + this.meta.fontFamily + "";
+			this.font = this.meta.fontStyle + " " + this.meta.fontWeight + " " + this.meta.fontSize + "px " + this.meta.fontFamily + "";
 			this.color = this.meta.fontColour;
-			this.setup( component );
+			this.setup(component);
 		}
 
-		public center = ( stage:createjs.Stage ) => {
+		public center = (stage: createjs.Stage) => {
 			const bounds = this.getBounds();
 			const currCanvas = stage.canvas as any;
 
@@ -1156,9 +1156,9 @@ export class BannerCreatorService implements OnDestroy {
 			stage.update();
 		}
 
-		public interact = ( stage:createjs.Stage ) => {
+		public interact = (stage: createjs.Stage) => {
 
-			this.on("mouseover", (evt:any) => {
+			this.on("mouseover", (evt: any) => {
 				this.mousePointerInteraction();
 				this.alpha = 0.5;
 				stage.update();
@@ -1169,16 +1169,16 @@ export class BannerCreatorService implements OnDestroy {
 				stage.update();
 			});
 
-			this.on("mousedown", (evt:any) => {
+			this.on("mousedown", (evt: any) => {
 
 				// keep a record on the offset between the mouse position and the container
 				// position. currentTarget will be the container that the event listener was added to:
-				evt.currentTarget.offset = {x: this.x - evt.stageX, y: this.y - evt.stageY};
+				evt.currentTarget.offset = { x: this.x - evt.stageX, y: this.y - evt.stageY };
 			});
 
-			this.on("pressmove", (evt:any) => {
+			this.on("pressmove", (evt: any) => {
 
-				if( this.positionLock === false ) {
+				if (this.positionLock === false) {
 
 					this.cursor = 'grabbing';
 
@@ -1203,7 +1203,7 @@ export class BannerCreatorService implements OnDestroy {
 
 				} else {
 
-					console.log('Text is locked');
+					//console.log('Text is locked');
 				}
 
 			});
@@ -1211,8 +1211,8 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		private mousePointerInteraction = ():void => {
-			if( this.positionLock === false ) {
+		private mousePointerInteraction = (): void => {
+			if (this.positionLock === false) {
 				this.cursor = 'grab';
 			} else {
 				this.cursor = 'pointer';
@@ -1223,32 +1223,32 @@ export class BannerCreatorService implements OnDestroy {
 
 	public BAPP_Shape = class BAPP_Shape extends createjs.Shape {
 
-		override name:string;
+		override name: string;
 		override cursor: string;
 		public meta: any;
 		public sortid: any;
 		public positionLock = true;
 
-		constructor( component:any ) {
+		constructor(component: any) {
 			super();
 
 			//this.meta = component.componentmeta;
 			this.cursor = 'pointer';
 			this.name = component.name.toLowerCase();
-			this.meta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			this.meta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			this.sortid = parseInt(this.meta.zIndex);
-			this.setup( component );
-			this.configIDData( component );
+			this.setup(component);
+			this.configIDData(component);
 		}
 
-		private setup = ( component:any )=> {
+		private setup = (component: any) => {
 			const
-				width 	= this.meta.width,
-				height 		= this.meta.height,
-				positionX 	= this.meta.positionX,
-				positionY 	= this.meta.positionY,
-				zIndex 		= this.meta.zIndex,
-				id			= this.meta.zIndex,
+				width = this.meta.width,
+				height = this.meta.height,
+				positionX = this.meta.positionX,
+				positionY = this.meta.positionY,
+				zIndex = this.meta.zIndex,
+				id = this.meta.zIndex,
 				shapeColour = this.meta.shapeColour;
 
 
@@ -1263,21 +1263,21 @@ export class BannerCreatorService implements OnDestroy {
 			this.sortid = parseInt(id);
 		}
 
-		private configIDData = ( component:any ):void => {
+		private configIDData = (component: any): void => {
 
-			this.set({componentId: parseInt(component.id)});
-			this.set({smart: component.smart});
-			this.set({componentMetaId: parseInt(component.componentmeta.find((x:any) => x.name === 'shapeColour').id)});
+			this.set({ componentId: parseInt(component.id) });
+			this.set({ smart: component.smart });
+			this.set({ componentMetaId: parseInt(component.componentmeta.find((x: any) => x.name === 'shapeColour').id) });
 
 		}
 
-		public update = ( component:any ) => {
+		public update = (component: any) => {
 
 			this.meta = component.componentmeta;
-			this.setup( component );
+			this.setup(component);
 		}
 
-		public center = ( stage:createjs.Stage ) => {
+		public center = (stage: createjs.Stage) => {
 			const bounds = this.getBounds();
 			const currCanvas = stage.canvas as any;
 
@@ -1287,9 +1287,9 @@ export class BannerCreatorService implements OnDestroy {
 			stage.update();
 		}
 
-		public interact = ( stage:createjs.Stage ) => {
+		public interact = (stage: createjs.Stage) => {
 
-			this.on("mouseover", (evt:any) => {
+			this.on("mouseover", (evt: any) => {
 				this.mousePointerInteraction();
 				this.alpha = 0.5;
 				stage.update();
@@ -1300,16 +1300,16 @@ export class BannerCreatorService implements OnDestroy {
 				stage.update();
 			});
 
-			this.on("mousedown", (evt:any) => {
+			this.on("mousedown", (evt: any) => {
 
 				// keep a record on the offset between the mouse position and the container
 				// position. currentTarget will be the container that the event listener was added to:
-				evt.currentTarget.offset = {x: this.x - evt.stageX, y: this.y - evt.stageY};
+				evt.currentTarget.offset = { x: this.x - evt.stageX, y: this.y - evt.stageY };
 			});
 
-			this.on("pressmove", (evt:any) => {
+			this.on("pressmove", (evt: any) => {
 
-				if( this.positionLock === false ) {
+				if (this.positionLock === false) {
 
 					this.cursor = 'grabbing';
 
@@ -1331,7 +1331,7 @@ export class BannerCreatorService implements OnDestroy {
 
 				} else {
 
-					console.log('Shape is locked');
+					//console.log('Shape is locked');
 				}
 
 			});
@@ -1339,8 +1339,8 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		private mousePointerInteraction = ():void => {
-			if( this.positionLock === false ) {
+		private mousePointerInteraction = (): void => {
+			if (this.positionLock === false) {
 				this.cursor = 'grab';
 			} else {
 				this.cursor = 'pointer';
@@ -1351,7 +1351,7 @@ export class BannerCreatorService implements OnDestroy {
 
 	public BAPP_Button = class BAPP_Button extends createjs.Container {
 
-		override name:string;
+		override name: string;
 		public meta: any;
 		public sortid: any;
 		public positionLock = true;
@@ -1362,20 +1362,20 @@ export class BannerCreatorService implements OnDestroy {
 		text!: createjs.Text;
 		graphic!: createjs.Graphics;
 
-		constructor( component:any ) {
+		constructor(component: any) {
 			super();
 
 			this.cursor = 'pointer';
 			this.name = component.name.toLowerCase();
-			this.meta = component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {});
+			this.meta = component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {});
 			this.sortid = parseInt(this.meta.zIndex);
-			this.setup( component );
-			this.configIDData( component );
+			this.setup(component);
+			this.configIDData(component);
 
 			this.mouseChildren = false;
 		}
 
-		private setup = ( component:any )=> {
+		private setup = (component: any) => {
 
 			this.x = this.meta.positionX;
 			this.y = this.meta.positionY;
@@ -1383,32 +1383,32 @@ export class BannerCreatorService implements OnDestroy {
 			this.setupText();
 
 			this.addChild(this.shape);
-			this.setChildIndex( this.shape, 1 );
+			this.setChildIndex(this.shape, 1);
 
 			this.addChild(this.text);
-			this.setChildIndex( this.text, 2 );
+			this.setChildIndex(this.text, 2);
 
 			this.id = parseInt(this.meta.zIndex);
 			this.sortid = parseInt(this.meta.zIndex);
 		}
 
-		private setupText = ()=> {
+		private setupText = () => {
 
 			const
-				width 				= this.meta.width,
-				height 				= this.meta.height,
-				text_size 			= this.meta.fontSize,
-				text_LineHeight 	= this.meta.fontLineHeight,
-				text_colour 		= this.meta.fontColour,
-				text_family 		= this.meta.fontFamily,
-				text_weight 		= this.meta.fontWeight,
-				text_style			= this.meta.fontStyle,
-				text_align 			= this.meta.textAlign,
-				text_value 			= this.meta.fontValue;
+				width = this.meta.width,
+				height = this.meta.height,
+				text_size = this.meta.fontSize,
+				text_LineHeight = this.meta.fontLineHeight,
+				text_colour = this.meta.fontColour,
+				text_family = this.meta.fontFamily,
+				text_weight = this.meta.fontWeight,
+				text_style = this.meta.fontStyle,
+				text_align = this.meta.textAlign,
+				text_value = this.meta.fontValue;
 
 			this.text = new createjs.Text(
 				text_value,
-				text_style + " " + text_weight + " " + text_size +"px " + text_family + "",
+				text_style + " " + text_weight + " " + text_size + "px " + text_family + "",
 				text_colour
 			);
 
@@ -1421,7 +1421,7 @@ export class BannerCreatorService implements OnDestroy {
 
 			//const bounds = this.text.getBounds();
 
-			if ( this.text.getBounds() !== null ) {
+			if (this.text.getBounds() !== null) {
 				this.bounds = this.text.getBounds();
 			}
 
@@ -1439,7 +1439,7 @@ export class BannerCreatorService implements OnDestroy {
 
 		}
 
-		private setupShape = ( bounds:any )=> {
+		private setupShape = (bounds: any) => {
 
 			const buttonColour = this.meta.shapeColour,
 				shapeRadiusTL = this.meta.shapeRadiusTL,
@@ -1460,19 +1460,19 @@ export class BannerCreatorService implements OnDestroy {
 			this.shape = new createjs.Shape();
 			this.shape.graphics
 				.beginFill(buttonColour)
-				.drawRoundRectComplex (bounds.x - cx, bounds.y - cy, BtnWidth, TextHeight, shapeRadiusTL, shapeRadiusTR, shapeRadiusBR, shapeRadiusBL);
+				.drawRoundRectComplex(bounds.x - cx, bounds.y - cy, BtnWidth, TextHeight, shapeRadiusTL, shapeRadiusTR, shapeRadiusBR, shapeRadiusBL);
 
 		}
 
-		private configIDData = ( component:any ):void => {
+		private configIDData = (component: any): void => {
 
-			this.set({componentId: parseInt(component.id)});
-			this.set({smart: component.smart});
-			this.set({componentMetaId: parseInt(component.componentmeta.find((x:any) => x.name === 'fontValue').id)});
+			this.set({ componentId: parseInt(component.id) });
+			this.set({ smart: component.smart });
+			this.set({ componentMetaId: parseInt(component.componentmeta.find((x: any) => x.name === 'fontValue').id) });
 
 		}
 
-		public update = ( component:any ) => {
+		public update = (component: any) => {
 
 			this.meta = component.componentmeta;
 
@@ -1484,18 +1484,18 @@ export class BannerCreatorService implements OnDestroy {
 			this.setupText();
 
 			this.addChild(this.shape);
-			this.setChildIndex( this.shape, 1 );
+			this.setChildIndex(this.shape, 1);
 
 			this.addChild(this.text);
-			this.setChildIndex( this.text, 2 );
+			this.setChildIndex(this.text, 2);
 
 			this.id = parseInt(this.meta.zIndex);
 			this.sortid = parseInt(this.meta.zIndex);
 
-			//console.log('Updating Button:', this);
+			////console.log('Updating Button:', this);
 		}
 
-		public center = ( stage:createjs.Stage ) => {
+		public center = (stage: createjs.Stage) => {
 			const bounds = this.getBounds();
 			const currCanvas = stage.canvas as any;
 
@@ -1505,9 +1505,9 @@ export class BannerCreatorService implements OnDestroy {
 			stage.update();
 		}
 
-		public interact = ( stage:createjs.Stage ) => {
+		public interact = (stage: createjs.Stage) => {
 
-			this.on("mouseover", (evt:any) => {
+			this.on("mouseover", (evt: any) => {
 				this.mousePointerInteraction();
 				this.alpha = 0.5;
 				stage.update();
@@ -1518,16 +1518,16 @@ export class BannerCreatorService implements OnDestroy {
 				stage.update();
 			});
 
-			this.on("mousedown", (evt:any) => {
+			this.on("mousedown", (evt: any) => {
 
 				// keep a record on the offset between the mouse position and the container
 				// position. currentTarget will be the container that the event listener was added to:
-				evt.currentTarget.offset = {x: this.x - evt.stageX, y: this.y - evt.stageY};
+				evt.currentTarget.offset = { x: this.x - evt.stageX, y: this.y - evt.stageY };
 			});
 
-			this.on("pressmove", (evt:any) => {
+			this.on("pressmove", (evt: any) => {
 
-				if( this.positionLock === false ) {
+				if (this.positionLock === false) {
 
 					this.cursor = 'grabbing';
 
@@ -1547,14 +1547,14 @@ export class BannerCreatorService implements OnDestroy {
 
 				} else {
 
-					console.log('Button is locked');
+					//console.log('Button is locked');
 				}
 
 			});
 		}
 
-		private mousePointerInteraction = ():void => {
-			if( this.positionLock === false ) {
+		private mousePointerInteraction = (): void => {
+			if (this.positionLock === false) {
 				this.cursor = 'grab';
 			} else {
 				this.cursor = 'pointer';
@@ -1565,15 +1565,15 @@ export class BannerCreatorService implements OnDestroy {
 
 	private generateUUID() { // Public Domain/MIT
 		let d = new Date().getTime();//Timestamp
-		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 			let r = Math.random() * 16;//random number between 0 and 16
-			if(d > 0){//Use timestamp until depleted
-				r = (d + r)%16 | 0;
-				d = Math.floor(d/16);
+			if (d > 0) {//Use timestamp until depleted
+				r = (d + r) % 16 | 0;
+				d = Math.floor(d / 16);
 			} else {//Use microseconds since page-load if supported
-				r = (d2 + r)%16 | 0;
-				d2 = Math.floor(d2/16);
+				r = (d2 + r) % 16 | 0;
+				d2 = Math.floor(d2 / 16);
 			}
 			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 		});

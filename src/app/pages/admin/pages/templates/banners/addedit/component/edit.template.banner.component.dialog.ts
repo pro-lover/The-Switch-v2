@@ -53,10 +53,10 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 	public resetVariationsObs: Observable<any>;
 
 	//wait for component to be emitted
-	@Input()EditActiveComponentReceived!: any;
-	public EditActiveComponent:any;
+	@Input() EditActiveComponentReceived!: any;
+	public EditActiveComponent: any;
 
-	@Input()UpdatedComponentPositionReceived!: any;
+	@Input() UpdatedComponentPositionReceived!: any;
 
 	// component meta data form
 	public FormGroupEditComponentMeta!: FormGroup;
@@ -95,10 +95,10 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 		//this.isAddMode = false;
 
-		this.EditActiveComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.EditActiveComponentReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
 			this.fontTypeService.fontType.pipe(takeUntil(this._destroy$)).subscribe((data: FontType[]) => {
-				if( data !== null ) {
+				if (data !== null) {
 					this.fontFamilies = data;
 				}
 			});
@@ -106,9 +106,9 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			this.initialise(evt);
 		});
 
-		this.UpdatedComponentPositionReceived.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.UpdatedComponentPositionReceived.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			//console.log('UpdatedComponentPositionReceived:', evt);
+			////console.log('UpdatedComponentPositionReceived:', evt);
 
 			this.updateEditFormValues(evt.component.meta);
 
@@ -122,11 +122,11 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	public initialise( event:any ):void {
+	public initialise(event: any): void {
 
 		if (!event) return;
 
-		//console.log('EditActiveComponentsEdit', event);
+		////console.log('EditActiveComponentsEdit', event);
 
 		this.EditActiveComponent = event;
 
@@ -138,7 +138,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 	public DragAndDropEventItem(newItem: any) {
 
-		//console.log('uploadItem:', newItem);
+		////console.log('uploadItem:', newItem);
 
 		if (!newItem || !newItem.data[0]) return;
 
@@ -153,14 +153,14 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 		//if (!this.isAddMode || this.componentId === 0) {
 
-			const componentMetaData = this.setupUpdatedComponentMetaData();
+		const componentMetaData = this.setupUpdatedComponentMetaData();
 
-			this.broadcastUpdatedComponentInputChanges(componentMetaData);
+		this.broadcastUpdatedComponentInputChanges(componentMetaData);
 
 		//}
 	}
 
-	public resetAssets(banner:any) {
+	public resetAssets(banner: any) {
 		this.ResetEvent.emit(banner);
 
 		this.resetVariationsSubject.next({
@@ -171,10 +171,10 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		//this.uploadedFiles = [];
 	}
 
-	public removeAsset(removeItem:any) {
+	public removeAsset(removeItem: any) {
 
-		//console.log('removeAsset:', removeItem );
-		//console.log('uploadedFiles:', this.uploadedFiles );
+		////console.log('removeAsset:', removeItem );
+		////console.log('uploadedFiles:', this.uploadedFiles );
 
 		this.RemoveUploadEvent.emit(removeItem);
 
@@ -196,7 +196,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 	 */
 	private prepareEditFormValues() {
 
-		if( this.EditActiveComponent.componenttype.name === 'Text' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Text') {
 
 			this.FormGroupEditComponentMeta = this.formBuilder.group({
 				componentId: [this.EditActiveComponent.id, Validators.required],
@@ -221,23 +221,23 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 
 			this.FormGroupEditComponentMeta.patchValue({
-				width: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'width').value),
-				height: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'height').value),
-				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionX').value),
-				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionY').value),
-				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'zIndex').value),
-				fontFamilyId: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontFamilyId').value,
-				fontFamily: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontFamily').value,
-				fontWeight: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontWeight').value,
-				fontStyle: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontStyle').value,
-				fontSize: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontSize').value),
-				fontLineHeight: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontLineHeight').value),
-				fontColour: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontColour').value,
-				fontValue: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontValue').value,
-				textAlign:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'textAlign').value
+				width: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'width').value),
+				height: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'height').value),
+				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionX').value),
+				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionY').value),
+				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'zIndex').value),
+				fontFamilyId: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontFamilyId').value,
+				fontFamily: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontFamily').value,
+				fontWeight: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontWeight').value,
+				fontStyle: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontStyle').value,
+				fontSize: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontSize').value),
+				fontLineHeight: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontLineHeight').value),
+				fontColour: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontColour').value,
+				fontValue: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontValue').value,
+				textAlign: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'textAlign').value
 			});
 
-		} else if( this.EditActiveComponent.componenttype.name === 'Button' ) {
+		} else if (this.EditActiveComponent.componenttype.name === 'Button') {
 
 			this.FormGroupEditComponentMeta = this.formBuilder.group({
 				componentId: [this.EditActiveComponent.id, Validators.required],
@@ -311,32 +311,32 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 
 			this.FormGroupEditComponentMeta.patchValue({
-				width: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'width').value),
-				height: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'height').value),
-				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionX').value),
-				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionY').value),
-				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'zIndex').value),
-				fontFamilyId: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontFamilyId').value,
-				fontFamily: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontFamily').value,
-				fontWeight: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontWeight').value,
-				fontStyle: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontStyle').value,
-				fontSize: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontSize').value),
-				fontLineHeight: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontLineHeight').value),
-				fontColour: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontColour').value,
-				fontValue: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'fontValue').value,
-				textAlign:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'textAlign').value,
-				shapeColour:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeColour').value,
-				shapeRadiusTL:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeRadiusTL').value,
-				shapeRadiusTR:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeRadiusTR').value,
-				shapeRadiusBR:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeRadiusBR').value,
-				shapeRadiusBL:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeRadiusBL').value,
-				shapePaddingTop:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapePaddingTop').value,
-				shapePaddingRight:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapePaddingRight').value,
-				shapePaddingBottom:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapePaddingBottom').value,
-				shapePaddingLeft:  this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapePaddingLeft').value
+				width: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'width').value),
+				height: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'height').value),
+				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionX').value),
+				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionY').value),
+				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'zIndex').value),
+				fontFamilyId: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontFamilyId').value,
+				fontFamily: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontFamily').value,
+				fontWeight: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontWeight').value,
+				fontStyle: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontStyle').value,
+				fontSize: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontSize').value),
+				fontLineHeight: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontLineHeight').value),
+				fontColour: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontColour').value,
+				fontValue: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'fontValue').value,
+				textAlign: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'textAlign').value,
+				shapeColour: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeColour').value,
+				shapeRadiusTL: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeRadiusTL').value,
+				shapeRadiusTR: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeRadiusTR').value,
+				shapeRadiusBR: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeRadiusBR').value,
+				shapeRadiusBL: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeRadiusBL').value,
+				shapePaddingTop: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapePaddingTop').value,
+				shapePaddingRight: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapePaddingRight').value,
+				shapePaddingBottom: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapePaddingBottom').value,
+				shapePaddingLeft: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapePaddingLeft').value
 			});
 
-		} else if( this.EditActiveComponent.componenttype.name === 'Shape' ) {
+		} else if (this.EditActiveComponent.componenttype.name === 'Shape') {
 
 			this.FormGroupEditComponentMeta = this.formBuilder.group({
 				componentId: [this.EditActiveComponent.id, Validators.required],
@@ -353,12 +353,12 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 
 			this.FormGroupEditComponentMeta.patchValue({
-				width: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'width').value),
-				height: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'height').value),
-				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionX').value),
-				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionY').value),
-				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'zIndex').value),
-				shapeColour: this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'shapeColour').value
+				width: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'width').value),
+				height: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'height').value),
+				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionX').value),
+				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionY').value),
+				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'zIndex').value),
+				shapeColour: this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'shapeColour').value
 			});
 
 		} else {
@@ -377,24 +377,24 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 
 			this.FormGroupEditComponentMeta.patchValue({
-				width: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'width').value),
-				height: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'height').value),
-				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionX').value),
-				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'positionY').value),
-				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x:any) => x.name === 'zIndex').value)
+				width: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'width').value),
+				height: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'height').value),
+				positionX: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionX').value),
+				positionY: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'positionY').value),
+				zIndex: parseInt(this.EditActiveComponent.componentmeta.find((x: any) => x.name === 'zIndex').value)
 			});
 
 		}
 
-		if( this.EditActiveComponent.componenttype.name === 'Text' || this.EditActiveComponent.componenttype.name === 'Button' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Text' || this.EditActiveComponent.componenttype.name === 'Button') {
 
 			this.ftemplateeditcomponent['fontFamilyId'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value: string) => {
 
-				//console.log('fontFamily:', parseInt(value), this.fontFamilies);
+				////console.log('fontFamily:', parseInt(value), this.fontFamilies);
 
-				this.fontFamilies.find( (font) => {
-					if( parseInt(font.id) === parseInt(value) ) {
-						///console.log('fontFamily:', font);
+				this.fontFamilies.find((font) => {
+					if (parseInt(font.id) === parseInt(value)) {
+						/////console.log('fontFamily:', font);
 						this.ftemplateeditcomponent['fontFamily'].patchValue(font.fontFamily);
 						this.ftemplateeditcomponent['fontWeight'].patchValue(font.fontWeight);
 						this.ftemplateeditcomponent['fontStyle'].patchValue(font.fontStyle);
@@ -406,7 +406,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 	}
 
-	private updateEditFormValues(componentmeta:any):void {
+	private updateEditFormValues(componentmeta: any): void {
 
 		this.changesHaveBeenSaved = false;
 		this.FormGroupEditComponentMeta.markAsDirty();
@@ -426,7 +426,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 	private setupUpdatedComponentMetaData() {
 		let componentMetaData: any;
 
-		if( this.EditActiveComponent.componenttype.name === 'Text' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Text') {
 
 			componentMetaData = {
 				width: this.FormGroupEditComponentMeta.value['width'],
@@ -445,7 +445,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 				textAlign: this.FormGroupEditComponentMeta.value['textAlign']
 			}
 
-		} else if( this.EditActiveComponent.componenttype.name === 'Button' ) {
+		} else if (this.EditActiveComponent.componenttype.name === 'Button') {
 
 			componentMetaData = {
 				width: this.FormGroupEditComponentMeta.value['width'],
@@ -473,7 +473,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 				shapePaddingLeft: this.FormGroupEditComponentMeta.value['shapePaddingLeft']
 			}
 
-		} else if( this.EditActiveComponent.componenttype.name === 'Image' ) {
+		} else if (this.EditActiveComponent.componenttype.name === 'Image') {
 
 			if (this.uploadedItem === null || this.uploadedItem === undefined) {
 				//this.alertService.error('Please upload image');
@@ -564,7 +564,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 			this.broadcastUpdatedComponentInputChanges(componentMetaData);
 
-			//console.log('componentWidth:', value, this.componentId, componentMetaData);
+			////console.log('componentWidth:', value, this.componentId, componentMetaData);
 		});
 
 		this.ftemplateeditcomponent['height'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
@@ -575,7 +575,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 			this.broadcastUpdatedComponentInputChanges(componentMetaData);
 
-			//console.log('componentWidth:', value, this.componentId, componentMetaData);
+			////console.log('componentWidth:', value, this.componentId, componentMetaData);
 		});
 
 		this.ftemplateeditcomponent['positionY'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
@@ -586,12 +586,12 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 			this.broadcastUpdatedComponentInputChanges(componentMetaData);
 
-			//console.log('positionY:', value, this.componentId, componentMetaData);
+			////console.log('positionY:', value, this.componentId, componentMetaData);
 
 		});
 
 		this.ftemplateeditcomponent['positionX'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
-			//console.log('positionX:', value, this.componentId);
+			////console.log('positionX:', value, this.componentId);
 
 			const componentMetaData = this.setupUpdatedComponentMetaData();
 
@@ -602,7 +602,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		});
 
 		this.ftemplateeditcomponent['zIndex'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
-			//console.log('positionX:', value, this.componentId);
+			////console.log('positionX:', value, this.componentId);
 
 			const componentMetaData = this.setupUpdatedComponentMetaData();
 
@@ -612,7 +612,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 		});
 
-		if ( this.EditActiveComponent.componenttype.name === 'Text' || this.EditActiveComponent.componenttype.name == 'Button' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Text' || this.EditActiveComponent.componenttype.name == 'Button') {
 
 			this.ftemplateeditcomponent['fontValue'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
@@ -664,7 +664,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		if ( this.EditActiveComponent.componenttype.name === 'Shape' || this.EditActiveComponent.componenttype.name == 'Button' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Shape' || this.EditActiveComponent.componenttype.name == 'Button') {
 
 			this.ftemplateeditcomponent['shapeColour'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
@@ -677,7 +677,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		if ( this.EditActiveComponent.componenttype.name === 'Button') {
+		if (this.EditActiveComponent.componenttype.name === 'Button') {
 
 			this.ftemplateeditcomponent['shapeRadiusTL'].valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value) => {
 
@@ -763,9 +763,9 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 	}
 
-	private broadcastUpdatedComponentInputChanges( componentMetaData: any ) {
+	private broadcastUpdatedComponentInputChanges(componentMetaData: any) {
 
-		//console.log('FormGroupEditComponentMeta', this.FormGroupEditComponentMeta);
+		////console.log('FormGroupEditComponentMeta', this.FormGroupEditComponentMeta);
 
 		this.changesHaveBeenSaved = false;
 
@@ -785,15 +785,15 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	public closeActiveComponentsEdit():void {
+	public closeActiveComponentsEdit(): void {
 
-		if( this.haveChangesBeenSaved() === true ) {
+		if (this.haveChangesBeenSaved() === true) {
 			this.EditComponentcloseEvent.emit();
 		} else {
 
 			//this.alertService.info('Your Changes have not been saved, please save your changes before closing.');
 
-			const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+			const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 				data: {
 					title: 'Your Changes have not been saved.',
 					message: 'Are you sure you want to continue and lose your updates?.'
@@ -808,7 +808,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	public saveActiveComponentsEdit(id:string):void {
+	public saveActiveComponentsEdit(id: string): void {
 
 		if (this.FormGroupEditComponentMeta.invalid) {
 			this.alertService.error('Please ensure all the Component Fields are completed correctly.');
@@ -816,11 +816,11 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		//console.log('saveActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
+		////console.log('saveActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
 
 		this.EditActiveComponent.isSaving = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Update Action',
 				message: 'Are you sure you want to update: ' + this.EditActiveComponent.name + '?.'
@@ -839,7 +839,7 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private saveUpdatedComponentToDB(id:string) {
+	private saveUpdatedComponentToDB(id: string) {
 
 		const newMeta = {
 			componentmeta: this.setupUpdatedComponentMetaData()//this.FormGroupEditComponentMeta.value
@@ -847,16 +847,16 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 		//console.info('saveUpdatedComponentToDB:', this.EditActiveComponent);
 
-		if( this.EditActiveComponent.componenttype.name === 'Image' ) {
+		if (this.EditActiveComponent.componenttype.name === 'Image') {
 
-			if(  newMeta.componentmeta.dataFile === undefined ) {
+			if (newMeta.componentmeta.dataFile === undefined) {
 				// image asset not updated
-				this.componentService.updateComponentMeta( id, newMeta)
+				this.componentService.updateComponentMeta(id, newMeta)
 					.pipe(first())
 					.subscribe({
 						next: () => {
 							this.EditActiveComponent.isSaving = false;
-							this.alertService.success( this.EditActiveComponent.name + ' Update successful', { keepAfterRouteChange: false });
+							this.alertService.success(this.EditActiveComponent.name + ' Update successful', { keepAfterRouteChange: false });
 
 							this.changesHaveBeenSaved = true;
 						},
@@ -872,88 +872,88 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			} else {
 
 				// image asset updated
-				const filePath = 'client-id-' + this.dataTemplate.clientId + '/template-id-' +this.dataTemplate.id + '/banner-id-' + this.dataBanner.id + '/container-id-' + this.dataContainerId;
+				const filePath = 'client-id-' + this.dataTemplate.clientId + '/template-id-' + this.dataTemplate.id + '/banner-id-' + this.dataBanner.id + '/container-id-' + this.dataContainerId;
 
-				this.componentService.upload( {
+				this.componentService.upload({
 					'file': newMeta.componentmeta.dataFile,
 					'path': filePath
 				})
-				.pipe(first())
-				.subscribe({
-					next: (results:any) => {
+					.pipe(first())
+					.subscribe({
+						next: (results: any) => {
 
-						newMeta.componentmeta.dataFilePath = results.data;
+							newMeta.componentmeta.dataFilePath = results.data;
 
-						//return;
+							//return;
 
-						this.componentService.updateComponentMeta( id, newMeta)
-							.pipe(first())
-							.subscribe({
-								next: () => {
-									this.EditActiveComponent.isSaving = false;
-									this.alertService.success( this.EditActiveComponent.name + ' Update successful', { keepAfterRouteChange: false });
+							this.componentService.updateComponentMeta(id, newMeta)
+								.pipe(first())
+								.subscribe({
+									next: () => {
+										this.EditActiveComponent.isSaving = false;
+										this.alertService.success(this.EditActiveComponent.name + ' Update successful', { keepAfterRouteChange: false });
 
-									newMeta.componentmeta.path = results.data;
-									newMeta.componentmeta.newimage = true;
+										newMeta.componentmeta.path = results.data;
+										newMeta.componentmeta.newimage = true;
 
-									//delete newMeta.componentmeta.dataFilePath
+										//delete newMeta.componentmeta.dataFilePath
 
-									this.broadcastUpdatedComponentInputChanges(newMeta.componentmeta);
+										this.broadcastUpdatedComponentInputChanges(newMeta.componentmeta);
 
-									this.changesHaveBeenSaved = true;
-								},
-								error: error => {
-									this.EditActiveComponent.isSaving = false;
-									this.alertService.error(error);
-									this.changesHaveBeenSaved = false;
-								}
-							});
+										this.changesHaveBeenSaved = true;
+									},
+									error: error => {
+										this.EditActiveComponent.isSaving = false;
+										this.alertService.error(error);
+										this.changesHaveBeenSaved = false;
+									}
+								});
 
-					},
-					error: error => {
-						this.EditActiveComponent.isSaving = false;
-						this.alertService.error(error);
-						this.changesHaveBeenSaved = false;
-					}
-				});
+						},
+						error: error => {
+							this.EditActiveComponent.isSaving = false;
+							this.alertService.error(error);
+							this.changesHaveBeenSaved = false;
+						}
+					});
 
 			}
 
 		} else {
 
-			this.componentService.updateComponentMeta( id, newMeta)
-					.pipe(first())
-					.subscribe({
-						next: () => {
+			this.componentService.updateComponentMeta(id, newMeta)
+				.pipe(first())
+				.subscribe({
+					next: () => {
 
-							//console.log('saveUpdatedComponentToDB complete', this.EditActiveComponent);
+						////console.log('saveUpdatedComponentToDB complete', this.EditActiveComponent);
 
-							this.alertService.success(  this.EditActiveComponent.name + ' updated successfully.', { keepAfterRouteChange: true });
+						this.alertService.success(this.EditActiveComponent.name + ' updated successfully.', { keepAfterRouteChange: true });
 
-							this.EditActiveComponent.isSaving = false;
+						this.EditActiveComponent.isSaving = false;
 
-							this.changesHaveBeenSaved = true;
+						this.changesHaveBeenSaved = true;
 
-						},
-						error: (error:string) => {
-							this.alertService.error(error);
-							this.EditActiveComponent.isSaving = false;
+					},
+					error: (error: string) => {
+						this.alertService.error(error);
+						this.EditActiveComponent.isSaving = false;
 
-							this.changesHaveBeenSaved = false;
-						}
-					});
+						this.changesHaveBeenSaved = false;
+					}
+				});
 		}
 	}
 
-	public deleteActiveComponentsEdit(id:string):void {
+	public deleteActiveComponentsEdit(id: string): void {
 
-		//console.log('deleteActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
+		////console.log('deleteActiveComponentsEdit', this.EditActiveComponent, this.FormGroupEditComponentMeta.value);
 
 		this.EditActiveComponent.isDeleting = true;
 
 		//return;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + this.EditActiveComponent.name + '?.'
@@ -982,14 +982,14 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 	private removeComponentFromDbAndCanvas() {
 
-		if( this.EditActiveComponent.id !== 0 ) {
+		if (this.EditActiveComponent.id !== 0) {
 
-			this.componentService.delete( this.EditActiveComponent.id )
+			this.componentService.delete(this.EditActiveComponent.id)
 				.pipe(first())
 				.subscribe({
 					next: () => {
 						this.EditActiveComponent.isDeleting = false;
-						this.alertService.success( this.EditActiveComponent.name + ' deleted successfully.', { keepAfterRouteChange: false });
+						this.alertService.success(this.EditActiveComponent.name + ' deleted successfully.', { keepAfterRouteChange: false });
 						this.DeleteComponentEvent.emit(this.EditActiveComponent);
 						this.EditComponentcloseEvent.emit();
 					},
@@ -1008,13 +1008,13 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 
 	}
 
-	public toggleSmartComponent(event:any, id: string):void {
+	public toggleSmartComponent(event: any, id: string): void {
 		this.updateSmartStatus(id, {
 			status: event.checked
 		});
 	}
 
-	private updateSmartStatus( id: string, params: any ):void {
+	private updateSmartStatus(id: string, params: any): void {
 
 		this.componentService.updateSmartStatus(id, params)
 			.pipe(first())
@@ -1042,8 +1042,8 @@ export class TemplateBannerEditDialogComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	private haveChangesBeenSaved():boolean {
-		if( this.FormGroupEditComponentMeta.dirty === true && this.changesHaveBeenSaved === false ) {
+	private haveChangesBeenSaved(): boolean {
+		if (this.FormGroupEditComponentMeta.dirty === true && this.changesHaveBeenSaved === false) {
 			return false;
 		} else {
 			return true;

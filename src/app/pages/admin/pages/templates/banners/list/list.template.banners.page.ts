@@ -38,14 +38,14 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 	// master reference data for filters
 	private allData!: any[];
 
-	public filterData$!:Observable<any>;
+	public filterData$!: Observable<any>;
 	public uiDataReady = false;
 
 	public myaccount!: Account;
 
 	id!: string;
-	public clientName!:string;
-	public templateName!:string;
+	public clientName!: string;
+	public templateName!: string;
 
 	// MatPaginator Inputs
 	public length!: number;
@@ -107,14 +107,14 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 	}
 
 	ngOnInit() {
 		this.id = this.route.snapshot.params['id'];
 
-		//console.log('Template ID:', this.id);
+		////console.log('Template ID:', this.id);
 
 		this.initialiseFilterData();
 
@@ -127,14 +127,14 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	private initialise():void {
+	private initialise(): void {
 
 		this.bannerService.getTemplateBannersById(this.id)
 			.pipe(first())
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((banners:any) => {
+			.subscribe((banners: any) => {
 
-				console.log('Template Banners:', banners);
+				//console.log('Template Banners:', banners);
 
 				this.primaryData = banners;
 				this.allData = banners;
@@ -149,7 +149,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 	}
 
 	// filters
-	private initialiseFilterData():void {
+	private initialiseFilterData(): void {
 		this.filterData$ = combineLatest(
 			[
 				//this.templateService.getAll(),
@@ -158,20 +158,20 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 				//this.clientService.getAll()
 			]
 		)
-		.pipe(
-			map(([bannerTypes, bannerSizes]):any => {
-				//console.info('combineLatest initialise', [bannerTypes, bannerSizes]);
-				// combineLatest returns an array of values, here we map those values to an object
-				return { bannerTypes, bannerSizes };
-			})
-		);
+			.pipe(
+				map(([bannerTypes, bannerSizes]): any => {
+					//console.info('combineLatest initialise', [bannerTypes, bannerSizes]);
+					// combineLatest returns an array of values, here we map those values to an object
+					return { bannerTypes, bannerSizes };
+				})
+			);
 
-		this.filterData$.pipe(takeUntil(this._destroy$)).subscribe( (data:any) => {
+		this.filterData$.pipe(takeUntil(this._destroy$)).subscribe((data: any) => {
 			this.prepFilterData(data);
 		});
 	}
 
-	private prepFilterData(data:any):void {
+	private prepFilterData(data: any): void {
 
 		//console.info('prepFilterData', data);
 
@@ -186,7 +186,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	private initialiseTextFilters() {
 
-		this.masterReference_names = this.allData.map( (jk: any) => {
+		this.masterReference_names = this.allData.map((jk: any) => {
 			return {
 				'id': jk.id,
 				'name': jk.name
@@ -196,19 +196,19 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 		this.filteredNames = this.chipCtrl.valueChanges.pipe(
 			startWith(null),
-			map( (so: any | null) => {
+			map((so: any | null) => {
 				//console.warn('this.filteredNames:', so, this.masterReference_names);
 
-				if( Number(so) ) {
+				if (Number(so)) {
 					return;
 				}
 
 				return so ? this.myTextFilter('name', so) : this.masterReference_names.slice()
-		}));
+			}));
 
 	}
 
-	private myTextFilter(type:string, name: string) {
+	private myTextFilter(type: string, name: string) {
 		//console.warn(email);
 		switch (type) {
 			case 'name':
@@ -235,11 +235,11 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 				break;
 		}
 
-		//console.log('selectedTextFilter['+type+']:', this.sortedData);
+		////console.log('selectedTextFilter['+type+']:', this.sortedData);
 
 	}
 
-	public removeSelectedFiltered(type:string): void {
+	public removeSelectedFiltered(type: string): void {
 
 		switch (type) {
 			case 'name':
@@ -254,7 +254,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		this.iterator();
 	}
 
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -270,25 +270,25 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 		newdata = this.allData;
 
-		if( this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannertypeFilterValue.value && this.bannertypeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.bannertypeId === this.bannertypeFilterValue.value
 			});
 		}
 
-		if( this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.bannersizeFilterValue.value && this.bannersizeFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.bannersizeId === this.bannersizeFilterValue.value
 			});
 		}
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
 
-		//console.log('newData:', newdata);
+		////console.log('newData:', newdata);
 		//this.initialise();
 		//this.initialise(newdata);
 
@@ -297,7 +297,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string):void {
+	public toggleStatus(event: any, id: string): void {
 
 		/**/
 		this.updateStatus(id, {
@@ -306,7 +306,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ):void {
+	private updateStatus(id: string, params: any): void {
 		this.bannerService.updateStatus(id, params)
 			.pipe(first())
 			.subscribe({
@@ -324,7 +324,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -338,21 +338,21 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' deleted successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 							//this.primaryData = this.primaryData.filter(x => x.id !== id);
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = new Date();
 									x.status = false;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.intialisePagination();
 								}
 							});
 
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -370,7 +370,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -384,21 +384,21 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: (newmodel) => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 
 							this.primaryData.find((x) => {
-								if( x.id === id ) {
+								if (x.id === id) {
 									x.deletedAt = null;
 									x.status = true;
-									//console.log('update model', this.primaryData);
+									////console.log('update model', this.primaryData);
 									this.intialisePagination();
 								}
 							});
 
 							//this.intialisePagination();
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -412,12 +412,12 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	public edit( id:string ): void {
+	public edit(id: string): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = true;
 
-		const editDialog = this.dialog.open( DialogBannerEditComponent, {
+		const editDialog = this.dialog.open(DialogBannerEditComponent, {
 			data: {
 				title: 'Editing Creative ' + model.name,
 				data: model
@@ -429,7 +429,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 				//console.info('Cancel Editing Model ID:', id);
 				model.isVC = false;
-				this.alertService.info(  model.name + ' not changed.', { keepAfterRouteChange: true });
+				this.alertService.info(model.name + ' not changed.', { keepAfterRouteChange: true });
 
 			} else {
 
@@ -442,12 +442,12 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 					.subscribe({
 						next: (updatedModel) => {
 							model.isVC = false;
-							this.alertService.success(  model.name + ' updated successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' updated successfully.', { keepAfterRouteChange: true });
 
 							this.primaryData = this.primaryData.map((x) => {
-								if( x.id === updatedModel.id ) {
+								if (x.id === updatedModel.id) {
 									x = updatedModel;
-									//console.log('New Model', updatedModel)
+									////console.log('New Model', updatedModel)
 								}
 
 								return x;
@@ -455,7 +455,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 							this.intialisePagination();
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isVC = false;
 						}
@@ -467,12 +467,12 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	}
 
-	public duplicate( id:string ): void {
+	public duplicate(id: string): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = true;
 
-		const duplicateDialog = this.dialog.open( DialogBannerDuplicateComponent, {
+		const duplicateDialog = this.dialog.open(DialogBannerDuplicateComponent, {
 			data: {
 				title: 'Duplicate Creative ' + model.name,
 				data: model
@@ -484,7 +484,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 				//console.info('Cancel Editing Model ID:', id);
 				model.isVC = false;
-				this.alertService.info(  model.name + ' not duplicated.', { keepAfterRouteChange: true });
+				this.alertService.info(model.name + ' not duplicated.', { keepAfterRouteChange: true });
 
 			} else {
 
@@ -502,7 +502,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 							this.createDuplicatedContainers(model, newModel);
 
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isVC = false;
 						}
@@ -514,7 +514,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	}
 
-	private createDuplicatedContainers(referenceModel:any, newModel: any) {
+	private createDuplicatedContainers(referenceModel: any, newModel: any) {
 
 		const containerCreatePromises = [];
 
@@ -533,16 +533,16 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		forkJoin(containerCreatePromises)
 			.pipe(last())
 			.subscribe({
-				next: ( newContainers:any[] ) => {
+				next: (newContainers: any[]) => {
 
 					// go through all components and update the containerId
-					const newContainerComponentsPromises:any[] = [];
+					const newContainerComponentsPromises: any[] = [];
 
 					for (let index = 0; index < newContainers.length; index++) {
 						const newContainer = newContainers[index];
 						const referenceModelContainer = referenceModel.containers[index];
 
-						referenceModelContainer.components.forEach((component:any) => {
+						referenceModelContainer.components.forEach((component: any) => {
 							newContainerComponentsPromises.push(
 								this.componentService.create(
 									{
@@ -553,7 +553,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 										componenttypeId: component.componenttypeId,
 										containerId: newContainer.id,
 										// https://stackoverflow.com/questions/61297000/convert-array-of-objects-to-object-of-key-value-pairs
-										componentmeta: component.componentmeta.reduce((r:any,{name,value}:any) => (r[name]=value,r), {})
+										componentmeta: component.componentmeta.reduce((r: any, { name, value }: any) => (r[name] = value, r), {})
 									}
 								)
 							)
@@ -564,12 +564,12 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 					forkJoin(newContainerComponentsPromises)
 						.pipe(last())
 						.subscribe({
-							next: ( newComponents:any[] ) => {
+							next: (newComponents: any[]) => {
 								referenceModel.isVC = false;
-								//console.log('New Components', newComponents);
+								////console.log('New Components', newComponents);
 								this.alertService.success('Creative duplicated successfully. Please update the image assets of the new creative.', { keepAfterRouteChange: true });
 
-								if( newModel.templateId === referenceModel.templateId ) {
+								if (newModel.templateId === referenceModel.templateId) {
 									this.primaryData.push(newModel);
 									this.intialisePagination();
 								}
@@ -590,14 +590,14 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	}
 
-	public viewRules( id:string ): void {
+	public viewRules(id: string): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		//model.isVC = true;
 
 		const tempRules = this.bannerService.generateBannerComponentRules(model.containers[0].components);
 
-		//console.log('creativeRules:', tempRules );
+		////console.log('creativeRules:', tempRules );
 
 		this._bottomSheet.open(
 			BottomSheetTemplateRulesComponent,
@@ -608,12 +608,12 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
@@ -623,7 +623,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data, index) => {
+		const exportArray = this.primaryData.map((data, index) => {
 
 			return {
 				'ID': data.id,
@@ -648,7 +648,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 		/* generate workbook and add the worksheet */
 		const wb: XLSX.WorkBook = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(wb, ws, TemplateName + ' Creatives' );
+		XLSX.utils.book_append_sheet(wb, ws, TemplateName + ' Creatives');
 
 		/* save to file */
 		XLSX.writeFile(wb, 'BAPP_Template-' + TemplateName + '-Creatives.xlsx');
@@ -664,7 +664,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		//this.introJS.showHints();
 
 		//this.introJS.start();
-		this.alertService.info( 'Help/Onboarding Feature still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Help/Onboarding Feature still in WIP.', { keepAfterRouteChange: true });
 	}
 
 	// PAGINATION FUNCS
@@ -675,7 +675,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 
 		this.iterator();
 	}
-	public sortData(sort: Sort) : void {
+	public sortData(sort: Sort): void {
 
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
@@ -703,7 +703,7 @@ export class TemplateBannersListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 

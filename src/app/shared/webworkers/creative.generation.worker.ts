@@ -3,15 +3,15 @@
 import * as saveAs from 'file-saver';
 import * as JSZip from 'jszip';
 
-const 	WorkerStages: any[] = [];
+const WorkerStages: any[] = [];
 //let 	stage: any | undefined;
 
 // Get Difference between two Arrays of Objects
-function getDifference(array1:any, array2:any) {
-	return array1.filter((object1:any) => {
-	  return !array2.some((object2:any) => {
-		return object1.name === object2.name;
-	  });
+function getDifference(array1: any, array2: any) {
+	return array1.filter((object1: any) => {
+		return !array2.some((object2: any) => {
+			return object1.name === object2.name;
+		});
 	});
 }
 
@@ -23,14 +23,14 @@ function getDifference(array1:any, array2:any) {
  * @param variationsArray (Array)
  *
  */
-function generateVariations( canvasRef:any, stageRef: any, copyVariationsArray:any[], variationsArray: any[]) {
+function generateVariations(canvasRef: any, stageRef: any, copyVariationsArray: any[], variationsArray: any[]) {
 
-	const allVariations:any[] = [];
+	const allVariations: any[] = [];
 
-	copyVariationsArray.forEach( (copy) =>{
+	copyVariationsArray.forEach((copy) => {
 		// issue #141 - This is a temporary fix until it's properly resolved.
-		if( copy.type === 'Text' && typeof copy.value === 'object' ) {
-			variationsArray.forEach( (background) => {
+		if (copy.type === 'Text' && typeof copy.value === 'object') {
+			variationsArray.forEach((background) => {
 				allVariations.push([copy, background])
 			});
 		}
@@ -109,7 +109,7 @@ function generateVariations( canvasRef:any, stageRef: any, copyVariationsArray:a
 			}
 		});
 
-		//console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
+		////console.log('missingcomponents'+this.canvasName + '-' + counter+':',missingcomponents);
 
 		stage.update();
 
@@ -131,18 +131,17 @@ function generateVariations( canvasRef:any, stageRef: any, copyVariationsArray:a
  * @param variationCollectionForExport (Array)
  *
  */
-function downloadVariations( variationCollectionForExport: any[] ){
+function downloadVariations(variationCollectionForExport: any[]) {
 
 	const zip = new JSZip();
 
-	variationCollectionForExport.forEach((blob:any) =>
-		{
-			zip.file(blob.name+'.png', blob.blobFile)
-		}
+	variationCollectionForExport.forEach((blob: any) => {
+		zip.file(blob.name + '.png', blob.blobFile)
+	}
 	);
 
-	zip.generateAsync({type:"blob"})
-		.then(	(blob) => {
+	zip.generateAsync({ type: "blob" })
+		.then((blob) => {
 			saveAs(blob, 'variations.zip')
 		})
 
@@ -151,7 +150,7 @@ function downloadVariations( variationCollectionForExport: any[] ){
 addEventListener('message', ({ data }) => {
 	//const response = `CG worker response to: ${data}`;
 
-	console.log(`CreativeGenerationWorker:`, data);
+	//console.log(`CreativeGenerationWorker:`, data);
 
 	switch (data.action) {
 

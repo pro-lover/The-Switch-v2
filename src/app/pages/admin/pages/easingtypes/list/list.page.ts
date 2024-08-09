@@ -46,7 +46,7 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 	public statusFilterValue: any;
 
 	private allData!: any[];//ComponentModel[];
-	
+
 	constructor(
 		private alertService: AlertService,
 		private dialog: MatDialog,
@@ -59,17 +59,17 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 
 		this.accountService.account
 			.pipe(takeUntil(this._destroy$))
-			.subscribe((x:any) => this.myaccount = x);
+			.subscribe((x: any) => this.myaccount = x);
 
 		this.easingTypeService.easingType
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(
-				(easingtypes:EasingType[]) =>  {
-					//console.log('collection subscription:', easingtypes);
+				(easingtypes: EasingType[]) => {
+					////console.log('collection subscription:', easingtypes);
 
 					this.allData = easingtypes;
 
-					if( easingtypes !== undefined && easingtypes.length > 0 ) {
+					if (easingtypes !== undefined && easingtypes.length > 0) {
 						this.initialise(easingtypes);
 					}
 				}
@@ -91,7 +91,7 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 		//this._destroy$.unsubscribe();
 		//this.ViewCollection.unsubscribe();
 	}
-	public onFilterChange( filter:string ): void {
+	public onFilterChange(filter: string): void {
 
 		let newdata: any;
 
@@ -106,10 +106,10 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 
 		newdata = this.allData;
 
-		console.log("data",newdata)
+		//console.log("data",newdata)
 
-		if( this.statusFilterValue.value && this.statusFilterValue.value !== undefined ) {
-			newdata = newdata.filter((x:any) => {
+		if (this.statusFilterValue.value && this.statusFilterValue.value !== undefined) {
+			newdata = newdata.filter((x: any) => {
 				return x.status === this.statusFilterValue.value
 			});
 		}
@@ -199,7 +199,7 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 
 	}
 
-	private initialise( easingtypes:EasingType[]):void {
+	private initialise(easingtypes: EasingType[]): void {
 
 		this.primaryData = easingtypes;
 		this.sortedData = this.primaryData.slice();
@@ -210,7 +210,7 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public toggleStatus(event:any, id: string) {
+	public toggleStatus(event: any, id: string) {
 
 		/**/
 		this.updateStatus(id, {
@@ -219,27 +219,27 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 		/**/
 	}
 
-	private updateStatus( id: string, params: any ) {
-        this.easingTypeService.updateStatus(id, params)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
-                    //this.router.navigate(['../../'], { relativeTo: this.route });
+	private updateStatus(id: string, params: any) {
+		this.easingTypeService.updateStatus(id, params)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					this.alertService.success('Record Status changed successfully', { keepAfterRouteChange: true });
+					//this.router.navigate(['../../'], { relativeTo: this.route });
 
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    //this.loading = false;
-                }
-            });
+				},
+				error: error => {
+					this.alertService.error(error);
+					//this.loading = false;
+				}
+			});
 	}
 
 	public deleteModel(id: string) {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogConfirmComponent, {
+		const confirmDialog = this.dialog.open(DialogConfirmComponent, {
 			data: {
 				title: 'Confirm Delete Action',
 				message: 'Are you sure you want to delete: ' + model.name
@@ -253,9 +253,9 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Deleted successfully.', { keepAfterRouteChange: true });
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -273,7 +273,7 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration Action',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -287,10 +287,10 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}
@@ -360,18 +360,18 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 
 	}
 
-	public audit( id:number ): void {
+	public audit(id: number): void {
 
 		const model = this.primaryData.find((x) => x.id === id);
 		model.isVC = false;
 
-		this.alertService.info( 'Version History still in WIP.', { keepAfterRouteChange: true });
+		this.alertService.info('Version History still in WIP.', { keepAfterRouteChange: true });
 
 	}
 
 	public export(): void {
 
-		const exportArray = this.primaryData.map( (data ) => {
+		const exportArray = this.primaryData.map((data) => {
 
 			return {
 				'ID': data.id,
@@ -422,23 +422,23 @@ export class EasingTypesListPage implements OnInit, OnDestroy {
 		});
 	}
 
-	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean) : number {
+	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
-	public setPageSizeOptions(setPageSizeOptionsInput: string) : void {
+	public setPageSizeOptions(setPageSizeOptionsInput: string): void {
 		if (setPageSizeOptionsInput) {
 			this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
 		}
 	}
 
-	public handlePage(e: any) :void {
+	public handlePage(e: any): void {
 		this.currentPage = e.pageIndex;
 		this.pageSize = e.pageSize;
 		this.iterator();
 	}
 
-	private iterator() :void {
+	private iterator(): void {
 		const end = (this.currentPage + 1) * this.pageSize;
 		const start = this.currentPage * this.pageSize;
 		const part = this.primaryData.slice(start, end);

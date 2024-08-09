@@ -15,7 +15,7 @@ export class AlertService {
 	private snackBarRef?: any;
 
 	//horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  	//verticalPosition: MatSnackBarVerticalPosition = 'top';
+	//verticalPosition: MatSnackBarVerticalPosition = 'top';
 
 	constructor(
 		//private _snackBar: MatSnackBar
@@ -24,12 +24,12 @@ export class AlertService {
 		this.snackBarRef = this._snackBar;
 
 		this.snackBarRef.afterDismissed().subscribe(() => {
-			console.log('The snackbar was dismissed');
+			//console.log('The snackbar was dismissed');
 		});
 
 
 		this.snackBarRef.onAction().subscribe(() => {
-			console.log('The snackbar action was triggered!');
+			//console.log('The snackbar action was triggered!');
 		});
 		/**/
 

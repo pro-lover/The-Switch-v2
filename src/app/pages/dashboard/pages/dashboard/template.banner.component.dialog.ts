@@ -1,22 +1,24 @@
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertService, ComponentService, FontTypeService } from '@app/core/services';
+import { Console } from 'console';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+
 
 @Component({
 	selector: 'app-component-variations',
 	templateUrl: './template.banner.component.dialog.html',
 	styleUrls: ['./template.banner.component.dialog.scss'],
 })
-export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestroy {
+export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
 
 	// will use the _destroy$ observable to control
 	// fetching items from an observable
 	private _destroy$ = new Subject<boolean>();
-
-	public dragPosition = {x: 0, y: 0};
+	logs: string[] = [];
+	public dragPosition = { x: 0, y: 0 };
 
 	//public id!: string;
 	//public isAddMode!: boolean;
@@ -25,7 +27,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	public copyContainerNeeded = false;
 
-	public uploadedFiles:any = [];
+	public uploadedFiles: any = [];
 
 	//
 	@Input() dataBanner!: any;
@@ -36,6 +38,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 	// Drag and Drop
 	@Output() FDCEvent = new EventEmitter<any>();
 	public uploadComplete = false;
+	public dataInputValue!: any;
 	//private uploadedItem: any;
 	private uploadedFileSubject: BehaviorSubject<any[] | unknown>;
 	public uploadedFileObs: Observable<any[] | unknown>;
@@ -68,7 +71,31 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	ngOnInit() {
 
-		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.name);
+		console.log('______________________________');
+
+		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer);
+		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components.length);
+		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components[1].componentmeta[9]);
+		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components[1].componentmeta[9].value);
+		const _componentmeta = this.dataComponents.find( (component:any) => component.componenttype.name === 'Text' && component.smart === true );
+
+		console.log(_componentmeta.componentmeta.length)
+
+			for (let i = 0; i < _componentmeta.componentmeta.length; i++) {
+
+
+
+			if(_componentmeta.componentmeta[i].name === "fontValue")
+			{
+				console.log("true is ")
+				this.dataInputValue =_componentmeta.componentmeta[i].value;
+			}
+			}
+
+			console.log(_componentmeta.componentmeta)
+
+
+
 
 		this.isCopyDialogNeeded();
 
@@ -84,9 +111,9 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	private isCopyDialogNeeded() {
 
-		const getSmartTextComponents = this.dataComponents.find( (component:any) => component.componenttype.name === 'Text' && component.smart === true );
+		const getSmartTextComponents = this.dataComponents.find((component: any) => component.componenttype.name === 'Text' && component.smart === true);
 
-		if( getSmartTextComponents ) {
+		if (getSmartTextComponents) {
 			this.copyContainerNeeded = true;
 		}
 
@@ -99,11 +126,24 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 		});
 	}
 
-	public ListtrackByFn(index:number, item:any) {
+	public saveDataOut(evt: any) {
+		console.warn('look i am working', evt);
+	}
+	ngOnChanges(changes: SimpleChanges): void {
+
+		console.warn('ngOnChanges  look i am working', changes);
+	}
+	ngDoCheck(): void {
+		this.logs.push('ngDoCheck  look i am working');
+
+	}
+	
+
+	public ListtrackByFn(index: number, item: any) {
 		return index; // or item.id
 	}
 
-	public resetAssets(banner:any) {
+	public resetAssets(banner: any) {
 		this.ResetEvent.emit({
 			banner: banner,
 			containerId: this.dataContainer.id
@@ -118,7 +158,7 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 		this.uploadedFiles = [];
 	}
 
-	public removeAsset(removeItem:any) {
+	public removeAsset(removeItem: any) {
 
 		//console.log('removeAsset:', removeItem );
 		//console.log('uploadedFiles:', this.uploadedFiles );
@@ -136,10 +176,37 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 		this.uploadedFiles = [];
 		/**/
 	}
+	public onTextChange(value: any) {
+
+		this.dataInputValue = value.value.text;
+
+		console.warn('_______that to share____', value.value);
+		
+
+		const _componentmeta = this.dataComponents.find( (component:any) => component.componenttype.name === 'Text' && component.smart === true );
+		console.warn('onTextChange : 1',_componentmeta);
+			for (let i = 0; i < _componentmeta.componentmeta.length; i++) {
+				if(_componentmeta.componentmeta[i].name === "fontValue")
+				{
+					
+					_componentmeta.componentmeta[i].value = value.value.text ;
+				}
+			}
+			console.warn('onTextChange : 3',_componentmeta.componentmeta );
+
+
+			if (!value || !value.value.text) return;
+
+			this.uploadComplete = true;
+
+			this.broadcastUpdatedComponentInputChanges(value);
+	}
 
 	public DragAndDropEventItem(newItem: any) {
-
-		console.log('uploadItem:', newItem);
+		console.log("TemplateBannerVariationsDialogComponent ________________________________________________________________[1]",);
+		
+		console.log(!newItem +'uploadItem  1:', newItem);
+		console.log(!newItem.data[0]+'uploadItem:', newItem.data[0]);
 
 		if (!newItem || !newItem.data[0]) return;
 
@@ -152,13 +219,14 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	}
 
-	private broadcastUpdatedComponentInputChanges( uploadItem: any ) {
+	private broadcastUpdatedComponentInputChanges(uploadItem: any) {
+		console.log("TemplateBannerVariationsDialogComponent ________________________________________________________________[2]",);
 
 		this.uploadedFiles.push(uploadItem);
 
 		this.UploadEvent.emit(uploadItem);
 
-		console.log('UploadEvent:', this.uploadedFiles);
+		//console.log('UploadEvent:', this.uploadedFiles);
 
 	}
 

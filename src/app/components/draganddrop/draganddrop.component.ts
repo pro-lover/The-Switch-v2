@@ -43,15 +43,16 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		console.log("________________________________________________________________[1]");
 		/**/
-		this.resetUploads.pipe(takeUntil(this._destroy$)).subscribe((evt:any) => {
+		this.resetUploads.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			//console.log('DND clear files:', evt);
+			////console.log('DND clear files:', evt);
 
 			if (!evt || !evt.stage) return;
 
-			if( this.dataStageName == evt.stage ) {
-				//console.log('DND clear files:', evt);
+			if (this.dataStageName == evt.stage) {
+				////console.log('DND clear files:', evt);
 				this.files = [];
 				this.files.length = 0;
 
@@ -64,6 +65,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		console.log("________________________________________________________________[2]");
 		console.warn('DragandDrop Component ngOnDestroy');
 		this._destroy$.complete();
 		this._destroy$.unsubscribe();
@@ -73,6 +75,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * on file drop handler
 	 */
 	public onFileDropped($event: any) {
+		console.log("________________________________________________________________[3]");
 		this.prepareFilesList($event);
 	}
 
@@ -80,6 +83,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * handle file from browsing
 	 */
 	public fileBrowseHandler(files: Event | any) {
+		console.log("________________________________________________________________[4]");
 		//this.prepareFilesList(files);
 		this.prepareFilesList(files.target.files);
 	}
@@ -89,6 +93,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * @param index (File index)
 	 */
 	public deleteFile(index: number) {
+		console.log("________________________________________________________________[5]");
 		const removedFile = this.files.splice(index, 1);
 		this.filesForVisualUI.splice(index, 1);
 
@@ -105,27 +110,28 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * Simulate the upload process
 	 */
 	private uploadFilesSimulator(index: number) {
+		console.log("________________________________________________________________[6]");
 
 		//setTimeout(() => {
-			if (index === this.files.length) {
-				this.DDEvent.emit({
-					stage: this.dataStageName,
-					containerId: this.dataContainerId,
-					type: this.dataType,
-					componentName: this.componentName,
-					data: this.files
-				});
-				return;
-			} else {
-				const progressInterval = setInterval(() => {
-					if (this.files[index].progress === 100) {
-						clearInterval(progressInterval);
-						this.uploadFilesSimulator(index + 1);
-					} else {
-						this.files[index].progress += 50;
-					}
-				}, 200);
-			}
+		if (index === this.files.length) {
+			this.DDEvent.emit({
+				stage: this.dataStageName,
+				containerId: this.dataContainerId,
+				type: this.dataType,
+				componentName: this.componentName,
+				data: this.files
+			});
+			return;
+		} else {
+			const progressInterval = setInterval(() => {
+				if (this.files[index].progress === 100) {
+					clearInterval(progressInterval);
+					this.uploadFilesSimulator(index + 1);
+				} else {
+					this.files[index].progress += 50;
+				}
+			}, 200);
+		}
 		//}, 1000);
 	}
 
@@ -134,20 +140,21 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * @param files (Files List)
 	 */
 	private prepareFilesList(files: Array<any>) {
+		console.log("________________________________________________________________[7]");
 
-		//console.log('files:', files);
+		////console.log('files:', files);
 
 		// Copy Validation: One Spreadsheet File at a time Only
 
-		if( this.dataType.toLowerCase() === 'copy' || this.dataType.toLowerCase() === 'text' ) {
+		if (this.dataType.toLowerCase() === 'copy' || this.dataType.toLowerCase() === 'text') {
 
-			if( this.files.length > 0 ) {
+			if (this.files.length > 0) {
 
 				this.alertService.error('A Spreadsheet is already uploaded. Please delete the existing file first.', { keepAfterRouteChange: true });
 
 				return;
 
-			} else if( files.length > 1 ) {
+			} else if (files.length > 1) {
 
 				this.alertService.error('Only one spreadsheet file at a time is supported.', { keepAfterRouteChange: true });
 
@@ -161,7 +168,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 
 		for (const item of files) {
 
-			if( this.validFileType(item) ) {
+			if (this.validFileType(item)) {
 
 				item.progress = 0;
 				this.files.push(item);
@@ -173,9 +180,9 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 
 			} else {
 
-				console.error('Invalid file['+this.dataType+'] type:', item.type);
+				console.error('Invalid file[' + this.dataType + '] type:', item.type);
 
-				this.alertService.error('Invalid '+this.dataType+' File for ' + this.componentName, { keepAfterRouteChange: true });
+				this.alertService.error('Invalid ' + this.dataType + ' File for ' + this.componentName, { keepAfterRouteChange: true });
 
 				this.elementRef.nativeElement.querySelector('.drag-and-drop-container').classList.remove('success');
 				this.elementRef.nativeElement.querySelector('.drag-and-drop-container').classList.add('error');
@@ -183,22 +190,23 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 			}
 		}
 
-		if( this.files.length > 0 ) {
+		if (this.files.length > 0) {
 			this.uploadFilesSimulator(0);
 		}
 
 	}
 
-	private validFileType(file:File): boolean {
+	private validFileType(file: File): boolean {
+		console.log("________________________________________________________________[8]");
 
 		switch (this.dataType.toLowerCase()) {
 
 			case 'image':
 			case 'logo':
 			case 'background':
-				console.log('file type:', file.type);
+				//console.log('file type:', file.type);
 
-				if( file.type.match('image.*') ) {
+				if (file.type.match('image.*')) {
 					return true;
 				} else {
 					return false;
@@ -207,7 +215,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 			case 'copy':
 			case 'text':
 
-				if( file.type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ) {
+				if (file.type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
 					return true;
 				} else {
 					return false;
@@ -227,6 +235,7 @@ export class DragandDropComponent implements OnInit, OnDestroy {
 	 * @param decimals (Decimals point)
 	 */
 	formatBytes(bytes: number, decimals: number) {
+
 		if (bytes === 0) {
 			return '0 Bytes';
 		}

@@ -37,12 +37,12 @@ export class DialogBannerEditComponent implements OnInit, OnDestroy {
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
 
-		console.log('DialogBannerEditComponent:', this.data);
+		//console.log('DialogBannerEditComponent:', this.data);
 
 		this.bannerTypeService.getAll()
 			.pipe(first())
 			.pipe(takeUntil(this._destroy$))
-			.subscribe( (x: BannerType[]) => {
+			.subscribe((x: BannerType[]) => {
 				this.formDataBannerTypes = x;
 			});
 
@@ -92,15 +92,15 @@ export class DialogBannerEditComponent implements OnInit, OnDestroy {
 		this.dialogRef.close(this.updatedModelData);
 	}
 
-	public deleteContainer( id:string) {
+	public deleteContainer(id: string) {
 
-		const deletedContainer = this.data.data.containers.find((x:any) => x.id === id);
+		const deletedContainer = this.data.data.containers.find((x: any) => x.id === id);
 
 		deletedContainer.isDeleting = true;
 
 		console.warn('deletedContainer:', deletedContainer);
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm delete',
 				message: 'Are you sure you want to delete this container: ' + deletedContainer.name
@@ -114,60 +114,60 @@ export class DialogBannerEditComponent implements OnInit, OnDestroy {
 
 				//return;
 				/**/
-				this.containerService.delete( deletedContainer.id )
-				.pipe(first())
-				.subscribe({
-					next: () => {
+				this.containerService.delete(deletedContainer.id)
+					.pipe(first())
+					.subscribe({
+						next: () => {
 
-						if( deletedContainer.components.length > 0 ) {
+							if (deletedContainer.components.length > 0) {
 
-							const noofcontainerstodelete = deletedContainer.components.length;
+								const noofcontainerstodelete = deletedContainer.components.length;
 
-							const componentsDeletePromises = [];
-							for (let index = 0; index < noofcontainerstodelete; index++) {
+								const componentsDeletePromises = [];
+								for (let index = 0; index < noofcontainerstodelete; index++) {
 
-								const containerComp = deletedContainer.components[index];
+									const containerComp = deletedContainer.components[index];
 
-								componentsDeletePromises.push(
-									this.componentService.delete( containerComp.id )
-								);
+									componentsDeletePromises.push(
+										this.componentService.delete(containerComp.id)
+									);
+								}
+
+								forkJoin(componentsDeletePromises)
+									.pipe(last())
+									.subscribe({
+										next: () => {
+
+											this.alertService.success('Container deleted and components removed successfully', { keepAfterRouteChange: true });
+											deletedContainer.isDeleting = false;
+
+											this.data.data.containers = this.data.data.containers.filter((x: any) => x.id !== deletedContainer.id);
+
+											//newContainerDb.components = componentsResults;
+											//this.broadcastNewContainer( newContainerDb );
+
+										},
+										error: error => {
+											this.alertService.error(error);
+											deletedContainer.isDeleting = false;
+										}
+									});
+
+							} else {
+
+								this.data.data.containers = this.data.data.containers.filter((x: any) => x.id !== deletedContainer.id);
+
+								deletedContainer.isDeleting = false;
+								this.alertService.success('Container deleted Successfully.', { keepAfterRouteChange: true });
 							}
 
-							forkJoin(componentsDeletePromises)
-								.pipe(last())
-								.subscribe({
-									next: () => {
-
-										this.alertService.success('Container deleted and components removed successfully', { keepAfterRouteChange: true });
-										deletedContainer.isDeleting = false;
-
-										this.data.data.containers = this.data.data.containers.filter((x:any) => x.id !== deletedContainer.id);
-
-										//newContainerDb.components = componentsResults;
-										//this.broadcastNewContainer( newContainerDb );
-
-									},
-									error: error => {
-										this.alertService.error(error);
-										deletedContainer.isDeleting = false;
-									}
-								});
-
-						} else {
-
-							this.data.data.containers = this.data.data.containers.filter((x:any) => x.id !== deletedContainer.id);
-
+						},
+						error: error => {
 							deletedContainer.isDeleting = false;
-							this.alertService.success('Container deleted Successfully.', { keepAfterRouteChange: true });
+							this.alertService.error(error);
+
 						}
-
-					},
-					error: error => {
-						deletedContainer.isDeleting = false;
-						this.alertService.error(error);
-
-					}
-				});
+					});
 				/**/
 			} else {
 				//console.info('Cancel Restoring record ID:', id);
@@ -179,10 +179,10 @@ export class DialogBannerEditComponent implements OnInit, OnDestroy {
 	}
 
 	public restoreContainer(id: string): void {
-		const model = this.data.data.containers.find((x:any) => x.id === id);
+		const model = this.data.data.containers.find((x: any) => x.id === id);
 		model.isDeleting = true;
 
-		const confirmDialog = this.dialog.open( DialogRestoreComponent, {
+		const confirmDialog = this.dialog.open(DialogRestoreComponent, {
 			data: {
 				title: 'Confirm Restoration',
 				message: 'Are you sure you want to restore this record: ' + model.name
@@ -196,10 +196,10 @@ export class DialogBannerEditComponent implements OnInit, OnDestroy {
 					.pipe(first())
 					.subscribe({
 						next: () => {
-							this.alertService.success(  model.name + ' Restored successfully.', { keepAfterRouteChange: true });
+							this.alertService.success(model.name + ' Restored successfully.', { keepAfterRouteChange: true });
 							model.isDeleting = false;
 						},
-						error: (error:string) => {
+						error: (error: string) => {
 							this.alertService.error(error);
 							model.isDeleting = false;
 						}

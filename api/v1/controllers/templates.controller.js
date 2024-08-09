@@ -92,7 +92,7 @@ function updateStatus(req, res, next) {
 			.then(model => res.json(model))
 			.catch(next);
 	} else {
-		//console.log('WTF', req.params.id);
+		////console.log('WTF', req.params.id);
 		return res.status(401).json({ message: 'Unauthorized' });
 	}
 }

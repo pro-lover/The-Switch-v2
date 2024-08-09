@@ -9,23 +9,23 @@ import { first } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  templateUrl: './sign-in.page.html',
-  styleUrls: ['./sign-in.page.scss'],
+	templateUrl: './sign-in.page.html',
+	styleUrls: ['./sign-in.page.scss'],
 })
 export class SignInPage implements OnInit {
 
 	public path = ROUTER_UTILS.config;
 
 	public form: FormGroup | any;
-    public loading = false;
-    public submitted = false;
+	public loading = false;
+	public submitted = false;
 	public returnUrl: string;
 
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
 		private activatedRoute: ActivatedRoute,
-        private accountService: AccountService,
+		private accountService: AccountService,
 		private sanitizer: DomSanitizer,
 		private authService: AuthService,
 		private alertService: AlertService
@@ -51,45 +51,45 @@ export class SignInPage implements OnInit {
 	private login() {
 		this.submitted = true;
 
-        // reset alerts on submit
-        this.alertService.clear();
+		// reset alerts on submit
+		this.alertService.clear();
 
-        // stop here if form is invalid
-        if (this.form.invalid) {
+		// stop here if form is invalid
+		if (this.form.invalid) {
 			this.alertService.error('An Error Occurred. Please ensure all fields are completed.');
 			console.error('Login Error:', this.form.value);
-            return;
-        }
+			return;
+		}
 
 		this.loading = true;
-        this.accountService.login(this.f.email.value, this.f.password.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    // get return url from query parameters or default to home page
+		this.accountService.login(this.f.email.value, this.f.password.value)
+			.pipe(first())
+			.subscribe({
+				next: () => {
+					// get return url from query parameters or default to home page
 					//let qquickie = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    //const returnUrl = this.sanitizer.sanitize( SecurityContext.URL, qquickie);
+					//const returnUrl = this.sanitizer.sanitize( SecurityContext.URL, qquickie);
 					const returnUrl = '/';
-                    this.router.navigateByUrl(returnUrl);
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+					this.router.navigateByUrl(returnUrl);
+				},
+				error: error => {
+					this.alertService.error(error);
+					this.loading = false;
+				}
+			});
 
 	}
 
-    public onSubmit() {
-        this.submitted = true;
+	public onSubmit() {
+		this.submitted = true;
 
-        // reset alerts on submit
-        this.alertService.clear();
+		// reset alerts on submit
+		this.alertService.clear();
 
-        // stop here if form is invalid
-        if (this.form.invalid) {
-            return;
-        }
+		// stop here if form is invalid
+		if (this.form.invalid) {
+			return;
+		}
 
 		this.loading = true;
 
@@ -97,27 +97,27 @@ export class SignInPage implements OnInit {
 		//this.recaptchaService.execute({action: 'login'});
 
 		return;
-    }
+	}
 
 	public onCaptchaExpired(event: any): void {
-		//console.log('onCaptchaExpired:', event);
+		////console.log('onCaptchaExpired:', event);
 	}
 
 	public onCaptchaResponse(token: any): void {
-		//console.log('onCaptchaResponse:', token);
+		////console.log('onCaptchaResponse:', token);
 
-		this.accountService.verifyRecaptchaToken(token, environment.recaptchaSecret ).pipe(first())
-            .subscribe({
-                next: (RecaptchaResponse) => {
-                    //console.log('RecaptchaResponse:', RecaptchaResponse);
+		this.accountService.verifyRecaptchaToken(token, environment.recaptchaSecret).pipe(first())
+			.subscribe({
+				next: (RecaptchaResponse) => {
+					////console.log('RecaptchaResponse:', RecaptchaResponse);
 
 					this.login();
-                },
-                error: error => {
+				},
+				error: error => {
 
 					this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+					this.loading = false;
+				}
+			});
 	}
 }

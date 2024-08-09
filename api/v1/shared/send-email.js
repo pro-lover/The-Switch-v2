@@ -40,7 +40,7 @@ async function sendEmail({ to, subject, html }) {
 	};
 
 	await apiInstance.sendTransacEmail(sendSmtpEmail).then( function(data) {
-			//console.log('Email API called successfully. Returned data: ' + data);
+			////console.log('Email API called successfully. Returned data: ' + data);
 		}, function(error) {
 			console.error(error);
 		}
