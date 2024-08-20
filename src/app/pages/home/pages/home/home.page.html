@@ -1,5 +1,4 @@
 <div class="p-4"></div>
-
 <section class="container">
 	<main class="row">
 		<div class="col-12">
@@ -17,6 +16,20 @@
 				<a [routerLink]="['/', path.base.howItWorks]">
 					<span>HOW IT WORKS</span>
 				</a>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<ng-container *ngFor="let activeBannerSize of activeBannerSizes" >
+						<app-banner
+				
+						>
+		
+						</app-banner>
+
+					</ng-container>
+					
+				</div>
+
 			</div>
 
 			<ng-template #notAuthorized>

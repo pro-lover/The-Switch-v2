@@ -231,7 +231,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	get f() { return this.FormGroupProjectDetails.controls; }
 
 	ngOnInit() {
-		console.log("DashboardPage ________________________________________________________________[1]",);
 		//console.log("ngOnInit");
 		this.initialise();
 
@@ -362,14 +361,12 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		console.log("DashboardPage ________________________________________________________________[2]",);
 		console.warn('Dashboard Component ngOnDestroy');
 		this._destroy$.next(false);
 		this._destroy$.complete();
 	}
 
 	private buildForm(): void {
-		console.log("DashboardPage ________________________________________________________________[3]",);
 		this.FormGroupProjectDetails = this._formBuilder.group({
 			projectTitle: [{ value: '', disabled: true }, Validators.required],
 			projectClient: [{ value: '', disabled: false }, Validators.required],
@@ -383,8 +380,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private initialise(): void {
-		console.log("DashboardPage ________________________________________________________________[56]",);
-
 		console.info('Dashboard Component initialise');
 
 		this.dashboardData$ = combineLatest(
@@ -415,9 +410,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private prepDashboardData(data: any): void {
-		console.log("DashboardPage ________________________________________________________________[57]",);
 		//console.log('prepDashboard', data);
-
 		this.Templates = data.templates;
 		this.Clients = data.clients;
 		this.BannerTypes = data.bannertypes;
@@ -445,7 +438,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public onStepChange(event: any): void {
-		console.log("DashboardPage ________________________________________________________________[4]",);
 		//console.log('onStepChange:', event);
 
 		//if( event.selectedIndex === 2 ) {
@@ -454,7 +446,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public creativeReady($event: any): void {
-		console.log("DashboardPage ________________________________________________________________[5]",);
 		//console.log('creativeReady:', $event);
 
 		this.activeBannerSizes.forEach((size: any) => {
@@ -483,7 +474,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public refreshBanner(db?: any) {
-		console.log("DashboardPage ________________________________________________________________[6]",);
 		if (db !== undefined) {
 			this.refreshStageSubject.next(db);
 		} else {
@@ -495,7 +485,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 * EVENTS FOR HTML5 CANVAS CREATIVE
 	 */
 	public playAnimation(banner: any, container: any) {
-		console.log("DashboardPage ________________________________________________________________[7]",);
 		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
 
 		container.animation_isPlaying = this.animation_isPlaying;
@@ -508,7 +497,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public frameAnimationStart($event: any) {
-		console.log("DashboardPage ________________________________________________________________[8]",);
 		this.animation_isPlaying = true;
 
 		this.activeBannerSizes.forEach((size: any) => {
@@ -520,7 +508,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public frameAnimationEnd($event: any) {
-		console.log("DashboardPage ________________________________________________________________[9]",);
 		this.animation_isPlaying = false;
 
 		this.activeBannerSizes.forEach((size: any) => {
@@ -532,19 +519,16 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public playGlobalAnimation(banner: any, container: any) {
-		console.log("DashboardPage ________________________________________________________________[10]",);
 		this.animation_isPlaying = this.animation_isPlaying === true ? false : true;
 		this.playGlobalAnimationSubject.next(this.animation_isPlaying);
 	}
 
 	public GlobalAnimationEnd($event: any) {
-		console.log("DashboardPage ________________________________________________________________[11]",);
 		this.animation_isPlaying = false;
 		this.playGlobalAnimationSubject.next(null);
 	}
 
 	public previewCreative(db?: any) {
-		console.log("DashboardPage ________________________________________________________________[12]",);
 		if (db !== undefined) {
 			this.refreshStageSubject.next(db);
 		} else {
@@ -553,7 +537,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private resetUIControls() {
-		console.log("DashboardPage ________________________________________________________________[13]",);
 		this.creativeType = undefined;
 		this.noOfVariations = 0;
 		this.completedBannerVariationCounter = 0;
@@ -567,7 +550,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private resetSelectedCreativeData() {
-		console.log("DashboardPage ________________________________________________________________[14]",);
+		console.warn("____________[ resetSelectedCreativeData ]________________[14]",);
+		console.log("BannerSizes : ",this.BannerSizes)
+		console.log("TemplateRules : ",this.TemplateRules)
+		console.log("activeBannerSizes : ",this.activeBannerSizes)
+		console.log("updateableComponents : ",this.updateableComponents)
 		this.activeTemplate = null;
 		//this.BannerSizes = [];
 		//this.TemplateRules = [];
@@ -663,7 +650,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 	private generateTemplateRules(dynamicComponents: any): any[] {
 		console.log("DashboardPage ________________________________________________________________[17]",);
-		//console.log('generateTemplateRules');
 		const TemplateRules: any[] = [];
 
 		dynamicComponents.forEach((component: any) => {
@@ -708,7 +694,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private countNoofCounters() {
-		console.log("DashboardPage ________________________________________________________________[18]",);
+		console.log("[18]",);
 
 		let count = 0;
 
@@ -717,11 +703,10 @@ export class DashboardPage implements OnInit, OnDestroy {
 		});
 
 		this.TotalContainersForAllCreatives = count;
-
+		console.log("TotalContainersForAllCreatives", this.TotalContainersForAllCreatives);
 		//return count;
 	}
-	public onTextChange(datain: any){
-		console.log("DashboardPage ________________________________________________________________[19]",);
+	public onTextChange(datain: any) {
 		console.warn('onTextChange  look i am working', datain);
 
 	}
@@ -732,35 +717,128 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public DragAndDropEventItem(newItem: any) {
-		console.log("DashboardPage ________________________________________________________________[20]",);
-		console.warn('DragAndDropEventItem 1:', newItem, this.updateableComponents);
+		console.warn("[Step 8] -->");
+		console.warn(newItem, this.updateableComponents);
 
-		if (!newItem.value)
-			{
-				if (!newItem || !newItem.data[0]) return;
-				console.log("out here ")
-				console.warn('DragAndDropEventItem 2:');
-				this.files.push(newItem);
-		
-				console.warn('DragAndDropEventItem 3:', this.files);
-				this.uploadedFileSubject.next(newItem);
-		
-				console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
-		
-				// replacing the below
-				// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
-				this.activeBannerSizes.find((x: any) => {
-					console.warn('DragAndDropEventItem 5:', x);
-					console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
-					if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
-		
+		if (!newItem.value) {
+			if (!newItem || !newItem.data[0]) return;
+
+			console.log("out here ")
+			console.warn('DragAndDropEventItem 2:');
+			this.files.push(newItem);
+
+			console.warn('DragAndDropEventItem 3:', this.files);
+			this.uploadedFileSubject.next(newItem);
+
+			console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
+
+			// replacing the below
+			// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
+			this.activeBannerSizes.find((x: any) => {
+				console.warn('DragAndDropEventItem 5:', x);
+				console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
+				if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
+
+					x.containers.find((y: any) => {
+
+						console.warn("(" + y.id + "===" + newItem.containerId);
+						if (y.id === newItem.containerId) {
+
+							let containerReady = true;
+
+							//checkRelevantUpdateableComponents.forEach((z:any) => {
+							console.warn("check in updateableComponents");
+							this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
+								if (newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button')) {
+									console.warn("z.readyForVariations is this true");
+									z.readyForVariations = true;
+								}
+								if (z.readyForVariations === false) {
+									console.warn("containerReady is this true");
+									containerReady = false;
+								}
+								console.warn("updateableComponents is this true", containerReady);
+							});
+
+							if (containerReady === true) {
+								console.warn("containerReady is this true", containerReady);
+								y.componentWindowOpen = false;
+							}
+
+							console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
+						}
+
+					});
+
+					//this.isBannerReadyyForVariations(x.id);
+				}
+			});
+		} else {
+			console.warn("[Step 9] -->");
+			console.log("out here ")
+			console.warn('DragAndDropEventItem 2:');
+
+			if (!newItem || !newItem.value) return;
+			this.files.push(newItem);
+
+			console.warn('DragAndDropEventItem 3:', this.files);
+
+			console.warn("[Step 10] --> jump to to banner.component");
+			this.uploadedFileSubject.next(newItem);
+
+			console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
+
+			// replacing the below
+			// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
+			this.activeBannerSizes.find((x: any) => {
+				console.warn('[step 12] --> find :', x);
+				console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
+				if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
+					console.warn("[step 13] --> Test", x);
+					if (newItem.bannerType === 'GIFs') {
+						console.warn("[step 14] --> Confirm that is ");
+						console.log(x.bannertype.name);
 						x.containers.find((y: any) => {
-		
-							console.warn("(" + y.id + "===" + newItem.containerId);
-							if (y.id === newItem.containerId) {
-		
+							console.warn("[step 15] --> In a container : ");
+							console.log(x.containers);
+							console.warn("[step 16] --> Test ", y.name + " === " + newItem.frame);
+							if (y.name === newItem.frame) {
+								console.warn("[step 17] --> Test Successful");
 								let containerReady = true;
-		
+
+								//checkRelevantUpdateableComponents.forEach((z:any) => {
+								console.warn("check in updateableComponents");
+
+								this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
+									if (newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button')) {
+										console.warn("z.readyForVariations is this true");
+										z.readyForVariations = true;
+									}
+									if (z.readyForVariations === false) {
+										console.warn("containerReady is this true");
+										containerReady = false;
+									}
+									console.warn("updateableComponents is this true", containerReady);
+								});
+
+								if (containerReady === true) {
+									console.warn("containerReady is this true", containerReady);
+									//y.componentWindowOpen = false;
+								}
+
+								console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
+							}
+
+						});
+					} else {
+						x.containers.find((y: any) => {
+
+							console.warn("(" + y.id + "===" + newItem.containerId);
+							console.warn("[step 14] --> Test", x.containers);
+							if (y.id === newItem.containerId) {
+
+								let containerReady = true;
+
 								//checkRelevantUpdateableComponents.forEach((z:any) => {
 								console.warn("check in updateableComponents");
 								this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
@@ -774,79 +852,28 @@ export class DashboardPage implements OnInit, OnDestroy {
 									}
 									console.warn("updateableComponents is this true", containerReady);
 								});
-		
-								if (containerReady === true) {
-									console.warn("containerReady is this true", containerReady);
-									y.componentWindowOpen = false;
-								}
-		
-								console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
-							}
-		
-						});
-		
-						this.isBannerReadyyForVariations(x.id);
-					}
-				});
-			}else{
-				console.log("out here ")
-				console.warn('DragAndDropEventItem 2:');
 
-				if (!newItem || !newItem.value) return;
-				this.files.push(newItem);
-		
-				console.warn('DragAndDropEventItem 3:', this.files);
-				this.uploadedFileSubject.next(newItem);
-		
-				console.warn('DragAndDropEventItem 4:', this.uploadedFileSubject);
-		
-				// replacing the below
-				// const checkRelevantUpdateableComponents = this.updateableComponents.filter((x:any) => x.containerId === newItem.containerId);
-				this.activeBannerSizes.find((x: any) => {
-					console.warn('DragAndDropEventItem 5:', x);
-					console.warn("(" + 'bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height + ")" + "===" + newItem.stage);
-					if (('bannerCanvas-' + x.bannersize.width + '-' + x.bannersize.height) === newItem.stage) {
-		
-						x.containers.find((y: any) => {
-		
-							console.warn("(" + y.id + "===" + newItem.containerId);
-							if (y.id === newItem.containerId) {
-		
-								let containerReady = true;
-		
-								//checkRelevantUpdateableComponents.forEach((z:any) => {
-								console.warn("check in updateableComponents");
-								this.updateableComponents.filter((x: any) => x.containerId === newItem.containerId).forEach((z: any) => {
-									if (newItem.type === z.componenttype.name || (newItem.type === 'Text' && z.componenttype.name === 'Button')) {
-										console.warn("z.readyForVariations is this true");
-										z.readyForVariations = true;
-									}
-									if (z.readyForVariations === false) {
-										console.warn("containerReady is this true");
-										containerReady = false;
-									}
-									console.warn("updateableComponents is this true", containerReady);
-								});
-		
 								if (containerReady === true) {
 									console.warn("containerReady is this true", containerReady);
-									y.componentWindowOpen = false;
+									//y.componentWindowOpen = false;
 								}
-		
+
 								console.warn('checkRelevantUpdateableComponents:', this.updateableComponents);
 							}
-		
+
 						});
-		
-						this.isBannerReadyyForVariations(x.id);
 					}
-				});
-			}
-		
+
+
+					this.isBannerReadyyForVariations(x.id);
+				}
+			});
+		}
+
 	}
 
 	public ResetVariationsEvent(data: any) {
-		console.log("DashboardPage ________________________________________________________________[21]",);
+		console.log("[21]",);
 		//console.log('ResetVariationsEvent 1:', data);
 
 		this.activeBannerSizes.find((x: any) => {
@@ -880,7 +907,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public RemoveUploadEventItem(removeItem: any) {
-		console.log("DashboardPage ________________________________________________________________[22]",);
+
 		//console.log('RemoveUploadEventItem:', removeItem);
 		////console.log('this.files:', this.files);
 
@@ -943,8 +970,9 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public generateVariations(bannerComponent: any) {
-		console.log("DashboardPage ________________________________________________________________[23]",);
-		////console.log('generateVariations', bannerComponent);
+		console.warn('[Step 22 ] --> generateVariations');
+		console.log(bannerComponent);
+
 		bannerComponent.componentWindowOpen = false;
 
 		bannerComponent.containers.map((x: any) => {
@@ -953,15 +981,20 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 		this.noOfVariations++;
 		bannerComponent.readyForVariations = true;
-		console.log('generateVariations', this.files);
-		this.variationsEvent.emit({bannerComponent,dta:this.files});
+		console.warn('[Step 23 ] --> Moving to Banner.component with :', this.files);
+		console.log(bannerComponent, this.files);
+
+		this.variationsEvent.emit({ bannerComponent, dta: this.files });
 
 		//this.FormGroupVariations.value.variationsReady = true;
+		
 
 	}
+	
 
 	public generateAllVariations() {
-		console.log("DashboardPage ________________________________________________________________[24]",);
+		console.log('[Step 20 ] --> generateAllVariations');
+
 		for (let index = 0; index < this.updateableComponents.length; index++) {
 			const element = this.updateableComponents[index];
 
@@ -979,6 +1012,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 				break;
 			}
+			console.log('[Step 21 ] --> Test was successfully');
 		}
 
 		this.activeBannerSizes.forEach((x: any) => {
@@ -1000,11 +1034,12 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	private isBannerReadyyForVariations(bannerId: string): void {
-		console.log("DashboardPage ________________________________________________________________[25]",);
-		console.log('isBannerReadyyForVariations', bannerId);
+		console.warn("[Step 18] --> isBannerReadyyForVariations",);
+		console.log(bannerId);
 
 		let status = true;
-
+		console.warn("[Step 19] --> updateableComponents",);
+		console.log(this.updateableComponents);
 		const chhh = this.updateableComponents.filter((x: any) => x.bannerId === bannerId);
 
 		console.log('isBannerReadyyForVariations', chhh);
@@ -1014,7 +1049,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 		for (let index = 0; index < chhh.length; index++) {
 			const element = chhh[index];
 
-			console.log("element : " , element)
+			console.log("element : ", element)
 
 			console.log(element.readyForVariations + " === " + false)
 			if (element.readyForVariations === false) {
@@ -1029,7 +1064,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 			this.activeBannerSizes.find((x: any) => {
 				if (x.id === bannerId) {
 					x.readyForVariations = true;
-					x.componentWindowOpen = false;
+					//x.componentWindowOpen = false;
 
 					this.variationsTracker.push({
 						bannerId: x.id,
@@ -1047,7 +1082,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public acceptCollectionOfVariationsFromBannerComponent(bannerComponentVariationCollection: any) {
-		console.log("DashboardPage ________________________________________________________________[26]",);
+		console.log("[26]",);
 		//console.log("acceptCollectionOfVariationsFromBannerComponent	", bannerComponentVariationCollection)
 
 		//console.log('CreativeType:', this.f['projectBannerType'].value);
@@ -1123,13 +1158,13 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private prepFinalVariationsArray() {
-		console.log("DashboardPage ________________________________________________________________[27]",);
+		console.log("[27]",);
 		this.variationCollectionForExport = this.variationCollectionForExport.flat();
 		console.warn('variationCollectionForExport:', this.variationCollectionForExport);
 	}
 
 	private generateAllFrames(allFrames: any[]): Promise<any> {
-		console.log("DashboardPage ________________________________________________________________[28]",);
+		console.log("[28]",);
 		return new Promise<any>((resolve, reject) => {
 
 			const groupedArray = groupBy(allFrames, 'containerId');
@@ -1194,7 +1229,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private generateGIFs(variation: any[]): Promise<Blob> {
-		console.log("DashboardPage ________________________________________________________________[29]",);
+		console.log("[29]",);
 		return new Promise<Blob>((resolve, reject) => {
 
 			// https://stackoverflow.com/questions/21913673/execute-web-worker-from-different-origin
@@ -1235,7 +1270,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private generateImageFromDataURI(imgDataURL: string): Promise<HTMLImageElement> {
-		console.log("DashboardPage ________________________________________________________________[30]",);
+		console.log("[30]",);
 		return new Promise(
 			(resolve, reject) => {
 
@@ -1261,7 +1296,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	private GIFImagesFromDataURI(FinalGIFVariation: any[]): Promise<HTMLImageElement[]> {
-		console.log("DashboardPage ________________________________________________________________[31]",);
+		console.log("[31]",);
 		const allFrameImages: any[] = [];
 
 		for (let index = 0; index < FinalGIFVariation.length; index++) {
@@ -1280,7 +1315,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public exportVariation(bannerComponent: any) {
-		console.log("DashboardPage ________________________________________________________________[32]",);
+		console.log("[32]",);
 		//console.log('exportVariation', bannerComponent);
 
 		this.downloadVariationsEvent.emit(bannerComponent);
@@ -1288,7 +1323,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public progressPercentage(data: any) {
-		console.log("DashboardPage ________________________________________________________________[33]",);
+		console.log("[33]",);
 		this.activeBannerSizes.find((x) => {
 			if (x.bannersize.id === data.bannersizeId) {
 				x.variationpercentage = data.value;
@@ -1327,13 +1362,13 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public downloadAllVariations() {
-		console.log("DashboardPage ________________________________________________________________[34]",);
+		console.log("[34]",);
 		this.generatingDownloads = true;
 
 		const pauseBeforeBatch = setTimeout(() => {
 
 			clearTimeout(pauseBeforeBatch);
-			console.log(this.creativeType +'=== Static JPG');
+			console.log(this.creativeType + '=== Static JPG');
 
 			if (this.creativeType === 'static') {
 
@@ -1571,7 +1606,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public sortData(sort: Sort): void {
-		console.log("DashboardPage ________________________________________________________________[35]",);
+	
 		const data = this.sortedData.slice();
 		if (!sort.active || sort.direction === '') {
 			this.sortedData = data;
@@ -1589,19 +1624,19 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private compare(a: number | string | boolean, b: number | string | boolean, isAsc: boolean): number {
-		console.log("DashboardPage ________________________________________________________________[36]",);
+	
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
 	public setPageSizeOptions(setPageSizeOptionsInput: string) {
-		console.log("DashboardPage ________________________________________________________________[37]",);
+
 		if (setPageSizeOptionsInput) {
 			this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
 		}
 	}
 
 	public handlePage(e: any) {
-		console.log("DashboardPage ________________________________________________________________[38]",);
+
 		/** /
 		//console.log('Paginating:', e, {
 			'previousStage': this.stages[e.previousPageIndex],
@@ -1615,7 +1650,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private iterator() {
-		console.log("DashboardPage ________________________________________________________________[39]",);
+	
 		const end = (this.currentPage + 1) * this.pageSize;
 		const start = this.currentPage * this.pageSize;
 		const part = this.variationCollectionForExport.slice(start, end);
@@ -1623,7 +1658,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private intialisePagination() {
-		console.log("DashboardPage ________________________________________________________________[40]",);
+
 		this.sortedData = this.variationCollectionForExport.slice();
 		this.pageLength = this.sortedData.length;
 		this.iterator();
@@ -1634,7 +1669,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public onFilterChange(filter: string): void {
-		console.log("DashboardPage ________________________________________________________________[41]",);
+
 
 		let newdata: any;
 
@@ -1675,12 +1710,10 @@ export class DashboardPage implements OnInit, OnDestroy {
 	 *
 	 */
 	public back(): void {
-		console.log("DashboardPage ________________________________________________________________[42]",);
 		this.location.back();
 	}
 
 	public help(): void {
-		console.log("DashboardPage ________________________________________________________________[43]",);
 		this.introJS.refresh();
 
 		if (this.activeBannerSizes.length <= 0) {
@@ -1821,7 +1854,11 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public toggleUploadWindow(banner: any, container: any) {
-		console.log("DashboardPage ________________________________________________________________[44]",);
+		// this.variationsGenerated = false;
+		// this.activeBannerSizes.forEach((x: any) => {
+		// 	x.readyForVariations = false;
+		// });
+
 		//console.log("________________________________________________________start________________________________________________________________________");
 		//console.log(banner);
 		//console.log(container);
@@ -1842,18 +1879,18 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public CloseComponentWindow($event: any) {
-		console.log("DashboardPage ________________________________________________________________[45]",);
+		console.log("[45]",);
 		$event.dataBanner.componentWindowOpen = false;
 		$event.dataContainer.componentWindowOpen = false;
 	}
 
 	public onOpenedChange(o: boolean) {
-		console.log("DashboardPage ________________________________________________________________[46]",);
+		console.log("[46]",);
 		//console.log(`Drawer IsOpen: ${o}`);
 	}
 
 	public openPreview(variation: any): void {
-		console.log("DashboardPage ________________________________________________________________[47]",);
+		console.log("[47]",);
 		this.variationCollectionForExport.map((x) => {
 			if (x.isOpen === true) {
 				this.newVariationNameValue.setValue(x.name, { emitEvent: false });
@@ -1867,7 +1904,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	private variationPreviewConfig(variation: any): void {
-		console.log("DashboardPage ________________________________________________________________[48]",variation);
+		console.log("[48]", variation);
 		console.log(this.newVariationNameValue)
 		this.newVariationNameValue = new FormControl('');
 		// this.newVariationNameValue = new FormControl('', Validators.required);
@@ -1881,7 +1918,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public editVariationName(id: number): void {
-		console.log("DashboardPage ________________________________________________________________[49]",);
 		////console.log('id',id);
 		const model = this.variationCollectionForExport[id];
 		model.isEditingVariation = true;
@@ -1911,7 +1947,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public downloadVariation(id: number): void {
-		console.log("DashboardPage ________________________________________________________________[50]",);
 		console.log(this.creativeType);
 
 		if (this.creativeType === 'static') {
@@ -1974,7 +2009,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public nextPreviewVariation(id: number): void {
-		console.log("DashboardPage ________________________________________________________________[51]",);
 		const model = this.variationCollectionForExport[id];
 		const oldmodel = this.variationCollectionForExport[(id - 1)];
 
@@ -1986,7 +2020,6 @@ export class DashboardPage implements OnInit, OnDestroy {
 	}
 
 	public previousPreviewVariation(id: number): void {
-		console.log("DashboardPage ________________________________________________________________[52]",);
 		const model = this.variationCollectionForExport[id];
 		const oldmodel = this.variationCollectionForExport[(id + 1)];
 
@@ -2025,7 +2058,6 @@ export class DialogEditVariationFormComponent implements OnInit {
 
 	get f() { return this.form.controls; }
 	ngOnInit() {
-		console.log("DialogEditVariationFormComponent ________________________________________________________________[54]",);
 		//this.isAddMode = !this.id;
 
 		this.form = this.formBuilder.group({
@@ -2037,7 +2069,6 @@ export class DialogEditVariationFormComponent implements OnInit {
 	}
 
 	public onSubmit(): void {
-		console.log("DialogEditVariationFormComponent ________________________________________________________________[55]",);
 		this.submitted = true;
 
 		//console.warn('value', this.form.value);

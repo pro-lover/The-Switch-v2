@@ -40,7 +40,7 @@
 					<ng-container
 
 					>
-					<br /><br />
+					<br />
 					<div class="form-row row">
 						<div class="form-group col-12 col-md-6" id="select-client-drp">
 							<mat-form-field appearance="fill">
@@ -140,8 +140,6 @@
 					</div>
 					</ng-container>
 
-					<hr />
-					<br />
 					<div style="display:flex;justify-content: space-between;">
 						<button
 							[disabled]="activeBannerSizes.length === 0"
@@ -237,21 +235,19 @@
 										<br />
 										<div class="row banner-variation-option">
 											<div
-												class="col-11 control-artboard" style="text-align: left;" >
-
+												class="col-11 control-artboard" style="text-align: center;" >
 
 													<mat-drawer-container class="creative-canvas-container" autosize [hasBackdrop]="false" >
 														<div class="creative-canvas-sidenav-content">
 															<div class="row">
-
 																<div
-																	class="col-12 creative-holding-section"
+																	class="col-4 creative-holding-section"
 																	style="padding: 0;"
 																	[ngClass]="{ 'creative-loaded': activeContainer.creativeReady === true }"
 																	*ngFor="let activeContainer of activeBannerSize.containers;trackBy: ListtrackByFn">
 
-
 																	<app-banner
+																		
 																		(variationCollectionForDownloadEvent)="acceptCollectionOfVariationsFromBannerComponent($event)"
 																		(variationCounter)="progressPercentage($event)"
 																		[populateVariations]="variationsEvent"
@@ -272,10 +268,11 @@
 
 																		[BannerComponentTemplateRules]="TemplateRules"
 
+																		(click)="toggleUploadWindow(activeBannerSize, activeContainer)"
 																		[dataTemplate]="activeTemplate"
 																		[dataBanner]="activeBannerSize"
-																		[dataContainer]="activeContainer">
-
+																		[dataContainer]="activeContainer">{{activeContainer.name}}
+																		
 																	</app-banner>
 
 																	<app-component-variations
@@ -368,20 +365,6 @@
 														</button>
 
 													</ng-container>
-
-													<!--
-													<button mat-icon-button
-														[color]="[(activeBannerSize.componentWindowOpen === true) ? 'primary' : 'accent']"
-														(click)="toggleUploadWindow(activeBannerSize)"
-														aria-label="Upload Creative Assets"
-														#tooltip="matTooltip"
-														[matTooltipPosition]="'left'"
-														matTooltipHideDelay="2000"
-														matTooltip="Toggle upload assets window for Frame 1?"
-														id="toggle-btn-assets">
-															<mat-icon>upload</mat-icon>
-													</button>
-													-->
 
 												</mat-button-toggle-group>
 

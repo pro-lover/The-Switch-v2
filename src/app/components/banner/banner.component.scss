@@ -18,5 +18,35 @@
 	background-color: whitesmoke;
 	padding: 2em;
 }
+.layer-pannel{
+	top: 5px;
+    height: 600px;
+    position: absolute;
+    width: 100%;
+    right: 5px;
+}
+.field-pannel{
+	margin-left: 15px;
+}
+.headers-pannel-align .mat-expansion-panel-header-description {
+	justify-content: space-between;
+	align-items: center;
+  }
+  
+  .headers-pannel-align .mat-form-field + .mat-form-field {
+	margin-left: 8px;
+
+  }
+  mat-form-field {
+	color: #700201;
+    width: 100%;
+  }
+  .example-box.cdk-drag-animating {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .example-chip .cdk-drop-list-dragging {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
 
 

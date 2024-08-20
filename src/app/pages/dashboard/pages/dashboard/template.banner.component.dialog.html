@@ -1,14 +1,39 @@
 <mat-card class="drag-drop-component-edit-box" cdkDrag [cdkDragFreeDragPosition]="(dragPosition)">
+	<div class="row">
+		<!-- <div class="col-12">
+		
+		</div> -->
+		<div class="col-12">
+			<mat-accordion class="headers-pannel-align" >
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title> {{(dataContainer.name).toUpperCase()}}</mat-panel-title>
+					</mat-expansion-panel-header>
+		
+					<app-inputText 
+					(inputEvent)="onTextChange($event)"
+					[dataInputValue] = "dataInputValue" 
+					[dataType]="'Text'" 
+					[bannerType] = "dataBanner.bannertype.name" 
+					[dataContainerComponents] = "dataContainer" 
+					[componentName]="'Copy'"
+					[dataContainerId] = "dataContainer.id"
+					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						
+					>
+						
+					</app-inputText>
+					
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
+	</div>
 
-	<!-- cdkDragBoundary=".banner-variation-option" -->
-	<!--
-	<mat-card-title></mat-card-title>
-	-->
 
-	<mat-card-content class="mat-bapp-content">
+	<!-- <mat-card-content class="mat-bapp-content">
 		<h4 class="title">
 			{{dataBanner.name}} Assets
-			<small>FRAME: {{dataContainer.displayorder}}</small>
+			<small>FRAME: {{dataContainer.displayorder}}</small>{{dataContainer.id}}
 		</h4>
 		<mat-stepper class="bapp-dialog-stepper" orientation="vertical" [linear]="false" #stepper>
 
@@ -29,7 +54,7 @@
 					</div>
 				</mat-step>
 			</div>
-			<mat-step label="Copy" state="copy" [editable]="true" *ngIf="copyContainerNeeded === true">
+			<!-- <mat-step label="Copy" state="copy" [editable]="true" *ngIf="copyContainerNeeded === true">
 				<br />
 				<div class="form-row row">
 					<app-draganddrop 
@@ -38,18 +63,20 @@
 						[resetUploads]="resetVariationsObs" 
 						[dataType]="'Text'" 
 						[componentName]="'Copy'"
+						
 						[dataContainerId]="dataContainer.id"
 						[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
 						<h3>
 							Drag and Drop<br />CSV/XLSX File here TBC
 						</h3>
-					</app-draganddrop>
+					</app-draganddrop> -->
 
-					<app-inputText 
+					<!-- <app-inputText 
 					(inputEvent)="onTextChange($event)"
 					[dataInputValue] = "dataInputValue" 
 					[dataType]="'Text'" 
 					[componentName]="'Copy'"
+					[dataContainerComponents] = "dataContainer" 
 					[dataContainerId]="dataContainer.id"
 					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
 						
@@ -70,7 +97,7 @@
 			</ng-template>
 
 		</mat-stepper>
-	</mat-card-content>
+	</mat-card-content> -->
 
 	<mat-card-actions class="component-edit-dialog-actions">
 		<div class="example-handle" cdkDragHandle>
@@ -87,11 +114,6 @@
 			color="accent">
 			<mat-icon>
 				restart_alt
-			</mat-icon>
-		</button>
-		<button mat-button mat-flat-button (click)="saveDataOut($event)">
-			<mat-icon>
-				save
 			</mat-icon>
 		</button>
 

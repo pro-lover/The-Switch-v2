@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Nissan Brand';
+    src: url('fonts/Nissan-Brand-Light.eot');
+    src: url('fonts/Nissan-Brand-Light.eot?#iefix') format('embedded-opentype'),
+         url('fonts/Nissan-Brand-Light.woff2') format('woff2'),
+         url('fonts/Nissan-Brand-Light.woff') format('woff'),
+         url('fonts/Nissan-Brand-Light.ttf')  format('truetype'),
+         url('fonts/Nissan-Brand-Light.svg#Nissan Brand') format('svg');
+}

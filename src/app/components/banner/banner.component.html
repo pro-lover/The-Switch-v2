@@ -1,20 +1,5 @@
-
-
-	<div class="banner-holder"></div>
-
-	<div class="row pagination-holder">
-		<div class="col-12">
-
-			<mat-paginator class="generations-preview"
-				[disabled]="timelineIsPlaying === true"
-				[length]="pageLength"
-				[showFirstLastButtons]=true
-				[pageSize]="pageSize"
-				[pageSizeOptions]="pageSizeOptions"
-				[pageIndex]="currentPage"
-				(page)="handlePage($event)"
-				aria-label="Select page">
-			</mat-paginator>
-
-		</div>
+<div class="banner-holder">
+	<div class="layer-pannel">
+		{{(dataContainer.name).toUpperCase()}}
 	</div>
+</div>

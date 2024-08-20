@@ -1,5 +1,23 @@
-<div >
-	<input type="text" name="fname" value="{{dataInputValue}}" #inputValue  (change)="fileBrowseHandler(inputValue.value)" />
-
-	<div>{{dataInputValue}}</div>
+<div class="field-pannel" *ngFor=" let components of dataContainerComponents.components">
+	<mat-accordion class="headers-pannel-align">
+		<mat-expansion-panel [disabled]="!(components.smart)">
+			<mat-expansion-panel-header>
+				<mat-panel-title>{{(components.name).toUpperCase()}}</mat-panel-title>
+			</mat-expansion-panel-header>
+			<div class="row">
+				<div *ngFor=" let componentmeta of components.componentmeta">
+					<div class="col-12">
+						<mat-form-field appearance="fill" *ngIf="componentmeta.name === 'fontValue'">
+							<mat-label>{{ (componentmeta.name).toUpperCase()}}</mat-label>
+							<input #inputValueHeader matInput placeholder="" [value]="componentmeta.value" (change)="fileBrowseHandler(inputValueHeader.value,componentmeta.id)">
+							
+						</mat-form-field>
+						
+					</div>
+				</div>
+			</div>
+		</mat-expansion-panel>
+	
+	</mat-accordion>
 </div>
+

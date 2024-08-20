@@ -132,6 +132,7 @@
 
 		.creative-holding-section {
 			position: relative;
+			width: 30%;
 
 			&:after {
 				content: '';
@@ -187,7 +188,7 @@
 	flex-direction: column;
     justify-content: space-evenly;
 	z-index: 2;
-	width: 7.3%;
+	width: 40px;
 	border: 3px solid #dbdbdb;
 
 	.component-actions {

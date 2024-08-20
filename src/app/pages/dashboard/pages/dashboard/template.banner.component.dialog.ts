@@ -38,7 +38,8 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 	// Drag and Drop
 	@Output() FDCEvent = new EventEmitter<any>();
 	public uploadComplete = false;
-	public dataInputValue!: any;
+
+	public dataInputValue: any[] = [];
 	//private uploadedItem: any;
 	private uploadedFileSubject: BehaviorSubject<any[] | unknown>;
 	public uploadedFileObs: Observable<any[] | unknown>;
@@ -71,34 +72,41 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 
 	ngOnInit() {
 
-		console.log('______________________________');
-
+		console.log('Template Banner Component Dialog ngOnInit for data:', this.dataBanner);
 		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer);
 		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components.length);
 		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components[1].componentmeta[9]);
-		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components[1].componentmeta[9].value);
-		const _componentmeta = this.dataComponents.find( (component:any) => component.componenttype.name === 'Text' && component.smart === true );
+		console.log('Template Banner Component Dialog ngOnInit for Container:', this.dataContainer.components);
 
-		console.log(_componentmeta.componentmeta.length)
+		const _componentmetaUpdates: any[] = [];
 
-			for (let i = 0; i < _componentmeta.componentmeta.length; i++) {
-
-
-
-			if(_componentmeta.componentmeta[i].name === "fontValue")
+		for (let x = 0; x < this.dataContainer.components.length; x++) {
+	
+			if(this.dataContainer.components[x].componenttype.name === 'Text' && this.dataContainer.components[x].smart === true)
 			{
-				console.log("true is ")
-				this.dataInputValue =_componentmeta.componentmeta[i].value;
+				_componentmetaUpdates.push(this.dataContainer.components[x])
+	
 			}
+			
+		}
+
+		console.warn("name is text and smart is true; ",_componentmetaUpdates)
+
+		for (let OutLoop = 0; OutLoop < _componentmetaUpdates.length; OutLoop++) {
+			for (let i = 0; i < _componentmetaUpdates[OutLoop].componentmeta.length; i++) {
+				if(_componentmetaUpdates[OutLoop].componentmeta[i].name === "fontValue")
+					{
+						//this.dataInputValue[OutLoop] = _componentmetaUpdates[OutLoop].componentmeta[i].value;
+						this.dataInputValue.push(_componentmetaUpdates[OutLoop].componentmeta[i]);
+
+						Object.defineProperty(this.dataInputValue[OutLoop], "nameId", {value:_componentmetaUpdates[OutLoop].name})
+					}
 			}
-
-			console.log(_componentmeta.componentmeta)
-
-
-
+			
+		}
+		console.warn("All value to be updated on input field: " ,this.dataInputValue);
 
 		this.isCopyDialogNeeded();
-
 	}
 
 	ngOnDestroy(): void {
@@ -178,31 +186,35 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 	}
 	public onTextChange(value: any) {
 
-		this.dataInputValue = value.value.text;
+		console.warn("[Step 4] --> Entering onTextChange function here values ",value );
+		console.warn("[Step 5] --> Entering onTextChange function here values ",this.dataComponents );
 
-		console.warn('_______that to share____', value.value);
-		
+		for (let i = 0; i < this.dataComponents.length; i++) {
+			
+			if (this.dataComponents[i].componenttype.name === 'Text' && this.dataComponents[i].smart === true) {
 
-		const _componentmeta = this.dataComponents.find( (component:any) => component.componenttype.name === 'Text' && component.smart === true );
-		console.warn('onTextChange : 1',_componentmeta);
-			for (let i = 0; i < _componentmeta.componentmeta.length; i++) {
-				if(_componentmeta.componentmeta[i].name === "fontValue")
-				{
-					
-					_componentmeta.componentmeta[i].value = value.value.text ;
+				for (let o = 0; o < this.dataComponents[i].componentmeta.length; o++) {
+					console.warn(i+' got it here ',this.dataComponents[i].name);
+					if(this.dataComponents[i].componentmeta[o].name === "fontValue")
+						{
+
+							//var thisValue = this.dataComponents[i].name;
+
+							this.dataComponents[i].componentmeta[o].value = value.value[this.dataComponents[i].name] ;
+
+							console.warn("[Step 6] --> WAS UPDATE A SUCCESS   ");
+							console.warn(this.dataComponents[i].componentmeta[o].value );
+
+						}
 				}
 			}
-			console.warn('onTextChange : 3',_componentmeta.componentmeta );
-
-
-			if (!value || !value.value.text) return;
-
+		}
 			this.uploadComplete = true;
-
 			this.broadcastUpdatedComponentInputChanges(value);
 	}
 
 	public DragAndDropEventItem(newItem: any) {
+		
 		console.log("TemplateBannerVariationsDialogComponent ________________________________________________________________[1]",);
 		
 		console.log(!newItem +'uploadItem  1:', newItem);
@@ -220,13 +232,11 @@ export class TemplateBannerVariationsDialogComponent implements OnInit, OnDestro
 	}
 
 	private broadcastUpdatedComponentInputChanges(uploadItem: any) {
-		console.log("TemplateBannerVariationsDialogComponent ________________________________________________________________[2]",);
+		console.warn("[Step 7] --> sending data to dasboard.page");
 
 		this.uploadedFiles.push(uploadItem);
 
 		this.UploadEvent.emit(uploadItem);
-
-		//console.log('UploadEvent:', this.uploadedFiles);
 
 	}
 

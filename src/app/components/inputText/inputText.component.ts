@@ -13,11 +13,15 @@ export class InputTextComponent implements OnInit, OnDestroy {
 
 
 	@Output() inputEvent = new EventEmitter<any>();
-	@Input() dataInputValue!: string;
+
+	@Input() dataInputValue: any[] = [];
+	@Input() dataContainerComponents: any;
 	@Input() dataStageName!: string;
+	@Input() bannerType!: string;
 	@Input() dataType!: string;
 	@Input() componentName!: string;
 	@Input() dataContainerId!: number | string;
+
 	logs: string[] = [];
 
 	constructor(
@@ -27,35 +31,64 @@ export class InputTextComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		console.log("InputTextComponent________________________________________________________________[1]");
-
+		console.log("bannerType-_____________________[1]", this.bannerType);
+		console.log("InputTextComponent-_____________________[1]", this.dataInputValue);
+		console.log("componentName -_____________________[1]", this.componentName);
+		console.log("dataType -_____________________[1]", this.dataType);
+		console.log("dataContainerId -_____________________[1]", this.dataContainerId);
+		console.log("dataStageName -_____________________[1]", this.dataStageName);
+		console.log("dataContainerComponents -_____________________[1]", this.dataContainerComponents);
 
 	}
 
 
 	ngOnDestroy(): void {
-		console.log('________[input]________ ngOnDestroy');
+		console.log('.');
 	}
 
-	public fileBrowseHandler(files: Event | any) {
-		this.logs.push('ngDoCheck  look i am working');
-		console.log("InputTextComponent________________________________________________________________[4]");
-		this.uploadFilesSimulator(files.values);
-		this.uploadFilesSimulator(files);
+	public fileBrowseHandler(files: Event | any, x: any) {
+
+		console.warn("[step 0.0 ] ->type and Selected Frame :");
+		console.log(this.bannerType);
+		console.log(this.dataContainerComponents.name);
+		console.warn("[step 0 ] -> check what is in the selected banner  : ", this.dataInputValue)
+
+		//this.uploadFilesSimulator(files.values);
+		this.uploadFilesSimulator(files, x);
 	}
 	/**
 	 * Simulate the upload process
 	 */
-	private uploadFilesSimulator(value: string) {
+	private uploadFilesSimulator(value: string, x: any) {
 
-		console.log("________________________________________________________________[6]", value);
+		for (let i = 0; i < this.dataInputValue.length; i++) {
 
+			if (x === this.dataInputValue[i].id) { 
+				this.dataInputValue[i].value = value; 
+				console.warn("[step 1 ] -> Updated value is :") 
+				console.warn(this.dataInputValue[i].value)
+			}
+		}
+		const inDataInputValue: any[] = [];
+
+		//Below i am creating an object with propeties to avoid hard coding 
+		for (let outLoop = 0; outLoop < this.dataInputValue.length; outLoop++) {
+
+			Object.defineProperty(inDataInputValue, this.dataInputValue[outLoop].nameId, { value: this.dataInputValue[outLoop].value })
+
+		}
+		console.warn("[step 3] -> Here object to send with updated value]");
+		console.warn(inDataInputValue);
+
+		//Below i am sending value to template.banner.component.dialog
 		this.inputEvent.emit({
-			value: { text: value },
+			value: inDataInputValue,
 			stage: this.dataStageName,
 			containerId: this.dataContainerId,
 			type: this.dataType,
 			componentName: this.componentName,
+			frame : this.dataContainerComponents.name,
+			bannerType : this.bannerType,
 
 		});
 

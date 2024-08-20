@@ -8,8 +8,12 @@ import { gsap } from "gsap";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
-
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 //const GIF = (window as any).GIF;
+
+export interface Vegetable {
+	name: string;
+  }
 
 @Component({
 	selector: 'app-banner',
@@ -26,6 +30,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 	public Templates!: Template[];
 
 	// MatPaginator Inputs
+	public activeLayer!: any;
 	public pageLength = 0;
 	public pageSize = 1;
 	public currentPage = 0;
@@ -104,11 +109,13 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 		this.templateService.template.pipe(takeUntil(this._destroy$)).subscribe((x: any) => {
 			console.log('TemplateService Subscription:', x);
+			console.warn('[step A0]');
 			this.Templates = x;
 		});
 	}
 
 	ngOnInit() {
+		console.warn('[step A1]');
 		console.log('bannerComponent__ngOnInit ');
 		// run default population functions
 
@@ -118,7 +125,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		//dropping item
 		this.newDropReceive.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			console.warn('New File Received:', evt);
+			console.warn('[step 11] ---> New file received : ', evt);
 
 			if (!evt || !evt.data) return;
 
@@ -187,7 +194,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		//Listen to Request to generate variations
 		this.populateVariations.pipe(takeUntil(this._destroy$)).subscribe((evt: any) => {
 
-			console.warn('New File Received:', evt);
+			console.warn('[Step 24] --> New File Received:', evt);
 
 
 
@@ -201,7 +208,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 				const allVariations = this.prepareVariationsarray(evt);
 
-				console.warn('Banner Directive Populate Variations::', allVariations);
+				console.warn('[Step 28] -->Banner Directive Populate Variations::', allVariations);
 
 				// Get Difference between two Arrays of Objects
 				function getDifference(array1: any, array2: any) {
@@ -215,18 +222,17 @@ export class BannerComponent implements OnInit, OnDestroy {
 				let counter = 0;
 
 				const allNewComponentSet: any[] = [];
-
+				console.warn('[Step 29 ]');
 				allVariations.forEach((variatation: any) => {
-
+					
 					counter++;
-					// pass active banner to canvas
-					console.warn('Variations1::', allVariations);
+					console.warn('[Step 30 ]____________________________ : ',counter);
 					const stage = new createjs.Stage(this.elementRef.nativeElement.querySelector('canvas#' + this.canvasName));
+
 					stage.set({
 						mastername: this.canvasName, // for HTML5
 						name: this.canvasName + '-' + counter,
-						//children: this.stages[0].children,
-						//nextStage: this.stages[this.stages.length - 1]
+
 					});
 
 					stage.enableDOMEvents(false);
@@ -235,88 +241,51 @@ export class BannerComponent implements OnInit, OnDestroy {
 					// eslint-disable-next-line prefer-const
 					let stageVariationComponents = this.stages[0].components;
 
-					// find the children relevant to the current stage variation and update their values
-					variatation.forEach((y: any) => {
-						console.warn('Variations2::', y.type);
-						if (y.type === 'Text' || y.type === 'Button') {
+					if (variatation.bannerType === 'GIFs') {
+						for (let outLoop = 0; outLoop < evt.bannerComponent.containers.length; outLoop++) {
+			
+							for (let inLoop = 0; inLoop < evt.bannerComponent.containers[outLoop].components.length; inLoop++) {
 
-							const keeyys = Object.keys(y.value);
-							console.warn('y.value: ', y.value);
-							console.warn('keeyys: ', keeyys);
-
-							keeyys.forEach((zKey: string) => {
-								console.warn('zKey: ', zKey);
-								//const updateThisText = this.stage.getChildByName(zKey.toLowerCase());
-								const updateThisText = this.stage.children[1];
-								//const updateThisText = "NISSAN NP200";
-								console.warn('updateThisText: ', updateThisText);
-								console.warn('updateThisText: ', this.stage.getChildByName("Stage"));
-								console.log('this.stage', this.stage)
-								if (updateThisText) {
-									console.warn('in : ', updateThisText);
-									const cloneText = updateThisText.clone(true);
-									console.warn('cloneText : ', cloneText);
-									console.log('typeof updateThisText: 1 ', typeof updateThisText);
-									console.log('typeof updateThisText: 2 ', updateThisText);
-									console.log('typeof updateThisText: 3 ', updateThisText instanceof this.bannerCreatorService.BAPP_Button);
-									console.warn('typeof cloneText:', typeof cloneText, cloneText);
-
-									////console.log('Cloning Text:', cloneText, updateThisText, typeof cloneText);
-									/**/
-									if (updateThisText instanceof this.bannerCreatorService.BAPP_Button) {
-
-										cloneText.text = y.value[zKey];
-										//Shape is always at a lower index for buttons
-										const ButtonText = cloneText.getChildAt(1);
-
-										ButtonText.text = y.value[zKey];
-										console.log('Cloning Button Text:', cloneText);
-
-									} else {
-
-										cloneText.text = y.value[zKey];
-										console.log('Cloning Button Text:', cloneText);
-									}
-									//remove og child in new stage
-									//stage.removeChild(stage.getChildByName(zKey.toLowerCase()));
-									console.log('Cloning Button Text:', cloneText);
-									cloneText.id = parseInt(updateThisText.id);
-									console.log('Cloning Button Text:', cloneText);
-
-									cloneText.set({ componentId: parseInt(updateThisText.componentId) });
-									cloneText.set({ smart: updateThisText.smart });
-									cloneText.set({ componentMetaId: parseInt(updateThisText.componentMetaId) });
-
-									//add updated og child to new stage
-									stage.addChild(cloneText);
-									//set index for updated og child in new stage
-									stage.setChildIndex(cloneText, this.stage.getChildIndex(updateThisText));
-									console.log('Cloning Button Text:', cloneText);
-								}
-							});
-
-						} else if (y.type === 'Image') {
-							console.warn('Variations3::', allVariations);
-							const stage_image_child = this.stage.getChildByName(y.name);
-							if (stage_image_child) {
-								const cloneImage = stage_image_child.clone();
-								cloneImage.image = y.value;
-
-								//remove og child in new stage
-								//stage.removeChild(stage.getChildByName(y.name));
-								cloneImage.id = parseInt(stage_image_child.id);
-
-								cloneImage.set({ componentId: parseInt(stage_image_child.componentId) });
-								cloneImage.set({ smart: stage_image_child.smart });
-								cloneImage.set({ componentMetaId: parseInt(stage_image_child.componentMetaId) });
-
-								//add updated og child to new stage
-								stage.addChild(cloneImage);
-								//set index for updated og child in new stage
-								stage.setChildIndex(cloneImage, this.stage.getChildIndex(stage_image_child));
+								this.addData(evt.bannerComponent.containers,outLoop,inLoop)
 							}
 						}
-					});
+					} else {
+						variatation.forEach((y: any) => {
+							console.warn('[Step 32 ]');
+							if (y.type === 'Text' || y.type === 'Button') {
+								for (let outLoop = 0; outLoop < this.stage.children.length; outLoop++) {
+									console.warn(" this.stage.children.name", this.stage.children[outLoop].name);
+									console.warn(" this.stage.children ", this.stage.children);
+									console.warn(" evt : ", y.value[this.stage.children[outLoop].name]);
+
+									this.stage.children[outLoop].text = y.value[this.stage.children[outLoop].name];
+
+								}
+
+							} else if (y.type === 'Image') {
+								console.warn('Variations3::', allVariations);
+								const stage_image_child = this.stage.getChildByName(y.name);
+								if (stage_image_child) {
+									const cloneImage = stage_image_child.clone();
+									cloneImage.image = y.value;
+
+									//remove og child in new stage
+									//stage.removeChild(stage.getChildByName(y.name));
+									cloneImage.id = parseInt(stage_image_child.id);
+
+									cloneImage.set({ componentId: parseInt(stage_image_child.componentId) });
+									cloneImage.set({ smart: stage_image_child.smart });
+									cloneImage.set({ componentMetaId: parseInt(stage_image_child.componentMetaId) });
+
+									//add updated og child to new stage
+									stage.addChild(cloneImage);
+									//set index for updated og child in new stage
+									stage.setChildIndex(cloneImage, this.stage.getChildIndex(stage_image_child));
+								}
+							}
+						});
+					}
+
 
 					// add "hard" or not smart components missing in the variation
 					const missingcomponents = getDifference(this.stage.children, stage.children);
@@ -422,6 +391,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 						timeline: this.stages[0].timeline,
 						tweens: this.stages[0].tweens
 					});
+					console.warn('stages ::', this.stages);
 
 				});
 				/**/
@@ -670,6 +640,22 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	}
 
+	addData(evtBannerComponentContainers:any, outLoop:any,inLoop:any) {
+
+		let idBanner = evtBannerComponentContainers[outLoop].components[inLoop].id;
+		let componentsData = evtBannerComponentContainers[outLoop].components[inLoop];
+
+		for (let oLoop = 0; oLoop < this.stage.children.length; oLoop++) {
+			if (idBanner === this.stage.children[oLoop].componentId) {
+				for (let iLoop = 0; iLoop < componentsData.componentmeta.length; iLoop++) {
+					if(componentsData.componentmeta[iLoop].name === 'fontValue') {
+						this.stage.children[oLoop].text = componentsData.componentmeta[iLoop].value;
+					}	
+				}
+			}
+		}
+	}
+
 	ngOnDestroy(): void {
 		console.warn('Banner Component ngOnDestroy');
 		this._destroy$.next(false);
@@ -682,10 +668,12 @@ export class BannerComponent implements OnInit, OnDestroy {
 	 * START: NEW BUILD FUNCTIONS
 	 -------------------------------------------*/
 	private initialiseCreative(): void {
+		console.warn('[step A2]');
 		console.log('bannerComponent__ initialiseCreative');
 		this._createCanvas()
 
 			.then((newcanvas: HTMLCanvasElement) => {
+				console.log('bannerComponent__ initialiseCreative_ HTMLCanvasElement');
 				return this._setupStage(newcanvas);
 			})
 			.then((newStage: createjs.Stage) => {
@@ -739,9 +727,10 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	private _createCanvas(): Promise<HTMLCanvasElement> {
 
-		console.log('createCanvas', this.dataBanner);
+		console.log('[step A3] -> createCanvas', this.dataBanner);
 
 		return new Promise<HTMLCanvasElement>((resolve, reject) => {
+			console.log('[step A3]');
 
 			const canvas = document.createElement("canvas");
 			this.canvasName = "bannerCanvas-" + this.dataBanner.bannersize.width + '-' + this.dataBanner.bannersize.height; //+ '-' + this.dataContainer.id;
@@ -1039,45 +1028,56 @@ export class BannerComponent implements OnInit, OnDestroy {
 
 	private prepareVariationsarray(evt: any): any[] {
 
-		console.log('prepareVariationsarray');
-
+		console.warn('[Step 25] --> prepareVariationsarray:');
 		const variationsHolder: any[] = [];
-		this.copyVariationsArray.push(evt.dta[0])
 
-		console.log(this.copyVariationsArray.length + " > 0 && " + this.variationsArray.length);
+		if (evt.bannerComponent.bannertype.name === 'GIFs') {
+			console.warn('[Step 26] --> GIFs and i dont need variationsHolder');
 
-		if (this.copyVariationsArray.length > 0 && this.variationsArray.length > 0) {
-			console.log("in if copy n1");
-			this.copyVariationsArray.forEach((copy) => {
-				// issue #141 - This is a temporary fix until it's properly resolved.
-				if ((copy.type === 'Text' && typeof copy.value === 'object') || (copy.type === 'Button' && typeof copy.value === 'object')) {
-					this.variationsArray.forEach((background) => {
-						console.log("test if push 1");
-						variationsHolder.push([copy, background])
-					});
-				}
-			});
+			console.warn('[Step 27] --> return:');
+			console.log(evt.dta);
+			return evt.dta;
 
-		} else if (this.variationsArray.length > 0) {
-			console.log("in if image");
-			this.variationsArray.forEach((image) => {
-				variationsHolder.push([image])
-			});
+		} else {
 
-		} else if (this.copyVariationsArray.length > 0) {
-			console.log("in if copy");
-			this.copyVariationsArray.forEach((copy) => {
-				console.log("test if before push 2", copy.type);
-				if ((copy.type === 'Text' && typeof copy.value === 'object') || copy.type === 'Button' && typeof copy.value === 'object') {
-					console.log("test if push 2");
-					variationsHolder.push([copy])
-				}
-			});
+			this.copyVariationsArray.push(evt.dta[evt.dta.length - 1])
+
+			console.log(this.copyVariationsArray.length + " > 0 && " + this.variationsArray.length);
+
+			if (this.copyVariationsArray.length > 0 && this.variationsArray.length > 0) {
+				console.log("in if copy n1");
+				this.copyVariationsArray.forEach((copy) => {
+					// issue #141 - This is a temporary fix until it's properly resolved.
+					if ((copy.type === 'Text' && typeof copy.value === 'object') || (copy.type === 'Button' && typeof copy.value === 'object')) {
+						this.variationsArray.forEach((background) => {
+							console.log("test if push 1");
+							variationsHolder.push([copy, background])
+						});
+					}
+				});
+
+			} else if (this.variationsArray.length > 0) {
+				console.log("in if image");
+				this.variationsArray.forEach((image) => {
+					variationsHolder.push([image])
+				});
+
+			} else if (this.copyVariationsArray.length > 0) {
+				console.log("in if copy");
+				this.copyVariationsArray.forEach((copy) => {
+					console.log("test if before push 2", copy.type);
+					if ((copy.type === 'Text' && typeof copy.value === 'object') || copy.type === 'Button' && typeof copy.value === 'object') {
+						console.log("test if push 2");
+						variationsHolder.push([copy])
+					}
+				});
+
+			}
+			console.warn('[Step 27] --> return:');
+			console.log(variationsHolder);
+			return variationsHolder;
 
 		}
-		console.log("variationsHolder ", variationsHolder);
-		return variationsHolder;
-
 	}
 
 	/**
@@ -1743,6 +1743,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 		} while (currentDate - date < milliseconds);
 	}
 
+
 }
 
 
@@ -1819,4 +1820,5 @@ export class BottomSheetBannerTemplateRulesComponent {
 		this._bottomSheetRef.dismiss();
 		event.preventDefault();
 	}
+
 }

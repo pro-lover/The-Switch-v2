@@ -9,7 +9,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 //import { DialogConfirmComponent, DialogRestoreComponent } from '@app/components';
 //import { RouterModule } from '@angular/router';
+import { BannerModule } from '@app/components/banner/banner.module';
 import { HomeRoutingModule } from './home-routing.module';
+import {MatExpansionModule} from '@angular/material/expansion';
 import {
 	HomePage, HowitworksPage
 } from './pages';
@@ -30,7 +32,9 @@ import {
 		MatGridListModule,
 		MatBottomSheetModule,
 		MatProgressBarModule,
-		HomeRoutingModule
+		HomeRoutingModule,
+		BannerModule,
+		MatExpansionModule
 	],
 })
 export class HomeModule {}
