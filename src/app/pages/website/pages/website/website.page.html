@@ -1,0 +1,534 @@
+<mat-toolbar class="bapp-admin-toolbar">
+	<span class="toolbar-title">
+		<span *ngIf="isAddMode">Add Creative to Template</span>
+		<span *ngIf="!isAddMode && template">Edit Creative</span>
+	</span>
+	<span class="example-spacer"></span>
+
+	<div class="btn-group">
+		<button (click)="back()" class="btn btn-dark">Back</button>
+	</div>
+
+	<button mat-icon-button (click)="help()" class="Help" aria-label="Help">
+		<mat-icon>help</mat-icon>
+	</button>
+
+</mat-toolbar>
+
+<mat-stepper labelPosition="bottom" #stepper>
+	<mat-step [stepControl]="firstFormGroup">
+	  <form [formGroup]="firstFormGroup">
+		<ng-template matStepLabel>Select template</ng-template>
+		<mat-chip-list class="example-chip" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+			<mat-chip class="example-box" cdkDrag *ngFor="let websiteTemplate of websiteTemplates">
+				<div class="websiteTemplate" >
+					<div class="websiteTemplate-media" (click)="selectedTemplate(websiteTemplate.id)">
+						<img src={{websiteTemplate.image}} alt="">
+						<p>{{websiteTemplate.content.value}}</p>
+					</div>
+
+					<div class="websiteTemplate-details">
+						{{websiteTemplate.title.value}}
+					</div>
+					<hr>
+					<div class="container">
+						<button mat-button (click)="previewTemplate(websiteTemplate.id)" >Preview</button>
+						<button *ngIf = "websiteSelectedTemplateID == websiteTemplate.id" mat-button matStepperNext>Next</button>
+					</div>
+				</div>
+			</mat-chip>
+
+		</mat-chip-list>
+	  </form>
+	</mat-step>
+	<mat-step [stepControl]="secondFormGroup">
+	  <form [formGroup]="secondFormGroup">
+		<ng-template matStepLabel>Design your website</ng-template>
+			<div *ngFor="let websiteTemplate of websiteTemplates">
+				<div *ngIf="websiteTemplate.id == websiteSelectedTemplateID">
+
+					<div class="websiteTemplate">
+						<div class="websiteTemplate-media">
+							<img src={{websiteTemplate.image}} alt="">
+							<p>
+								{{websiteTemplate.content.value}}
+							</p>
+							
+						</div>
+						<div class="websiteTemplate-details">
+							{{websiteTemplate.title.value}}
+						</div>
+					</div>
+
+					<div class="websiteTemplate">
+						<div class="header">Layers</div>
+						<hr>
+						<div class="col-4">
+							<button
+							  class="btn btn-success btn-sm float-right"
+							  [disabled]="!selectedFiles"
+							  (click)="upload()"
+							>
+							  Upload
+							</button>
+						</div>
+						  	<input type="file" accept="image/*" (change)="selectFile($event)" />
+						<hr>
+							<textarea (change)="selectProperties($event)" style="width: 390px;" matInput [value]=websiteTemplate.content.value></textarea>
+						<hr>
+						<div class="websiteTemplate-details">
+							<input (change)="selectProperties($event)" [value]=websiteTemplate.title.value type="text">
+						</div>
+					</div>
+					<div class="websiteTemplate">
+						<div class="properties">
+							<div class="header">Properties</div>
+								<hr>
+								<label>X : </label>
+								<input type="number" [value]="websiteTemplate.title.x">
+								<label>Y : </label>
+								<input type="number" [value]="websiteTemplate.title.y">
+								<h1></h1>
+								<label>Z : </label>
+								<input type="number" [value]="websiteTemplate.title.z">
+								<label>W : </label>
+								<input type="number" [value]="websiteTemplate.title.w">
+								<h1></h1>
+								<label>Color : </label>
+								<input type="text" [value]="websiteTemplate.title.color">
+								<h1></h1>
+								<label>Background : </label>
+								<input type="text" [value]="websiteTemplate.title.background">
+								<h1></h1>
+								<label>fonts : </label>
+								<input type="text" [value]="websiteTemplate.title.fonts">
+								<h1></h1>
+								<label>font Type : </label>
+								<input type="text" [value]="websiteTemplate.title.fontType">
+								<h1></h1>
+								<label>font Size : </label>
+								<input type="number" [value]="websiteTemplate.title.fontSize">
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<div>
+		  <button mat-button matStepperPrevious>Back</button>
+		  <button mat-button matStepperNext>Next</button>
+		</div>
+	  </form>
+	</mat-step>
+	<mat-step>
+	  <ng-template matStepLabel>Done</ng-template>
+	  <p>You are now done.</p>
+	  <div>
+		<button mat-button matStepperPrevious>Back</button>
+		<button mat-button (click)="stepper.reset()">Reset</button>
+	  </div>
+	</mat-step>
+  </mat-stepper>
+  
+
+
+
+
+
+
+<!-- <div class="row">
+	<div class="col-12">
+
+		<form class="form-model-edit">
+
+			<div class="row">
+
+				<div class="col-12">
+
+					<mat-accordion class="accordion-headers-align">
+						<mat-expansion-panel [expanded]="!previewActive" [disabled]="previewActive" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+							<mat-expansion-panel-header>
+								<mat-panel-title >
+									<strong>templateName</strong>&nbsp;for template.client.name
+								</mat-panel-title>
+								<mat-panel-description >
+									<mat-icon >html</mat-icon>
+									<mat-icon >gif</mat-icon>
+
+								</mat-panel-description>
+							</mat-expansion-panel-header>
+							<div class="row">
+								<div class="col-12 col-md-12 offset-md-0 d-flex" style="padding-right: 0;justify-content: space-between;">
+									<ng-container >
+										<mat-form-field class="" appearance="fill" style="width: 100px;">
+											<mat-label>Order <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+											<input id="Frame Order" [readonly]="true" matInput type="number" min="1" max="3" [formControl]="formControlActiveContainerOrder" placeholder="0" />
+
+										</mat-form-field>
+										<mat-form-field class="" appearance="fill" style="width: 100px;">
+											<mat-label>Duration <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+											<input id="Frame Duration" [readonly]="true" matInput type="number" min="1" max="15" [formControl]="formControlActiveContainerDuration" placeholder="0" />
+											<mat-hint>seconds(s)</mat-hint>
+										</mat-form-field>
+									</ng-container>
+									<mat-form-field class="" appearance="fill" style="width: 50%;max-width: 200px;">
+										<mat-label>Click Through Name <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<input id="Click Through Name" [readonly]="true" matInput type="text" [formControl]="formControlActiveContainerClickThroughName" placeholder="EXIT Tracking Name" />
+									</mat-form-field>
+									<mat-form-field class="" appearance="fill" style="width: 50%;max-width: 200px;">
+										<mat-label>Click Through URL <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<input id="Click Through Link" [readonly]="true" matInput type="text" [formControl]="formControlActiveContainerClickThroughURL" placeholder="https://cmdbanner.io" />
+									</mat-form-field>
+									<mat-form-field class="select-active-container" appearance="fill" style="width: 50%;max-width: 250px;">
+										<mat-label>Choose a Frame <small>(Total: 600)</small> <span *ngIf="containerUpdate" class="mr-1 spinner-border spinner-border-sm"></span></mat-label>
+										<mat-select [formControl]="formControlActiveContainer">
+											<mat-option [value]="1" >
+												name
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+
+								</div>
+							</div>
+
+						</mat-expansion-panel>
+					</mat-accordion>
+
+					
+					<br />
+					<div class="row" >
+						<div class="col-12 col-md-4">
+
+							<mat-button-toggle-group class="coordinates-box" name="containerActions" aria-label="">
+
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>X-Pos.</mat-label>
+									<input id="coordinate-x" class="coordinates-box-input" matInput type="number" readonly placeholder="0.00" />
+								</mat-form-field>
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>Y-Pos.</mat-label>
+									<input id="coordinate-y" class="coordinates-box-input" matInput type="number" readonly placeholder="0.00" />
+								</mat-form-field>
+
+							</mat-button-toggle-group>
+
+						</div>
+						<div class="col-12 col-md-4 offset-md-4 actions-canvas-animation-control" >
+
+							<mat-button-toggle-group class="coordinates-box" name="containerActions" aria-label="">
+
+								<mat-form-field class="coordinates-box-form-field" appearance="fill">
+									<mat-label>Duration</mat-label>
+									<input id="frame-animation-duration" class="coordinates-box-input" matInput type="number" [value]="0" readonly placeholder="0.00" />
+								</mat-form-field>
+								
+
+							</mat-button-toggle-group>
+
+							<mat-divider [vertical]="true" style="height:50%;"></mat-divider>
+
+		
+
+
+							<mat-divider [vertical]="true" style="height:50%;"></mat-divider>
+
+							<button
+								mat-icon-button
+								aria-label="Play All Animation"
+								[disabled]="!previewActive || animation_isPlaying === true"
+								[color]="animation_isPlaying ? 'primary' : ''"
+								(click)="playGlobalAnimation()">
+									<mat-icon>
+										subscriptions
+									</mat-icon>
+							</button>
+
+						</div>
+					</div>
+
+		
+
+					<div class="row section-artboard" [ngClass]="{ 'creative-loaded': creativeReadyObs | async }">
+						<div class="col-11 control-artboard">
+							<mat-drawer-container class="creative-canvas-container" autosize [hasBackdrop]="false">
+
+								<div
+									class="creative-canvas-sidenav-content">
+										<div class="row">
+
+											<div class="col-12" style="padding:0;">
+												<app-banner-creator
+													(CreativeReadyEvent)="creativeReady($event)"
+													(componentPositionUpdateEvent)="acceptComponentPositionUpdates($event)"
+													(componentEditComponentActionsMenuEvent)="activeComponentsActionMenu($event)"
+
+													
+													[dataContainer]="activeContainer"
+
+													[newComponentReceived]="newComponentObs"
+													[updateComponentReceived]="updateComponentObs"
+													[unlockComponentReceived]="unlockComponentObs"
+													[deleteComponentReceived]="deleteComponentObs"
+													[editableComponentsReceived]="editableComponentsObs"
+
+													[componentMenuStateReceived]="editableComponentActionMenuObs"
+
+													[playAnimationStageReceived]="playStageAnimationObs"
+													(FrameAnimationPlayEventEnd)="frameAnimationEnd($event)"
+													[playAnimationGlobalStageReceived]="playGlobalAnimationObs"
+													(GlobalAnimationPlayEventEnd)="GlobalAnimationEnd($event)"
+													[loopAnimationStageReceived]="loopStageAnimationObs"
+
+													[refreshStageReceived]="refreshStageObs"
+													[previewCreativeReceived]="previewStageObs"
+													[generateExportReceived]="generateObs">
+												</app-banner-creator>
+												
+
+												<ng-container>
+													
+												</ng-container>
+											</div>
+										</div>
+								</div>
+
+
+								<mat-drawer #drawer (openedChange)="onOpenedChange($event)" class="creative-canvas-sidenav" mode="push" [position]="'end'" >
+
+									<div class="animation-toolbar">
+										
+									</div>
+									<div class="animation-timeline">
+										<div class="timeline-outline">
+											<div class="outline-header" id="outline-header" style="min-height: 45px; max-height: 45px;">
+												COMPONENTS <button
+																mat-icon-button
+																[matMenuTriggerFor]="menuLayers"
+																aria-label="Add Animation">
+																	<mat-icon>add_circle</mat-icon>
+															</button>
+															<mat-menu #menuLayers="matMenu" xPosition="after">
+																<div
+																	class="layer-component-menu"
+																	
+																	mat-menu-item *ngFor="let ExistingComponentType of componentMetaFiles"
+																	>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Shape'">rectangle</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Text'">text_fields</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Image'">image</mat-icon>
+																		<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Button'">smart_button</mat-icon>
+																			{{ExistingComponentType.name}}
+																</div>
+
+															</mat-menu>
+											</div>
+
+											<div class="outline-scroll-container" id="outline-scroll-container" >
+												<div class="outline-items" id="outline-container">
+
+													<div
+														class="outline-node"
+
+														*ngFor="let anim8row of componentAnimationsOutline">
+															<div title="{{anim8row.componentName}}">
+																{{anim8row.componentName}}
+															</div>
+															<div>
+
+															</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div id="timeline" #timelineCanvas></div>
+									</div>
+
+
+
+								</mat-drawer>
+
+							</mat-drawer-container>
+						</div>
+						<div class="col-1 control-panel">
+
+							<mat-button-toggle-group class="component-actions" name="addComponents" aria-label="Add Component">
+								
+
+								<button mat-icon-button
+									color="accent"
+									(click)="refreshBanner()"
+									aria-label="Refresh Banner"
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Refresh the Creative Canvas">
+										<mat-icon>autorenew</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Add a New Component"
+									mat-icon-button color="accent"
+									[disabled]="TimelineOpen === true || previewActive === true"
+									[matMenuTriggerFor]="menuAddComponents"
+									aria-label="Add New Component">
+										<mat-icon>add_circle</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[disabled]="containerUpdate === true || TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Edit Frame/Container"
+									mat-icon-button
+									color="accent"
+									aria-label="Manage Frame"
+									[matMenuTriggerFor]="frameActions">
+										<mat-icon>web_stories</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[disabled]="containerUpdate === true || componentEditUI === true || TimelineOpen === true || previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="List Components"
+									mat-icon-button
+									color="accent"
+									aria-label="List Components"
+									[matMenuTriggerFor]="menuComponents">
+										<mat-icon>layers</mat-icon>
+								</button>
+
+								<button
+									[ngClass]="{ 'active': TimelineOpen === true }"
+									[disabled]= "previewActive === true"
+									#tooltip="matTooltip"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="View the Animation Timeline"
+									mat-icon-button
+									color="accent"
+									aria-label="Timeline"
+									(click)="drawer.toggle()">
+										<mat-icon>blur_linear</mat-icon>
+								</button>
+
+								<button
+									#tooltip="matTooltip"
+									[ngClass]="{ 'active': previewActive === true }"
+									[disabled]=" TimelineOpen === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Preview the Creative"
+									mat-icon-button
+									color="accent"
+									aria-label="Preview"
+									(click)="previewCreative()">
+										<mat-icon>visibility</mat-icon>
+								</button>
+								<button
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true|| previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="Download the Creative"
+									mat-icon-button
+									color="accent"
+									aria-label="Download"
+									(click)="exportCreative()">
+										<mat-icon>download</mat-icon>
+								</button>
+								<button
+									#tooltip="matTooltip"
+									[disabled]="TimelineOpen === true|| previewActive === true"
+									[matTooltipPosition]="'left'"
+									matTooltipHideDelay="1000"
+									matTooltip="View the Creative Rules"
+									mat-icon-button
+									color="accent"
+									aria-label="Rules"
+									(click)="creativeRules()">
+										<mat-icon>gavel</mat-icon>
+								</button>
+							</mat-button-toggle-group>
+
+							<mat-menu #frameActions="matMenu" xPosition="before">
+								<div
+									class="layer-component-menu"
+									mat-menu-item
+									
+									(click)="addContainerDialog(activeContainer)">
+										<mat-icon>note_add</mat-icon> Add Container/Frame?
+								</div>
+
+								<div
+									class="layer-component-menu"
+									mat-menu-item
+									(click)="editContainerDialog(activeContainer)">
+										<mat-icon>filter_activeContainer.displayorder</mat-icon> Edit Active Container
+								</div>
+
+							</mat-menu>
+
+
+							<mat-menu #menuComponents="matMenu" class="control-nav-components-menu" xPosition="before" >
+
+								<div
+									cdkDropList [cdkDropListData]="componentMetaFiles" (cdkDropListDropped)="dropComponentOrder($event)">
+
+									<div
+										class="layer-component-menu"
+										cdkDrag [cdkDragData]="ExistingComponentType"
+										(click)="selectComponentFromControlMenu(ExistingComponentType)"
+										mat-menu-item *ngFor="let ExistingComponentType of componentMetaFiles"
+										>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Shape'">rectangle</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Text'">text_fields</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Image'">image</mat-icon>
+											<mat-icon *ngIf="ExistingComponentType.componenttypeName ==='Button'">smart_button</mat-icon>
+											<span class="component-title">{{ExistingComponentType.name}}</span>
+											<span class="badge-index">{{ExistingComponentType.componentmeta.zIndex}}</span>
+									</div>
+
+								</div>
+
+							</mat-menu>
+
+							
+
+							<mat-menu #menuAddComponents="matMenu" xPosition="before">
+								<div
+									class="layer-component-menu"
+									mat-menu-item *ngFor="let componentType of formDataComponentType"
+									(click)="addComponentDialog(componentType)">
+										<mat-icon *ngIf="componentType.name ==='Shape'">rectangle</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Text'">text_fields</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Image'">image</mat-icon>
+										<mat-icon *ngIf="componentType.name ==='Button'">smart_button</mat-icon>
+										New {{componentType.name}}
+								</div>
+							</mat-menu>
+						</div>
+
+						<div class="col-12 loading-creative">
+							<mat-spinner></mat-spinner>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+			<br />
+			<br />
+		</form>
+
+	</div>
+</div> -->

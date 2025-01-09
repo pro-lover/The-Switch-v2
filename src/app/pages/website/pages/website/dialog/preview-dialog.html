@@ -1,0 +1,18 @@
+<div class="mat-typography">
+  <div >
+    <div class="websiteTemplate">
+      <div class="websiteTemplate-media">
+        <img src={{websiteSelectedTemplate.image}} alt="">
+        <p>
+          {{websiteSelectedTemplate.content.value}}
+        </p>
+      </div>
+      <div class="websiteTemplate-details">
+        {{websiteSelectedTemplate.title.value}}
+      </div>
+    </div>
+  </div>
+</div>
+<div style="align-items: end;">
+  <button (click)="onNoClick()">Cancel</button>
+</div>

@@ -1,0 +1,121 @@
+<mat-card class="drag-drop-component-edit-box" cdkDrag [cdkDragFreeDragPosition]="(dragPosition)">
+	<div class="row">
+		<!-- <div class="col-12">
+		
+		</div> -->
+		<div class="col-12">
+			<mat-accordion class="headers-pannel-align" >
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title> {{(dataContainer.name).toUpperCase()}}</mat-panel-title>
+					</mat-expansion-panel-header>
+		
+					<app-inputText 
+					(inputEvent)="onTextChange($event)"
+					[dataInputValue] = "dataInputValue" 
+					[dataType]="'Text'" 
+					[bannerType] = "dataBanner.bannertype.name" 
+					[dataContainerComponents] = "dataContainer" 
+					[componentName]="'Copy'"
+					[dataContainerId] = "dataContainer.id"
+					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						
+					>
+						
+					</app-inputText>
+					
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
+	</div>
+
+
+	<!-- <mat-card-content class="mat-bapp-content">
+		<h4 class="title">
+			{{dataBanner.name}} Assets
+			<small>FRAME: {{dataContainer.displayorder}}</small>{{dataContainer.id}}
+		</h4>
+		<mat-stepper class="bapp-dialog-stepper" orientation="vertical" [linear]="false" #stepper>
+
+			<div *ngFor="let component of dataComponents;trackBy: ListtrackByFn">
+				<mat-step label="{{component.name}} {{component.componenttype.name}}" state="image"
+					*ngIf="component.componenttype.name === 'Image' && component.smart === true" [editable]="true">
+					<br />
+					<div class="form-row row">
+						<app-draganddrop *ngIf="component.componenttype.name === 'Image'"
+							(DDEvent)="DragAndDropEventItem($event)" (removeUpload)="removeAsset($event)"
+							[resetUploads]="resetVariationsObs" [dataType]="component.componenttype.name"
+							[componentName]="component.name" [dataContainerId]="dataContainer.id"
+							[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+							<h3>
+								Drag and Drop<br />{{component.name}}(s) Here
+							</h3>
+						</app-draganddrop>
+					</div>
+				</mat-step>
+			</div>
+			<!-- <mat-step label="Copy" state="copy" [editable]="true" *ngIf="copyContainerNeeded === true">
+				<br />
+				<div class="form-row row">
+					<app-draganddrop 
+						(DDEvent)="DragAndDropEventItem($event)" 
+						(removeUpload)="removeAsset($event)"
+						[resetUploads]="resetVariationsObs" 
+						[dataType]="'Text'" 
+						[componentName]="'Copy'"
+						
+						[dataContainerId]="dataContainer.id"
+						[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						<h3>
+							Drag and Drop<br />CSV/XLSX File here TBC
+						</h3>
+					</app-draganddrop> -->
+
+					<!-- <app-inputText 
+					(inputEvent)="onTextChange($event)"
+					[dataInputValue] = "dataInputValue" 
+					[dataType]="'Text'" 
+					[componentName]="'Copy'"
+					[dataContainerComponents] = "dataContainer" 
+					[dataContainerId]="dataContainer.id"
+					[dataStageName]="'bannerCanvas-' + dataBanner.bannersize.width + '-' + dataBanner.bannersize.height">
+						
+					>
+						
+					</app-inputText>
+				</div>
+			</mat-step>
+
+			<ng-template matStepperIcon="image">
+				<mat-icon>collections</mat-icon>
+			</ng-template>
+			<ng-template matStepperIcon="shape">
+				<mat-icon>format_shapes</mat-icon>
+			</ng-template>
+			<ng-template matStepperIcon="copy">
+				<mat-icon>text_fields</mat-icon>
+			</ng-template>
+
+		</mat-stepper>
+	</mat-card-content> -->
+
+	<mat-card-actions class="component-edit-dialog-actions">
+		<div class="example-handle" cdkDragHandle>
+			<mat-icon>
+				drag_indicator
+			</mat-icon>
+		</div>
+		<button mat-button mat-flat-button (click)="closeDialog()">
+			<mat-icon>
+				close
+			</mat-icon>
+		</button>
+		<button [disabled]="uploadedFiles.length <= 0" mat-button mat-flat-button (click)="resetAssets(dataBanner)"
+			color="accent">
+			<mat-icon>
+				restart_alt
+			</mat-icon>
+		</button>
+
+	</mat-card-actions>
+</mat-card>

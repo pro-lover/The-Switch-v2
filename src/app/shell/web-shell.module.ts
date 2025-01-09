@@ -35,6 +35,12 @@ const APP_ROUTES: Routes = [
 		canLoad: [AuthGuard],
 	},
 	{
+		path: ROUTER_UTILS.config.base.home,
+		loadChildren: async () =>
+		(await import('@pages/website/website.module')).WebsiteModule,
+		canLoad: [AuthGuard],
+	},
+	{
 		path: ROUTER_UTILS.config.settings.root,
 		loadChildren: async () =>
 		(await import('@pages/settings/settings.module')).SettingsModule,

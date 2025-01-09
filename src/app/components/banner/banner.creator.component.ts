@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+//import { PageEvent } from '@angular/material/paginator';
 import { AlertService, BannerCreatorService, BannerService, ComponentService, TemplateService } from '@app/core/services';
 import { environment } from '@env/environment';
 import * as createjs from 'createjs-module';
@@ -37,7 +37,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 	public sortedData!: any[];
 
 	// MatPaginator Output
-	public pageEvent!: PageEvent;
+	//public pageEvent!: PageEvent;
 	/**/
 	//
 	public stages: any[] = [];
@@ -763,7 +763,7 @@ export class BannerCreatorComponent implements AfterViewInit, OnInit, OnDestroy 
 		});
 
 		//
-		this.renderAnimationsActive = (['HTML5'].includes(this.dataBanner.bannertype.name) === true ? true : false);
+		//this.renderAnimationsActive = (['HTML5'].includes(this.dataBanner.bannertype.name) === true ? true : false);
 		//this.renderAnimationsActive = false;
 
 		// run default population functions

@@ -12,6 +12,13 @@ export const ROUTER_UTILS = {
 			downloads: 'downloads',
 			reviews: 'reviews'
 		},
+		website: {
+			root: 'website',
+			jobs: 'jobs',
+			notifications: 'notifications',
+			downloads: 'downloads',
+			reviews: 'reviews'
+		},
 		auth: {
 			root: 'auth',
 			signIn: 'login',

@@ -50,16 +50,12 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {
 
-		//let projectId = this.activatedRoute.snapshot.params['projectId'];
-		//this.routeParams(this.activatedRoute).subscribe(params => //console.log(params));
-
 		this.router.events.pipe(
 			filter((event: Event) => event instanceof NavigationEnd),
 			distinctUntilChanged(),
 		)
 			.subscribe((event: Event) => {
-				//this.routeParams(this.activatedRoute).subscribe(params => //console.log(params));
-				////console.log('projectId', this.activatedRoute.snapshot.params['projectId'], this.routeParams(this.activatedRoute));
+				
 				this.breadcrumbs = this.buildBreadCrumb(this.activatedRoute.root);
 
 			});
@@ -119,7 +115,6 @@ export class NavBreadcrumbsComponent implements OnInit, OnChanges {
 		}
 		if (label === 'Project Detail') {
 			//this.lastPrjId = label;
-			//path = path.replace(':projectId', this.lastPrjId).replace('/budgets', '');
 
 			if (this.lastPrjId === undefined) {
 				const urll = window.location.pathname;

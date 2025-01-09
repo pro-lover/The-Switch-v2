@@ -58,7 +58,7 @@ export class DialogVersionControlComponent implements OnInit, OnDestroy {
 	}
 
 	public onChange(action: string): void {
-		////console.log('New Project selected:', this.projectId );
+
 	}
 
 	public restore(id: string | number, hid: string | number): void {
